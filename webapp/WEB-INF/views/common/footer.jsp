@@ -11,58 +11,9 @@
    <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&display=swap" rel="stylesheet">
-<style>
-	div {
-		
-		box-sizing: border-box;
-	}
-	
-	#wrap_footer {
-		width: 1200px;
-		height: 190px;
-		margin: auto;
-	}
-	
-	#wrap_footer > div {
-		width: 100%;
-	}
-	
-	#footer {
-		height: 100%;
-	}
-	
-	#footer>div {
-		height: 100%;
-		float: left;
-	}
 
-	#footer_1 {
-		width: 75%;
-		font-family: 'IBM Plex Sans KR', sans-serif;
-	}
-	
-	#footer_2 {
-		width: 25%;
-	}
-	
-	#footer1_1 {
-		font-size: 17px;
-	}
-	
-	#footer1_2 {
-		font-size: 15px;
-	}
-	
-	#footer_2_1 {
-		height: 30%;
-		margin-left: 40%;
-		margin-top: 1%;
-	}
-	
-	#footer_2_2 {
-		height: 70%;
-	}
-</style>
+<link rel="stylesheet" href="resources/css/common/footer.css">
+
 </head>
 
 
@@ -83,10 +34,10 @@
 		    </div>
 		    <div id="footer_2">
 		        <div id="footer_2_1">
-		            <i class="fa-brands fa-instagram fa-2xl" style="color: #ff9111;"></i>
+		            <i class="fa-brands fa-instagram fa-2xl"></i>
 		    </div>
 		    <div id="footer_2_2">
-	        <i class="fa-solid fa-qrcode fa-4xl" style="color: #ff9111;"></i>
+	        <i class="fa-solid fa-qrcode fa-4xl"></i>
 	        </div>
 	    </div>
 	</div>
