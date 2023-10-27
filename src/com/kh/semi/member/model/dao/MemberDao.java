@@ -11,8 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Properties;
 
-import org.apache.ibatis.session.SqlSession;
-
 import com.kh.semi.common.model.vo.PageInfo;
 import com.kh.semi.member.model.vo.Member;
 import com.kh.semi.member.model.vo.MemberUpdate;
@@ -35,8 +33,45 @@ public class MemberDao {
 	}
 	
 	// 로그인시 로그인 한 유저 DB정보 가져오기
-	public Member loginMember(SqlSession sqlSession, Member m) {
-		return sqlSession.selectOne("memberMapper.loginMember", m);
+	public Member loginMember(Connection conn, String memberId, String memberPwd) {
+		
+		Member m = null;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String sql = prop.getProperty("loginMember");
+		
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, memberId);
+			pstmt.setString(2, memberPwd);
+			
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				m = new Member(rset.getInt("MEM_NO"),
+							   rset.getString("MEM_ID"),
+							   rset.getString("MEM_PWD"),
+							   rset.getString("MEM_NAME"),
+							   rset.getString("MEM_NICKNAME"),
+							   rset.getString("MEM_EMAIL"),
+							   rset.getString("MEM_STATUS"),
+							   rset.getDate("ENROLL_DATE"),
+							   rset.getDate("MODIFY_DATE"),
+							   rset.getDate("DELETE_DATE"),
+							   rset.getString("MEM_PICTURE"),
+							   rset.getInt("MEM_GRADE_NUMBER"),
+							   rset.getString("MEM_GRADE_NAME"),
+							   rset.getInt("MEM_COUPON_COUNT"),
+							   rset.getInt("MEM_REWARD"));
+			}	
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			close(rset);
+			close(pstmt);
+		}
+		return m;
 	}
 	
 	// 리워드 조회

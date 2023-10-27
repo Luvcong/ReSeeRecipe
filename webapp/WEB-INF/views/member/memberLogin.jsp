@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,57 +16,54 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <link rel="stylesheet" href="resources/css/member/memberLogin.css">
-
 </head>
 <body>
-	<!-- header부분 (상단 메인 메뉴바) -->
-	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp">
 
-    <form action="yrlogin.me" method="post">
-    	<input type="hidden" name="buy" value="${ requestScope.buy }">
+	<form action="yrlogin.me" method="post">
+		<input type="hidden" name="buy" value="${ requestScope.buy }">
 
-      <h1 id="title"><b>로그인</b></h1>
-      <div class="container">
-          <h4>
-          <b>
-          	 반갑습니다. <br>
-           	 오늘도 맛있는 식사하세요.
-          </b>
-          </h4>
-          <!-- <label for="uname"><b>아이디</b></label> -->
-          <input type="text" placeholder="아이디" name="memberId" maxlength="20" required>
-      
-          <!-- <label for="psw"><b>비밀번호</b></label> -->
-          <input type="password" placeholder="비밀번호" name="memberPwd" maxlength="20" required>
-      
-          <button type="submit" id="login">로그인</button>
+		<h1 id="title">
+			<b>로그인</b>
+		</h1>
+		<div class="container">
+			<h4>
+				<b>반갑습니다.<br>오늘도 맛있는 식사하세요.</b>
+			</h4>
+			<!-- <label for="uname"><b>아이디</b></label> -->
+			<input type="text" placeholder="아이디" name="memberId" maxlength="20" required>
 
-	        <div class="login-searchmenu">
-	          <!-- <button type="button" class="cancel-btn">Cancel</button> -->
-	          <div class="psw"><a href="yrenrollForm.me">회원가입</a></div>
-	          <div class="psw"><a href="yrsearchMemberIdForm.me">아이디 찾기</a></div>
-	          <div class="psw"><a href="yrsearchMemberPwdForm.me">비밀번호 찾기</a></div>
-	        </div>
-        </div>
-        
-      </form>
-      
-   
-    <!-- footer 푸터영역 -->
-	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
+			<!-- <label for="psw"><b>비밀번호</b></label> -->
+			<input type="password" placeholder="비밀번호" name="memberPwd" maxlength="20" required>
 
-    <c:if test="${ errorMsg ne null }" >
-	  	<script>
-	      Swal.fire({
-	        icon: 'error',
-	        title: '로그인 실패',
-	        text: '아이디와 비밀번호를 다시 확인해 주세요.'
-	      })
-	    </script>
-      <c:remove var="errorMsg" scope="request" />
-    }
-    </c:if>
-    
+			<button type="submit" id="login">로그인</button>
 
+			<div class="login-searchmenu">
+				<!-- <button type="button" class="cancel-btn">Cancel</button> -->
+				<div class="psw">
+					<a href="yrenrollForm.me">회원가입</a>
+				</div>
+				<div class="psw">
+					<a href="yrsearchMemberIdForm.me">아이디 찾기</a>
+				</div>
+				<div class="psw">
+					<a href="yrsearchMemberPwdForm.me">비밀번호 찾기</a>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<jsp:include page="/WEB-INF//views/common/footer.jsp">
+	<script>
+		var msg = '${ requestScope.errorMsg }';
+		if (msg != 'null') {
+			Swal.fire({
+				icon : 'error',
+				title : '로그인 실패',
+				text : '아이디와 비밀번호를 다시 확인해 주세요.'
+			})
+			<% request.removeAttribute("errorMsg"); %>
+	 	}
+    </script>
   </body>
 </html>
