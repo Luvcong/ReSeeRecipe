@@ -1,10 +1,6 @@
-<!--
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String errorMsg = (String)request.getAttribute("errorMsg"); %>
--->
-<!-- 초본_231005_yr -->
-<!-- 수정_231006_yr -->
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,18 +17,16 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
 
     <link rel="stylesheet" href="resources/css/member/memberEnrollForm.css">
-    <script src="resources/js/member/memberEnrollForm.js"></script>
-
 </head>
   <body>
   	<!-- header부분 (상단 메인 메뉴바) -->
   	<jsp:include page="/WEB-INF//views/common/header.jsp">
 	
-	<% if(errorMsg != null) { %>
+	<c:if test="${ requestScope.errorMsg ne null }">
 		<script>
-			alert("${} <%=errorMsg%>");
+			alert("${ requestScope.errorMsg }");
 		</script>
-	<% } %>
+	</c:if>
   
     <form action="yrenroll.me" method="post">
 
@@ -133,8 +127,7 @@
     </form>
       
     <!-- footer 푸터영역 -->
-    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
-
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
   </body>
 </html>
