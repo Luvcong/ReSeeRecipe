@@ -26,11 +26,11 @@
 </head>
   <body>
   	<!-- header부분 (상단 메인 메뉴바) -->
-	<%@ include file="/views/common/header.jspf" %> 
+  	<jsp:include page="/WEB-INF//views/common/header.jsp">
 	
 	<% if(errorMsg != null) { %>
 		<script>
-			alert("<%=errorMsg%>");
+			alert("${} <%=errorMsg%>");
 		</script>
 	<% } %>
   
@@ -133,7 +133,7 @@
     </form>
       
     <!-- footer 푸터영역 -->
-    <%@ include file="/views/common/footer.jspf" %>
+    <%@ include file="/WEB-INF/views/common/footer.jsp" %>
 
 
   </body>

@@ -18,7 +18,7 @@
     <link rel="stylesheet" href="resources/css/member/memberLogin.css">
 </head>
 <body>
-	<jsp:include page="/views/common/header.jsp">
+	<jsp:include page="/WEB-INF/views/common/header.jsp">
 
 	<form action="yrlogin.me" method="post">
 		<input type="hidden" name="buy" value="${ requestScope.buy }">
@@ -53,7 +53,7 @@
 		</div>
 	</form>
 
-	<jsp:include page="/views/common/footer.jsp">
+	<jsp:include page="/WEB-INF//views/common/footer.jsp">
 	<script>
 		var msg = '${ requestScope.errorMsg }';
 		if (msg != 'null') {

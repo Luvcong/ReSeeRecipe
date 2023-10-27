@@ -14,7 +14,7 @@
 
 <body>
 	<!-- header부분 (상단 메인 메뉴바) -->
-	<jsp:include page="views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
 	<c:if test="${ reqeustScope.alertMsg ne null }">
 		<script>
@@ -154,7 +154,7 @@
     </script>
 
 	<!-- footer 푸터영역 -->
-	<jsp:include page="views/common/footer.jsp" />
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 </body>
 </html>
