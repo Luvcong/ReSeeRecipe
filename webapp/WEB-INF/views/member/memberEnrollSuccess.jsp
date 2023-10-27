@@ -19,20 +19,20 @@
 <body>
 
     <!-- header부분 (상단 메인 메뉴바) -->
-	<%@ include file="/views/common/header.jspf" %>
+	<%@ include file="/WEB-INF/views/common/header.jsp" %>
 
     <div class="container">
         <div class="success">
             <h1>회원가입이 완료되었습니다.</h1>
         </div>
         <div class="success">
-            <button type="button" class="btn btn-secondary" onclick="location.href='<%= contextPath %>/yrloginForm.me'">로그인하러 가기</button>
+            <button type="button" class="btn btn-secondary" onclick="location.href='yrloginForm.me'">로그인하러 가기</button>
         </div>
     </div>
 
 
     <!-- footer 푸터영역 -->
-    <%@ include file="/views/common/footer.jspf" %>
+    <%@ include file="/WEB-INF//views/common/footer.jsp" %>
 
 </body>
 </html>
