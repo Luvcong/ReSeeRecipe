@@ -13,30 +13,59 @@
 	</resultMap>
 	
 	<resultMap id="ingredientResultMap" type="ingredient">
-		<result column="INGREDIENT_NO" property="" />
-		<result column="INGREDIENT" property="" />
-		<result column="INGREDIENT_AMOUNT" property="" />
-		<result column="RECIPE_NO" property="" />
+		<result column="INGREDIENT_NO" property="ingredientNo" />
+		<result column="INGREDIENT" property="ingredient" />
+		<result column="INGREDIENT_AMOUNT" property="ingredientAmount" />
+		<result column="RECIPE_NO" property="recipeNo" />
 	</resultMap>
 	
 	<resultMap id="recipeResultMap" type="recipe">
-		<result column="" property="" />
+		<result column="RECIPE_NO" property="recipeNo" />
+		<result column="RECIPE_TITLE" property="recipeTitle" />
+		<result column="RECIPE_DATE" property="recipeDate" />
+		<result column="RECIPE_MODIFIED" property="recipeModified" />
+		<result column="RECIPE_STATUS" property="recipeStatus" />
+		<result column="RECIPE_COUNT" property="recipeCount" />
+		<result column="RECIPE_WRITER_NO" property="recipeWriterNo" />
+		<result column="RECIPE_CATEGORY_NO" property="recipeCategoryNo" />
+		<result column="RECIPE_CATEGORY_NAME" property="recipeCategoryName" />
+		<result column="TITLEIMG" property="titleImg" />
+		<result column="MEM_NICKNAME" property="memNickName" />
+		<result column="HT_COUNT" property="htCount" />
 	</resultMap>
 	
 	<resultMap id="recipeCategoryResultMap" type="recipeCategory">
-		<result column="" property="" />
+		<result column="RECIPE_CATEGORY_NO" property="recipeCategoryNo" />
+		<result column="RECIPE_CATEGORY_NAME" property="recipeCategoryName" />
 	</resultMap>
 	
 	<resultMap id="recipePicResultMap" type="recipePic">
-		<result column="" property="" />
+		<result column="RECIPE_PIC_NO" property="recipePicNo" />
+		<result column="RECIPE_PIC_NAME_ORIGIN" property="recipePicNameOrigin" />
+		<result column="RECIPE_PIC_NAME_UPLOAD" property="recipePicNameUpload" />
+		<result column="RECIPE_PIC_PATH" property="recipePicPath" />
+		<result column="RECIPE_PIC_DATE" property="recipePicDate" />
+		<result column="RECIPE_PIC_LEV" property="recipePicLev" />
+		<result column="RECIPE_PIC_STATUS" property="recipePicStatus" />
+		<result column="REF_RNO" property="refRno" />
 	</resultMap>
 	
 	<resultMap id="recipeTagResultMap" type="recipeTag">
-		<result column="" property="" />
+		<result column="TAG_NO" property="" />
+		<result column="TAG_RECIPE_NO" property="" />
+		<result column="TAG_NAME" property="tagName" />
+		<result column="TAG_DATE" property="tagDate" />
 	</resultMap>
 	
 	<resultMap id="replyResultMap" type="reply">
-		<result column="" property="" />
+		<result column="REPLY_NO" property="" />
+		<result column="REPLY_CONTENT" property="" />
+		<result column="REPLY_DATE" property="" />
+		<result column="REPLY_MODIFIED" property="" />
+		<result column="REPLY_WRITER_NO" property="" />
+		<result column="RECIPE_NO" property="" />
+		<result column="REPLY_STATUS" property="" />
+		<result colum="MEM_NICKNAME" property="memNickName" />
 	</resultMap>
 	
 	
