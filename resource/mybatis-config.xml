@@ -8,6 +8,7 @@
 	<settings>
 		<setting name="jdbcTypeForNull" value="NULL" />
 	</settings>
+	
 	<typeAliases>
 		<typeAlias type="com.kh.semi.member.model.vo.Member" alias="member" />
 	</typeAliases>
@@ -16,7 +17,7 @@
 		<environment id="development">
 			<transactionManager type="JDBC"/>
 			<dataSource type="POOLED">
-				<property name="driver" value="oracle:jdbc.driver.OracleDriver"/>
+				<property name="driver" value="oracle.jdbc.driver.OracleDriver" />
 				<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
 				<property name="username" value="TESTRECIPE" />
 				<property name="password" value="TESTRECIPE" />
