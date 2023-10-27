@@ -1,29 +1,36 @@
 package com.kh.semi.member.model.service;
 
 import static com.kh.semi.common.JDBCTemplate.close;
+import static com.kh.semi.common.JDBCTemplate.commit;
 import static com.kh.semi.common.JDBCTemplate.getConnection;
-import static com.kh.semi.common.JDBCTemplate.*;
+import static com.kh.semi.common.JDBCTemplate.rollback;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import org.apache.ibatis.session.SqlSession;
+
 import com.kh.semi.common.model.vo.PageInfo;
+import com.kh.semi.common.template.Template;
 import com.kh.semi.member.model.dao.MemberDao;
 import com.kh.semi.member.model.vo.Member;
 import com.kh.semi.member.model.vo.MemberUpdate;
 
+
 public class MemberService {
 	
-	public Member loginMember(String memberId, String memberPwd) {
+	private MemberDao memberDao = new MemberDao();
+	
+	public Member loginMember(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		Member m = new MemberDao().loginMember(conn, memberId, memberPwd);
+		Member loginMember = memberDao.loginMember(sqlSession, m);
 		
-		close(conn);
+		sqlSession.close();
 		
-		return m;
+		return loginMember;
 	}
 	
 	public int memReward(int memNo) {
