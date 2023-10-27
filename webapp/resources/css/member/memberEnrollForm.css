@@ -1,0 +1,92 @@
+/* Bordered form */
+form {
+    border: 3px solid #f1f1f1;
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0px 0px 0px;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+/* Set a style for all buttons */
+button {
+    background-color: rgb(88, 87, 87);
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+    opacity: 0.8;
+}
+
+/* Extra style for the cancel button (red) */
+.cancelbtn {
+    width: auto;
+    padding: 10px 18px;
+    background-color: #f44336;
+}
+
+/* Add padding to containers */
+.container {
+    padding: 50px 300px;
+}
+
+/* The "Forgot password" text */
+span.psw {
+    float: right;
+    padding-top: 16px;
+}
+
+/* Change styles for span and cancel button on extra small screens */
+@media screen and (max-width: 300px) {
+    span.psw {
+        display: block;
+        float: none;
+    }
+    .cancel-btn {
+        width: 100%;
+    }
+}
+
+#title{
+    padding-top: 50px;
+    display : flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.enroll-checkbox{
+    border : none;
+    margin : 20px 0px;
+}
+
+.enroll-checkbox > div{ 
+    border : none;
+}
+
+.enroll-checkbox > div > a{
+    float : right;
+    margin-right : 20px;
+    color: black;
+}
+
+input[type="checkbox"]{
+    margin : 5px;
+}
+
+.container > label{
+    font-size: 12px;
+    margin : 0px 0px 5px 0px;
+}
+
+

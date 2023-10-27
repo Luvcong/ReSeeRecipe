@@ -1,0 +1,30 @@
+@charset "UTF-8";
+	<!-- 회원 관리 메인 화면 css -->
+	<!-- CDN -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    
+    <!-- style 태그 -->
+    h2{
+        text-align: center;
+    }
+    .totalMem{
+        caption-side: top;
+    }
+    .w3-bar{
+        text-align: center;
+    }
+    .header2{
+        text-align: right;
+    }
+    .header1 > div{
+        float : left;
+    }
+
+    #searchMember{
+        max-width: 300px;
+    }
+    
+    #memberdetailbtn{
+        text-align : center;
+    }
