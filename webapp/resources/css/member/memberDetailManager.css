@@ -1,0 +1,10 @@
+@charset "UTF-8";
+
+<!-- memberDetailManager.jsp 의 css 회원정보상세보기 -->
+ 	h2{
+       text-align: center;
+    }
+
+    #memberdetailbtn{
+        text-align : center;
+    }
