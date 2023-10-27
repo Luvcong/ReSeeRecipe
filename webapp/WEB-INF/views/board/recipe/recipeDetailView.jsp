@@ -199,9 +199,5 @@
 		   	<br><br><br><br><br>
     		</div>
 	</div>
-	
-	<script>
-		var recipeNo = ${ requestScope.recipeDetailMap.recipe.recipeNo };
-	</script>
 </body>
 </html>
