@@ -65,7 +65,7 @@
 		<result column="REPLY_WRITER_NO" property="" />
 		<result column="RECIPE_NO" property="" />
 		<result column="REPLY_STATUS" property="" />
-		<result colum="MEM_NICKNAME" property="memNickName" />
+		<result column="MEM_NICKNAME" property="memNickName" />
 	</resultMap>
 	
 	
