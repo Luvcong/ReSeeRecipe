@@ -1,1 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="recipeMapper">
+	
+	<resultMap id="cookStepsResultMap" type="cookSteps">
+		<result column="COOK_STEPS_NO" property="cookStepsNo" />
+		<result column="COOK_STEPS_TITLE" property="cookStepsTitle" />
+		<result column="COOK_STEPS_CONTENT" property="cookStepsContent" />
+		<result column="COOK_STEPS_LEV" property="cookStepsLev" />
+		<result column="RECIPE_NO" property="recipeNo" />
+	</resultMap>
+	
+	<resultMap id="ingredientResultMap" type="ingredient">
+		<result column="INGREDIENT_NO" property="" />
+		<result column="INGREDIENT" property="" />
+		<result column="INGREDIENT_AMOUNT" property="" />
+		<result column="RECIPE_NO" property="" />
+	</resultMap>
+	
+	<resultMap id="recipeResultMap" type="recipe">
+		<result column="" property="" />
+	</resultMap>
+	
+	<resultMap id="recipeCategoryResultMap" type="recipeCategory">
+		<result column="" property="" />
+	</resultMap>
+	
+	<resultMap id="recipePicResultMap" type="recipePic">
+		<result column="" property="" />
+	</resultMap>
+	
+	<resultMap id="recipeTagResultMap" type="recipeTag">
+		<result column="" property="" />
+	</resultMap>
+	
+	<resultMap id="replyResultMap" type="reply">
+		<result column="" property="" />
+	</resultMap>
+	
+	
+
+</mapper>
+ 
