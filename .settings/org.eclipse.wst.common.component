@@ -3,6 +3,7 @@
         <wb-resource deploy-path="/" source-path="/webapp" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/resource"/>
         <property name="context-root" value="ReSeeRecipe_renew"/>
         <property name="java-output-path" value="/ReSeeRecipe_renew/webapp/WEB-INF/classes"/>
     </wb-module>
