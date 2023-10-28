@@ -13,6 +13,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.kh.semi.board.recipe.model.service.RecipeService;
+import com.kh.semi.board.recipe.model.service.RecipeServiceImpl;
 import com.kh.semi.board.recipe.model.service.UnRecipeService;
 import com.kh.semi.board.recipe.model.vo.CookSteps;
 import com.kh.semi.board.recipe.model.vo.Ingredient;
@@ -50,7 +51,7 @@ public class RecipeController {
 	public String selectRecipeCategoryList(HttpServletRequest request, HttpServletResponse response) {
 		
 		String viewPath = "";
-		ArrayList<RecipeCategory> cList = new RecipeService().selectRecipeCategoryList();
+		ArrayList<RecipeCategory> cList = new RecipeServiceImpl().selectRecipeCategoryList();
 		
 		if(!cList.isEmpty()) {
 			request.setAttribute("cList", cList);
@@ -77,7 +78,7 @@ public class RecipeController {
 		
 		// 변수세팅
 		String viewPath = "/selectRecipeList.re";
-		RecipeService rs = new RecipeService();
+		RecipeServiceImpl rs = new RecipeServiceImpl();
 		
 		int listCount = rs.selectRecipeListCount(); // 레시피 개수 조회
 		int currentPage = request.getParameter("currentPage") != null ?
@@ -134,7 +135,7 @@ public class RecipeController {
 	 */
 	public String recipeDetail(HttpServletRequest request, HttpServletResponse response) {
 		String viewPath = "";
-		RecipeService rs = new RecipeService();
+		RecipeServiceImpl rs = new RecipeServiceImpl();
 		
 		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
 		
@@ -312,7 +313,7 @@ public class RecipeController {
 				
 				
 				// Recipecontroller호출
-				int result = new RecipeService().insertRecipe(insertRecipeMap);
+				int result = new RecipeServiceImpl().insertRecipe(insertRecipeMap);
 				
 				if(result > 0) {
 					request.getSession().setAttribute("alertMsg", "게시글 작성 성공");
@@ -381,7 +382,7 @@ public class RecipeController {
 		reply.setReplyNo(replyNo);
 		reply.setRecipeNo(recipeNo);
 		
-		int result = new RecipeService().deleteReqReplySingle(reply);
+		int result = new RecipeServiceImpl().deleteReqReplySingle(reply);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print(result);
@@ -400,7 +401,7 @@ public class RecipeController {
 		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
 		
 		// Service요청
-		ArrayList<Reply> replyList = new RecipeService().selectReplyListSingle(recipeNo);
+		ArrayList<Reply> replyList = new RecipeServiceImpl().selectReplyListSingle(recipeNo);
 		
 		// 형식+인코딩 지정 & 응답 Gson
 		response.setContentType("application/json; charset=UTF-8");
@@ -424,7 +425,7 @@ public class RecipeController {
 		reply.setReplyWriterNo(memNo);
 		reply.setRecipeNo(recipeNo);
 		
-		int result = new RecipeService().insertReply(reply);
+		int result = new RecipeServiceImpl().insertReply(reply);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		response.getWriter().print(result);
