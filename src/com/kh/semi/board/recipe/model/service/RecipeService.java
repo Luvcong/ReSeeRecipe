@@ -1,6 +1,7 @@
 package com.kh.semi.board.recipe.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.kh.semi.board.recipe.model.vo.CookSteps;
 import com.kh.semi.board.recipe.model.vo.Ingredient;
@@ -80,6 +81,41 @@ public interface RecipeService {
 	 * 	 Recipe필드 :  recipeNo, recipeTitle, recipeCount, titleImg, memNickName, htCount<br>
 	 */
 	public ArrayList<Recipe> selectRecipeList(PageInfo pi);
+	
+	
+	
+	/* ************************** UPDATE 종류 ************************** */
+	
+	/**
+	 * 댓글의 상태를 'N'으로 바꾸는 기능(삭제요청)<br>
+	 * 삭제요청에 성공할 시 int형 숫자 1, 실패 시 0 반환
+	 * @param reply
+	 * @return
+	 */
+	public int deleteReqReplySingle(Reply reply);
+	
+	
+	
+	/* ************************** INSERT 종류 ************************** */
+	
+	/**
+	 * 레시피 작성 기능
+	 * @param insertRecipeMap
+	 * @return
+	 */
+	public int insertRecipe(HashMap<String, Object> insertRecipeMap);
+	
+	
+	/**
+	 * 특정 번호 레시피(PK)에 댓글을 입력하는 기능
+	 * @param reply : replyContent, memNo, recipeNo필드가 초기화된 Reply객체
+	 */
+	public int insertReply(Reply reply);
+	
+	
+	
+	
+	
 	
 	
 	

@@ -1,14 +1,10 @@
 package com.kh.semi.board.recipe.model.service;
 
-import static com.kh.semi.common.JDBCTemplate.close;
-import static com.kh.semi.common.JDBCTemplate.commit;
-import static com.kh.semi.common.JDBCTemplate.doTransAction;
-import static com.kh.semi.common.JDBCTemplate.getConnection;
-import static com.kh.semi.common.JDBCTemplate.rollback;
-
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.apache.ibatis.session.SqlSession;
 
 import com.kh.semi.board.recipe.model.dao.RecipeDao;
 import com.kh.semi.board.recipe.model.vo.CookSteps;
@@ -19,20 +15,23 @@ import com.kh.semi.board.recipe.model.vo.RecipePic;
 import com.kh.semi.board.recipe.model.vo.RecipeTag;
 import com.kh.semi.board.recipe.model.vo.Reply;
 import com.kh.semi.common.model.vo.PageInfo;
+import static com.kh.semi.common.template.Template.*;
 
 public class RecipeServiceImpl implements RecipeService {
 	
 	/* ************************** SELECT 종류 ************************** */
-
+	
+	@Override
 	public Recipe selectRecipeSingle(int recipeNo) {
 		// tb_recipe정보와 유저닉네임, 카테고리 번호+이름 같이
-		Connection conn = getConnection();
-		Recipe recipe = new RecipeDao().selectRecipeSingle(conn, recipeNo);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		Recipe recipe = new RecipeDao().selectRecipeSingle(sqlSession, recipeNo);
+		sqlSession.close();
 		return recipe;
 	}
 	
 	
+	@Override
 	public ArrayList<RecipePic> selectRecipePicSingle(int recipeNo) {
 		Connection conn = getConnection();
 		ArrayList<RecipePic> reciepPicList = new RecipeDao().selectRecipePicSingle(conn, recipeNo);
@@ -57,6 +56,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 	
 	
+	@Override
 	public ArrayList<RecipeTag> selectRecipeTagSingle(int recipeNo) {
 		Connection conn = getConnection();
 		ArrayList<RecipeTag> recipeTagList = new RecipeDao().selectRecipeTagSingle(conn, recipeNo);
@@ -65,6 +65,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 	
 	
+	@Override
 	public ArrayList<Reply> selectReplyListSingle(int recipeNo) {
 		Connection conn = getConnection();
 		ArrayList<Reply> replyList = new RecipeDao().selectReplyListSingle(conn, recipeNo);
@@ -73,6 +74,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 	
 	
+	@Override
 	public ArrayList<RecipeCategory> selectRecipeCategoryList() {
 		Connection conn = getConnection();
 		ArrayList<RecipeCategory> cList = new RecipeDao().selectRecipeCategoryList(conn);
@@ -81,6 +83,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 
 	
+	@Override
 	public int selectRecipeListCount() {
 		Connection conn = getConnection();
 		int listCount = new RecipeDao().selectRecipeListCount(conn);
@@ -89,6 +92,7 @@ public class RecipeServiceImpl implements RecipeService {
 	}
 	
 	
+	@Override
 	public ArrayList<Recipe> selectRecipeList(PageInfo pi) {
 		Connection conn = getConnection();
 		ArrayList<Recipe> recipeList = new RecipeDao().selectRecipeList(conn, pi);
@@ -96,14 +100,11 @@ public class RecipeServiceImpl implements RecipeService {
 		return recipeList;
 	}
 	
+	
+	
 	/* ************************** UPDATE 종류 ************************** */
 	
-	/**
-	 * 댓글의 상태를 'N'으로 바꾸는 기능(삭제요청)<br>
-	 * 삭제요청에 성공할 시 int형 숫자 1, 실패 시 0 반환
-	 * @param reply
-	 * @return
-	 */
+	@Override
 	public int deleteReqReplySingle(Reply reply) {
 		Connection conn = getConnection();
 		int result = doTransAction(conn, new RecipeDao().deleteReqReplySingle(conn, reply));
@@ -114,12 +115,7 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	/* ************************** INSERT 종류 ************************** */
 	
-	
-	/**
-	 * 레시피 작성 기능
-	 * @param insertRecipeMap
-	 * @return
-	 */
+	@Override
 	public int insertRecipe(HashMap<String, Object> insertRecipeMap) {
 		
 		int returningResult = 0;
@@ -167,33 +163,14 @@ public class RecipeServiceImpl implements RecipeService {
 		return returningResult;
 	}
 	
-	
-	/**
-	 * 특정 번호 레시피(PK)에 댓글을 입력하는 기능
-	 * @param reply : replyContent, memNo, recipeNo필드가 초기화된 Reply객체
-	 */
+
+	@Override
 	public int insertReply(Reply reply) {
 		Connection conn = getConnection();
 		int result = doTransAction(conn, new RecipeDao().insertReply(conn, reply));
 		return result;
 	}
 
-	
-	
-
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	/* ***************************** AJAX 요청 처리 ***************************** */
@@ -203,14 +180,14 @@ public class RecipeServiceImpl implements RecipeService {
 	 * 특정 번호 레시피(PK) 글 작성자가 동일할 시 댓글을 수정해주는 기능 
 	 */
 	public void ajaxModifyRecipeReply(int recipeNo) {
-		
+		//
 	}
 	
 	/**
 	 * 특정 번호 레시피(PK) 글 작성자가 동일할 시 댓글의 상태를 'N'으로 바꾸는 기능 
 	 */
 	public void ajaxDeleteRecipeReply(int recipeNo) {
-		
+		//
 	}
 	
 
