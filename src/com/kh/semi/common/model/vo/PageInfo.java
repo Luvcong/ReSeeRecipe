@@ -15,14 +15,79 @@ public class PageInfo {
 	private int maxPage; // 가장 마지막 페이지가 몇 번 페이지인지(총 페이지의 개수)
 	private int startPage; // 페이지 하단에 보여질 페이징바의 시작 수
 	private int endPage; // 페이지 하단에 보여질 페이징바의 끝 수
-	
-	private int startRow; // 한 페이지에서 조회할 데이터 중 시작데이터의 RowNum
-	private int endRow; // 한 페이지에서 조회할 데이터 중 마지막데이터의 RowNum
-	
+
 	
 	public PageInfo() {
 		super();
 	}
+	public PageInfo(int listCount, int currentPage, int pageLimit, int boardLimit, int maxPage, int startPage,
+			int endPage) {
+		super();
+		this.listCount = listCount;
+		this.currentPage = currentPage;
+		this.pageLimit = pageLimit;
+		this.boardLimit = boardLimit;
+		this.maxPage = maxPage;
+		this.startPage = startPage;
+		this.endPage = endPage;
+	}
+	
+	
+	public int getListCount() {
+		return listCount;
+	}
+	public void setListCount(int listCount) {
+		this.listCount = listCount;
+	}
+	public int getCurrentPage() {
+		return currentPage;
+	}
+	public void setCurrentPage(int currentPage) {
+		this.currentPage = currentPage;
+	}
+	public int getPageLimit() {
+		return pageLimit;
+	}
+	public void setPageLimit(int pageLimit) {
+		this.pageLimit = pageLimit;
+	}
+	public int getBoardLimit() {
+		return boardLimit;
+	}
+	public void setBoardLimit(int boardLimit) {
+		this.boardLimit = boardLimit;
+	}
+	public int getMaxPage() {
+		return maxPage;
+	}
+	public void setMaxPage(int maxPage) {
+		this.maxPage = maxPage;
+	}
+	public int getStartPage() {
+		return startPage;
+	}
+	public void setStartPage(int startPage) {
+		this.startPage = startPage;
+	}
+	public int getEndPage() {
+		return endPage;
+	}
+	public void setEndPage(int endPage) {
+		this.endPage = endPage;
+	}
+	
+	
+	@Override
+	public String toString() {
+		return "PageInfo [listCount=" + listCount + ", currentPage=" + currentPage + ", pageLimit=" + pageLimit
+				+ ", boardLimit=" + boardLimit + ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage="
+				+ endPage + "]";
+	}
+	
+	
+	//private int startRow; // 한 페이지에서 조회할 데이터 중 시작데이터의 RowNum
+	//private int endRow; // 한 페이지에서 조회할 데이터 중 마지막데이터의 RowNum
+	
 	
 	/**
 	 * 페이지들을 자동계산해 전 필드 초기화하는 생성자
@@ -39,6 +104,7 @@ public class PageInfo {
 	 * @param endRow 	  : 한 페이지에서 조회할 데이터 중 마지막데이터의 RowNum
 	 * 
 	 */
+	/*
 	public PageInfo(int listCount, int currentPage, int pageLimit, int boardLimit) {
 		this.listCount = listCount;
 		this.currentPage = currentPage;
@@ -56,104 +122,7 @@ public class PageInfo {
 		this.startRow = (currentPage - 1) * boardLimit + 1;
 		this.endRow = startRow + boardLimit - 1;
 	}
-	
-	
-	
-	
-	public PageInfo(int listCount, int currentPage, int pageLimit, int boardLimit, int maxPage, int startPage,
-			int endPage, int startRow, int endRow) {
-		super();
-		this.listCount = listCount;
-		this.currentPage = currentPage;
-		this.pageLimit = pageLimit;
-		this.boardLimit = boardLimit;
-		this.maxPage = maxPage;
-		this.startPage = startPage;
-		this.endPage = endPage;
-		this.startRow = startRow;
-		this.endRow = endRow;
-	}
-
-	
-	public int getListCount() {
-		return listCount;
-	}
-
-	public void setListCount(int listCount) {
-		this.listCount = listCount;
-	}
-
-	public int getCurrentPage() {
-		return currentPage;
-	}
-
-	public void setCurrentPage(int currentPage) {
-		this.currentPage = currentPage;
-	}
-
-	public int getPageLimit() {
-		return pageLimit;
-	}
-
-	public void setPageLimit(int pageLimit) {
-		this.pageLimit = pageLimit;
-	}
-
-	public int getBoardLimit() {
-		return boardLimit;
-	}
-
-	public void setBoardLimit(int boardLimit) {
-		this.boardLimit = boardLimit;
-	}
-
-	public int getMaxPage() {
-		return maxPage;
-	}
-
-	public void setMaxPage(int maxPage) {
-		this.maxPage = maxPage;
-	}
-
-	public int getStartPage() {
-		return startPage;
-	}
-
-	public void setStartPage(int startPage) {
-		this.startPage = startPage;
-	}
-
-	public int getEndPage() {
-		return endPage;
-	}
-
-	public void setEndPage(int endPage) {
-		this.endPage = endPage;
-	}
-
-	public int getStartRow() {
-		return startRow;
-	}
-
-	public void setStartRow(int startRow) {
-		this.startRow = startRow;
-	}
-
-	public int getEndRow() {
-		return endRow;
-	}
-
-	public void setEndRow(int endRow) {
-		this.endRow = endRow;
-	}
-
-	
-	@Override
-	public String toString() {
-		return "PageInfo [listCount=" + listCount + ", currentPage=" + currentPage + ", pageLimit=" + pageLimit
-				+ ", boardLimit=" + boardLimit + ", maxPage=" + maxPage + ", startPage=" + startPage + ", endPage="
-				+ endPage + ", startRow=" + startRow + ", endRow=" + endRow + "]";
-	}
+	*/
 	
 	
 }//class.end
