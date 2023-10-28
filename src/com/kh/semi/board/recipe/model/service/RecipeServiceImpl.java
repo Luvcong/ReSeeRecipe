@@ -1,6 +1,7 @@
 package com.kh.semi.board.recipe.model.service;
 
-import java.sql.Connection;
+import static com.kh.semi.common.template.Template.getSqlSession;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -15,9 +16,12 @@ import com.kh.semi.board.recipe.model.vo.RecipePic;
 import com.kh.semi.board.recipe.model.vo.RecipeTag;
 import com.kh.semi.board.recipe.model.vo.Reply;
 import com.kh.semi.common.model.vo.PageInfo;
-import static com.kh.semi.common.template.Template.*;
 
 public class RecipeServiceImpl implements RecipeService {
+	
+	
+	private RecipeDao recipeDao = new RecipeDao();
+	
 	
 	/* ************************** SELECT 종류 ************************** */
 	
@@ -25,7 +29,7 @@ public class RecipeServiceImpl implements RecipeService {
 	public Recipe selectRecipeSingle(int recipeNo) {
 		// tb_recipe정보와 유저닉네임, 카테고리 번호+이름 같이
 		SqlSession sqlSession = getSqlSession();
-		Recipe recipe = new RecipeDao().selectRecipeSingle(sqlSession, recipeNo);
+		Recipe recipe = recipeDao.selectRecipeSingle(sqlSession, recipeNo);
 		sqlSession.close();
 		return recipe;
 	}
@@ -33,70 +37,70 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	@Override
 	public ArrayList<RecipePic> selectRecipePicSingle(int recipeNo) {
-		Connection conn = getConnection();
-		ArrayList<RecipePic> reciepPicList = new RecipeDao().selectRecipePicSingle(conn, recipeNo);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<RecipePic> reciepPicList = recipeDao.selectRecipePicSingle(sqlSession, recipeNo);
+		sqlSession.close();
 		return reciepPicList;
 	}
 	
 	
 	public ArrayList<Ingredient> selectIngredientSingle(int recipeNo) {
-		Connection conn = getConnection();
-		ArrayList<Ingredient> ingredientList = new RecipeDao().selectIngredientSingle(conn, recipeNo);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<Ingredient> ingredientList = recipeDao.selectIngredientSingle(sqlSession, recipeNo);
+		sqlSession.close();
 		return ingredientList;
 	}
 	
 	
 	public ArrayList<CookSteps> selectCookStepsSingle(int recipeNo) {
-		Connection conn = getConnection();
-		ArrayList<CookSteps> cookStepsList = new RecipeDao().selectCookStepsSingle(conn, recipeNo);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<CookSteps> cookStepsList = recipeDao.selectCookStepsSingle(sqlSession, recipeNo);
+		sqlSession.close();
 		return cookStepsList;
 	}
 	
 	
 	@Override
 	public ArrayList<RecipeTag> selectRecipeTagSingle(int recipeNo) {
-		Connection conn = getConnection();
-		ArrayList<RecipeTag> recipeTagList = new RecipeDao().selectRecipeTagSingle(conn, recipeNo);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<RecipeTag> recipeTagList = recipeDao.selectRecipeTagSingle(sqlSession, recipeNo);
+		sqlSession.close();
 		return recipeTagList;
 	}
 	
 	
 	@Override
 	public ArrayList<Reply> selectReplyListSingle(int recipeNo) {
-		Connection conn = getConnection();
-		ArrayList<Reply> replyList = new RecipeDao().selectReplyListSingle(conn, recipeNo);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<Reply> replyList = recipeDao.selectReplyListSingle(sqlSession, recipeNo);
+		sqlSession.close();
 		return replyList;
 	}
 	
 	
 	@Override
 	public ArrayList<RecipeCategory> selectRecipeCategoryList() {
-		Connection conn = getConnection();
-		ArrayList<RecipeCategory> cList = new RecipeDao().selectRecipeCategoryList(conn);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<RecipeCategory> cList = recipeDao.selectRecipeCategoryList(sqlSession);
+		sqlSession.close();
 		return cList;
 	}
 
 	
 	@Override
 	public int selectRecipeListCount() {
-		Connection conn = getConnection();
-		int listCount = new RecipeDao().selectRecipeListCount(conn);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		int listCount = recipeDao.selectRecipeListCount(sqlSession);
+		sqlSession.close();
 		return listCount;
 	}
 	
 	
 	@Override
 	public ArrayList<Recipe> selectRecipeList(PageInfo pi) {
-		Connection conn = getConnection();
-		ArrayList<Recipe> recipeList = new RecipeDao().selectRecipeList(conn, pi);
-		close(conn);
+		SqlSession sqlSession = getSqlSession();
+		ArrayList<Recipe> recipeList = recipeDao.selectRecipeList(sqlSession, pi);
+		sqlSession.close();
 		return recipeList;
 	}
 	
@@ -106,8 +110,13 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	@Override
 	public int deleteReqReplySingle(Reply reply) {
-		Connection conn = getConnection();
-		int result = doTransAction(conn, new RecipeDao().deleteReqReplySingle(conn, reply));
+		SqlSession sqlSession = getSqlSession();
+		int result = recipeDao.deleteReqReplySingle(sqlSession, reply);
+		
+		if(result > 0) {
+			sqlSession.commit(); // 단일 DML
+		}
+		sqlSession.close();
 		return result;
 	}
 	
@@ -126,38 +135,36 @@ public class RecipeServiceImpl implements RecipeService {
 		int cookStepsResult = 0;
 		int ingredientResult = 0;
 		
-		RecipeDao rd = new RecipeDao();
-		
-		Connection conn = getConnection();
+		SqlSession sqlSession = getSqlSession();
 		
 		// 레시피(TB_RECIPE) INSERT먼저
 		Recipe recipe = (Recipe)insertRecipeMap.get("recipe"); /* 맵에서 뽑음 */
-		recipeResult = rd.insertRecipe(conn, recipe);
+		recipeResult = recipeDao.insertRecipe(sqlSession, recipe);
 		
 		if(recipeResult > 0) {
 			// TB_RECIPE_PIC insert
 			ArrayList<RecipePic> recipePicList = (ArrayList<RecipePic>)insertRecipeMap.get("recipePicList");
-			picResult = rd.insertRecipePic(conn, recipePicList);
+			picResult = recipeDao.insertRecipePic(sqlSession, recipePicList);
 			
 			// TB_INGREDIENT insert
 			ArrayList<Ingredient> ingredientList = (ArrayList<Ingredient>)insertRecipeMap.get("ingredientList");
-			ingredientResult = rd.insertIngredient(conn, ingredientList);
+			ingredientResult = recipeDao.insertIngredient(sqlSession, ingredientList);
 			
 			// TB_COOK_STEPS insert
 			ArrayList<CookSteps> cookStepsList = (ArrayList<CookSteps>)insertRecipeMap.get("cookStepsList");
-			cookStepsResult = rd.insertCookSteps(conn, cookStepsList);
+			cookStepsResult = recipeDao.insertCookSteps(sqlSession, cookStepsList);
 			
 			// TB_RECIPE_TAG insert
 			ArrayList<Integer> tagNoList = (ArrayList<Integer>)insertRecipeMap.get("tagNoList");
-			tagResult = rd.insertRecipeTag(conn, tagNoList);
+			tagResult = recipeDao.insertRecipeTag(sqlSession, tagNoList);
 			
 			// 커넥션 닫기 전 transaction처리
 			if( !(recipeResult != 1
 			   || picResult * ingredientResult * cookStepsResult * tagResult != 1)) {
 				returningResult = 1;
-				commit(conn);
+				sqlSession.commit();
 			} else {
-				rollback(conn);
+				sqlSession.rollback();
 			}
 		}
 		return returningResult;
@@ -166,8 +173,13 @@ public class RecipeServiceImpl implements RecipeService {
 
 	@Override
 	public int insertReply(Reply reply) {
-		Connection conn = getConnection();
-		int result = doTransAction(conn, new RecipeDao().insertReply(conn, reply));
+		
+		SqlSession sqlSession = getSqlSession();
+		
+		int result = recipeDao.insertReply(sqlSession, reply);
+		if(result > 0) sqlSession.commit();
+		
+		sqlSession.close();
 		return result;
 	}
 

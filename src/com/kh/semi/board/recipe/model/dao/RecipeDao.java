@@ -1,9 +1,5 @@
 package com.kh.semi.board.recipe.model.dao;
 
-import static com.kh.semi.common.JDBCTemplate.close;
-import static com.kh.semi.common.JDBCTemplate.doTransAction;
-import static com.kh.semi.common.JDBCTemplate.getConnection;
-
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.Connection;
@@ -11,8 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Properties;
+
+import org.apache.ibatis.session.SqlSession;
 
 import com.kh.semi.board.recipe.model.vo.CookSteps;
 import com.kh.semi.board.recipe.model.vo.Ingredient;
@@ -25,30 +22,13 @@ import com.kh.semi.common.model.vo.PageInfo;
 
 public class RecipeDao {
 	
-	private Properties prop = new Properties();
-	
-	public RecipeDao() {
-		String filePath = RecipeDao.class.getResource("/sql/board/recipe-mapper.xml").getPath();
-		try {
-			prop.loadFromXML(new FileInputStream(filePath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	/* ************************************************************************** */
-	
-	
 	
 	/* ************************** SELECT 종류 ************************** */	
 	
 	/**
 	 * 레시피 번호로 해당 레시피의 레시피테이블(TB_RECIPE) 모든 정보와 작성자 닉네임, 카테고리 번호와 이름을 조회하는 기능
-	 * @param conn
-	 * @param recipeNo
-	 * @return
 	 */
-	public Recipe selectRecipeSingle(Connection conn, int recipeNo) {
+	public Recipe selectRecipeSingle(SqlSession sqlSession, int recipeNo) {
 		Recipe recipe = null;
 		String sql = prop.getProperty("selectRecipeSingle");
 		
@@ -83,7 +63,7 @@ public class RecipeDao {
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<RecipePic> selectRecipePicSingle(Connection conn, int recipeNo) {
+	public ArrayList<RecipePic> selectRecipePicSingle(SqlSession sqlSession, int recipeNo) {
 		ArrayList<RecipePic> recipePicList = new ArrayList();
 		String sql = prop.getProperty("selectRecipePicSingle");
 		
@@ -117,7 +97,7 @@ public class RecipeDao {
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<Ingredient> selectIngredientSingle(Connection conn, int recipeNo) {
+	public ArrayList<Ingredient> selectIngredientSingle(SqlSession sqlSession, int recipeNo) {
 		ArrayList<Ingredient> ingredientList = new ArrayList();
 		String sql = prop.getProperty("selectIngredientSingle");
 		
@@ -147,7 +127,7 @@ public class RecipeDao {
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<CookSteps> selectCookStepsSingle(Connection conn, int recipeNo) {
+	public ArrayList<CookSteps> selectCookStepsSingle(SqlSession sqlSession, int recipeNo) {
 		ArrayList<CookSteps> cookStepsList = new ArrayList();
 		String sql = prop.getProperty("selectCookStepsSingle");
 		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -177,7 +157,7 @@ public class RecipeDao {
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<RecipeTag> selectRecipeTagSingle(Connection conn, int recipeNo) {
+	public ArrayList<RecipeTag> selectRecipeTagSingle(SqlSession sqlSession, int recipeNo) {
 		ArrayList<RecipeTag> recipeTagList = new ArrayList();
 		String sql = prop.getProperty("selectRecipeTagSingle");
 		
@@ -204,7 +184,7 @@ public class RecipeDao {
 	/**
 	 * 특정 번호 레시피(PK)에 달린 댓글 리스트를 조회하는 기능<br>
 	 */
-	public ArrayList<Reply> selectReplyListSingle(Connection conn, int recipeNo) {
+	public ArrayList<Reply> selectReplyListSingle(SqlSession sqlSession, int recipeNo) {
 		ArrayList<Reply> replyList = new ArrayList();
 		String sql = prop.getProperty("selectReplyListSingle");
 		
@@ -257,7 +237,7 @@ public class RecipeDao {
 	 * @param conn : Connection객체
 	 * @return : 레시피 카테고리 목록이 담긴 ArrayList배열
 	 */
-	public ArrayList<RecipeCategory> selectRecipeCategoryList(Connection conn) {
+	public ArrayList<RecipeCategory> selectRecipeCategoryList(SqlSession sqlSession) {
 		
 		ArrayList<RecipeCategory> cList = new ArrayList();
 		String sql = prop.getProperty("selectRecipeCategoryList");
@@ -282,7 +262,7 @@ public class RecipeDao {
 	 * @param conn : Connection객체
 	 * @return : 글과 작성자의 STATUS가 유효한 레시피글의 총 개수
 	 */
-	public int selectRecipeListCount(Connection conn) {
+	public int selectRecipeListCount(SqlSession sqlSession) {
 		
 		int listCount = 0;
 		String sql = prop.getProperty("selectRecipeListCount");
@@ -306,7 +286,7 @@ public class RecipeDao {
 	 * @param pi : 페이지네이션 처리를 위한 정보가 담긴 PageInfo객체<br>
 	 * @return
 	 */
-	public ArrayList<Recipe> selectRecipeList(Connection conn, PageInfo pi) {
+	public ArrayList<Recipe> selectRecipeList(SqlSession sqlSession, PageInfo pi) {
 		
 		ArrayList<Recipe> recipeList = new ArrayList();
 		String sql = prop.getProperty("selectRecipeList");
@@ -346,19 +326,19 @@ public class RecipeDao {
 	 * @param recipeNo
 	 * @return
 	 */
-	public int deleteReqReplySingle(Connection conn, Reply reply) {
-		int result = 0;
-		String sql = prop.getProperty("deleteReqReplySingle");
+	public int deleteReqReplySingle(SqlSession sqlSession, Reply reply) {
 		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, reply.getReplyNo());
-			pstmt.setInt(2, reply.getRecipeNo());
-			
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
+		return sqlSession.update("recipeMapper.deleteReqReplySingle", reply);
+		/*
+		 * int result = 0; String sql = prop.getProperty("deleteReqReplySingle");
+		 * 
+		 * try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		 * pstmt.setInt(1, reply.getReplyNo());
+		 * pstmt.setInt(2, reply.getRecipeNo());
+		 * 
+		 * result = pstmt.executeUpdate(); } catch (SQLException e) {
+		 * e.printStackTrace(); }
+		 */
 	}
 	
 	
@@ -373,19 +353,18 @@ public class RecipeDao {
 	 * @return :
 	 * INSERT구문 수행이 성공한 행의 개수
 	 */
-	public int insertRecipe(Connection conn, Recipe recipe) {
-		int result = 0;
-		String sql = prop.getProperty("insertRecipe");
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, recipe.getRecipeTitle());
-			pstmt.setInt(2, recipe.getRecipeWriterNo());
-			pstmt.setInt(3, recipe.getRecipeCategoryNo());
-			
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
+	public int insertRecipe(SqlSession sqlSession, Recipe recipe) {
+		
+		return sqlSession.insert("recipeMapper", recipe);
+		/*
+		 * int result = 0; String sql = prop.getProperty("insertRecipe");
+		 * try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
+		 * pstmt.setString(1, recipe.getRecipeTitle()); pstmt.setInt(2,
+		 * recipe.getRecipeWriterNo()); pstmt.setInt(3, recipe.getRecipeCategoryNo());
+		 * 
+		 * result = pstmt.executeUpdate(); } catch (SQLException e) {
+		 * e.printStackTrace(); } return result;
+		 */
 	}
 	
 	
@@ -400,7 +379,10 @@ public class RecipeDao {
 	 * @return :
 	 * INSERT구문 수행이 성공한 행의 개수
 	 */
-	public int insertRecipePic(Connection conn, ArrayList<RecipePic> recipePicList) {
+	public int insertRecipePic(SqlSession sqlSession, ArrayList<RecipePic> recipePicList) {
+		
+		
+		/*
 		// 1로 초기화 후 executeUpdate결과를 곱함 => 하나라도 실패 시 0반환
 		int result = 1;
 		String sql = prop.getProperty("insertRecipePic");
@@ -418,8 +400,10 @@ public class RecipeDao {
 			}
 		}
 		return result;
+		*/
 	}
-
+	int result = 1;
+	result *= sqlSession.insert("recipeMapper.insertRecipePic", recipePicList);
 	
 	/**
 	 * 레시피 재료, 재료량 정보가 담긴 ArrayList를 받아<br>
@@ -431,7 +415,7 @@ public class RecipeDao {
 	 * @return :
 	 * INSERT구문 수행이 성공한 행의 개수
 	 */
-	public int insertIngredient(Connection conn, ArrayList<Ingredient> ingredientList) {
+	public int insertIngredient(SqlSession sqlSession, ArrayList<Ingredient> ingredientList) {
 		// 1로 초기화 후 executeUpdate결과를 곱함 => 하나라도 실패 시 0반환
 		int result = 1;
 		String sql = prop.getProperty("insertIngredient");
@@ -461,7 +445,7 @@ public class RecipeDao {
 	 * @return :
 	 * INSERT구문 수행이 성공한 행의 개수
 	 */
-	public int insertCookSteps(Connection conn, ArrayList<CookSteps> cookStepsList) {
+	public int insertCookSteps(SqlSession sqlSession, ArrayList<CookSteps> cookStepsList) {
 		// 1로 초기화 후 executeUpdate결과를 곱함 => 하나라도 실패 시 0반환
 		int result = 1;
 		String sql = prop.getProperty("insertCookSteps");
@@ -491,7 +475,7 @@ public class RecipeDao {
 	 * @return :
 	 * INSERT구문 수행이 성공한 행의 개수
 	 */
-	public int insertRecipeTag(Connection conn, ArrayList<Integer> tagNoList) {
+	public int insertRecipeTag(SqlSession sqlSession, ArrayList<Integer> tagNoList) {
 		// 1로 초기화 후 executeUpdate결과를 곱함 => 하나라도 실패 시 0반환
 		int result = 1;
 		String sql = prop.getProperty("insertRecipeTag");
@@ -513,7 +497,7 @@ public class RecipeDao {
 	 * 특정 번호 레시피(PK)에 댓글을 입력하는 기능
 	 * @param reply : replyContent, memNo, recipeNo필드가 초기화된 Reply객체
 	 */
-	public int insertReply(Connection conn, Reply reply) {
+	public int insertReply(SqlSession sqlSession, Reply reply) {
 		int result = 0;
 		String sql = prop.getProperty("insertReply");
 		
@@ -554,7 +538,7 @@ public class RecipeDao {
 	
 	
 	/*
-	public ArrayList<UnRecipe> selectUnRecipeForModal(Connection conn, int memNo) {
+	public ArrayList<UnRecipe> selectUnRecipeForModal(SqlSession sqlSession, int memNo) {
 		
 		ArrayList<UnRecipe> uList = new ArrayList();
 		String sql = prop.getProperty("selectUnRecipeForModal");
