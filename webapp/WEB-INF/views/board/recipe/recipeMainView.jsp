@@ -17,9 +17,9 @@
 
 <body>
 	<!-- 헤더, 레시피 카테고리바, 레시피 정렬바 -->
-	<jsp:include page="/views/common/header.jsp" />
-	<jsp:include page="/views/board/recipe_frag/recipeCategoryBar.jsp" />
-	<jsp:include page="/views/board/recipe_frag/recipeSortBar.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/board/recipe_frag/recipeCategoryBar.jsp" />
+	<jsp:include page="/WEB-INF/views/board/recipe_frag/recipeSortBar.jsp" />
 
 	<!-- 전체를 감싸는 div -->
 	<div id="recipeMainViewWrap">
@@ -88,6 +88,6 @@
 	<script src="resources/js/board/recipe/recipeMainView.js"></script>
 	
 	<!-- 푸터 -->
-	<jsp:include page="/views/common/footer.jsp" />
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 </body>
 </html>

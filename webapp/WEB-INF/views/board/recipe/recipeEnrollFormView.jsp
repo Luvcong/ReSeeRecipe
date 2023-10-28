@@ -16,9 +16,9 @@
 
 <body>
 	
-	<jsp:include page="/views/common/header.jsp" />
-	<jsp:include page="/views/board/recipe_frag/recipeCategoryBar.jsp" />
-	<jsp:include page="/views/board/recipe_frag/recipeSortBar.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/board/recipe_frag/recipeCategoryBar.jsp" />
+	<jsp:include page="/WEB-INF/views/board/recipe_frag/recipeSortBar.jsp" />
 
 	<div id="recipe-enroll-form-wrap"><!-- 전체 wrap 시작 -->
 		
