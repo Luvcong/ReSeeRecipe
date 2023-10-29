@@ -1,10 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.ArrayList, com.kh.semi.dm.model.vo.Dm, com.kh.semi.common.model.vo.PageInfo" %>       
+<%@ page import="java.util.ArrayList, com.kh.semi.dm.model.vo.Dm, com.kh.semi.common.model.vo.PageInfo" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-	ArrayList<Dm> list = (ArrayList<Dm>)request.getAttribute("list");
-	String successMsg = (String)session.getAttribute("successMsg");
-	String failMsg = (String)session.getAttribute("failMsg");
 	int waitingCount = (int)request.getAttribute("waitingCount");
 	int repliedCount = (int)request.getAttribute("repliedCount");
 	
@@ -31,7 +29,7 @@
 </head>
 <body>
 	
-	<%@ include file="../../manager/navbar.jsp" %>
+	<jsp:include page="../../manager/navbar.jsp" />
 	<script src="resources/js/dm/dm_manager.js"></script>
 	
     <div class="rs-content">        
@@ -41,7 +39,7 @@
             </div>
             <div class="h-content d-flex p-3">  <!-- 패딩 1rem -->
                 <div class="mr-auto">
-                    미답변 <span class="waiting"><%= pi.getListCount() - repliedCount %></span> 개 / 답변완료 <span class="replied"><%= repliedCount %></span>개
+                    미답변 <span class="waiting">${ requestScope.pi.listCount - requestScope.repliedCount }</span> 개 / 답변완료 <span class="replied">${ requestScope.repliedCount }</span>개
                 </div>
                 <div >
                     <button class="btn btn-sm btn-warning" onclick="showDmRepliedModal()">쪽지 답변</button>
@@ -64,51 +62,42 @@
                     </tr>
                 </thead>
                 <tbody>
-                <% if(list == null || list.isEmpty()) { %>
+                <c:choose>
+                	<c:when test="${ requestScope.list eq null || empty requestScope.list }">
    	                <tr>
 	                    <td colspan="7">받은 쪽지가 없습니다</td>
 	                </tr>
-	            <% } else { %>
-	            	<% for(Dm dm : list) { %>    
+                	</c:when>
+                	<c:otherwise>
+                		<c:forEach var="dm" items="${ requestScope.list }">
 	                    <tr ondblclick="onDbClickRow()">
 	                        <td><input type="checkbox" onclick="checkOnce()"></td>
-	                        <td><%= dm.getDmNo() %></td>
-	                        <td><%= dm.getSendDate() %></td>
-	                        <td><%= dm.getMemId() %></td>
-	                        <td><%= dm.getMemNickname() %></td>
-	                        <td><%= dm.getDmContent() %></td>
-	                        <td class="<%= dm.getDmStatus().equals("Y") ? "replied" : "waiting" %>">
-	                        	답변<%= dm.getDmStatus().equals("Y") ? "완료": "대기"  %>
-	                        </td>
-	                        <td style="display: none"><%= dm.getDmReply() %></td>
+	                        <td>${ dm.dmNo }</td>
+	                        <td>${ dm.sendDate }</td>
+	                        <td>${ dm.memId }</td>
+	                        <td>${ dm.memNickname }</td>
+	                        <td>${ dm.dmContent }</td>
+	                        <td class="dm-status-${ dm.dmStatus }">답변</td>
+	                        <td style="display: none">${ dm.dmReply }</td>
 	                    </tr>
-   	                <% } %>
-                <% } %>   
+                		</c:forEach>
+                	</c:otherwise>
+                </c:choose>
                 </tbody>
             </table>
         </div>
         
    	   	<!-- 페이징바 -->
 		<div class="paging-area">
-			<% if(dmListPage != 1) { %>
-				<button onclick="page('<%= dmListPage -1 %>');" class="btn btn-warning">&lt;</button>
-			<% } %>
-			<% for(int i = dmStartPage; i <= dmEndPage; i++) { %>
-				<% if(dmListPage != i) { %>
-					<button onclick="page('<%= i %>');" class="btn btn-warning"><%= i %></button>
-				<% } else { %>
-					<button disabled class="btn btn-warning"><%= i %></button>
-				<% } %>
-			<% } %>
-			<% if(dmListPage != dmMaxPage) { %>
-				<button onclick="page('<%= dmListPage + 1 %>');" class="btn bbtn-warning">&gt;</button>
-			<% } %>
+			<c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }">
+				<button onclick="location.href='${ pageContext.request.contextPath }/jhselect.dm?page=${ p }'" class="btn btn-warning">${ p }</button>
+			</c:forEach>
 		</div>	<!-- 페이징바 -->
     	</div>  <!-- rs-content -->
 
 	<!-- 쪽지답변  modal창 -->
  	<div class="modal" id="dmRepliedForm">
-		<form method="post" action="<%= contextPath %>/jhupdate.dm">
+		<form method="post" action="${ pageContext.request.contextPath }/jhupdate.dm">
 	        <div class="modal-dialog modal-lg">
 	            <div class="modal-content">
 	                <!-- Modal Header -->
@@ -119,7 +108,7 @@
 	                <!-- Modal body -->
 	                <div class="modal-body">
 							<input type="hidden" name="dmNo">
-							<input type="hidden" name="page" value="<%= dmListPage %>">
+							<input type="hidden" name="page" value="${ requestScope.pi.currentPage }">
 							<table class="modal-table" border="1">
 								<tr>
 									<th>회원 아이디</th>
@@ -154,21 +143,21 @@
   </div>
   
   <!-- alertMsg script : DmListController에서 사용 -->
-	<script>
-		var successMsg = '<%= successMsg %>';
-		var failMsg = '<%= failMsg %>';
-		
-		if(successMsg != 'null'){
-			Swal.fire('성공', successMsg, 'success');	// alert대신 swal 라이브러리 사용
-		}
-		
-		if(failMsg != 'null'){
-			Swal.fire('실패', failMsg, 'error');
-		}
-		
-		<% session.removeAttribute("successMsg"); %>
-		<% session.removeAttribute("failMsg"); %>
-	</script>	
+ 	<c:choose>
+ 		<c:when test="${ sessionScope.successMsg ne null && not empty sessionScope.successMsg }">
+ 			<script>
+	 			Swal.fire('성공', '${ successMsg }', 'success');
+ 			</script>
+ 		</c:when>
+ 		<c:when test="${ sessionScope.failMsg ne null && not empty sessionScope.failMsg }">
+ 			<script>
+ 			Swal.fire('실패', '${ failMsg }', 'error');
+ 			</script>
+ 		</c:when>
+ 	</c:choose>
+ 	
+ 	<c:remove var="successMsg" />
+ 	<c:remove var="failMsg" />
   	
 	
 
