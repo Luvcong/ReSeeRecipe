@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="couponMapper">
+	
+	<resultMap id="couponResultSet" type="coupon">
+		<result column="COUPON_NO" property="couponNo" />
+		<result column="COUPON_NAME" property="couponName" />
+		<result column="COUPON_RATIO" property="couponRatio" />
+		<result column="COUPON_STARTDATE" property="couponStartdate" />
+		<result column="COUPON_ENDDATE" property="couponEndDate" />
+		<result column="ISSUE_COUPON_CNT" property="issueCouponCount" />
+		<result column="USES_COUPON_CNT" property="usesCouponCount" />
+		<result column="COUPON_AVAIL" property="couponAvail" />
+		<result column="COUPON_REASON" property="couponReason" />
+	</resultMap>
+	
+	<!-- 쿠폰함 리스트 조회 -->
+	<select id="selectCouponList" resultMap="couponResultSet">
+          SELECT
+                C.COUPON_NO, C.COUPON_NAME, C.COUPON_RATIO, C.COUPON_STARTDATE, C.COUPON_ENDDATE,
+                NVL(MC.ISSUE_COUPON_CNT, 0) AS ISSUE_COUPON_CNT, NVL(TMC.USES_COUPON_CNT, 0) AS USES_COUPON_CNT,
+                C.COUPON_AVAIL, NVL(C.COUPON_REASON, '-') AS COUPON_REASON
+           FROM
+           		(SELECT
+           				COUPON_NO, COUNT(*) AS ISSUE_COUPON_CNT
+                   FROM
+                   		TB_MEMBER_COUPON
+                  GROUP
+                  	 BY
+                  	 	COUPON_NO) MC,
+                (SELECT
+                		COUPON_NO, COUNT(COUPON_NO) AS USES_COUPON_CNT
+                   FROM
+                   		TB_MEMBER_COUPON
+                  WHERE
+                  		MEMBER_COUPON_STATUS = 'Y'
+                  GROUP
+                     BY
+                     	COUPON_NO) TMC,
+                     	TB_COUPON C
+		          WHERE
+		          		MC.COUPON_NO(+) = C.COUPON_NO
+		            AND
+	            		MC.COUPON_NO = TMC.COUPON_NO(+)
+		          ORDER
+		          	 BY
+		          	 	C.COUPON_NO ASC
+	</select>
+	
+	<!-- 쿠폰함 리스트 행 수 조회 -->
+	<select id="selectCouponListCount" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+	  			TB_COUPON
+	</select>
+	
+	
+	<!-- 쿠폰함 쿠폰 추가 -->
+	<insert id="insertCoupon" parameterType="coupon">
+		INSERT
+		  INTO
+		  		TB_COUPON
+  		VALUES
+  				(SEQ_COUPON.NEXTVAL,
+  				#{ couponName },
+  				#{ couponRatio },
+  				'N',
+  				#{ couponReason },
+  				#{ startCoupon },
+  				#{ endCoupon }
+  				)
+	</insert>
+	
+	<!-- 쿠폰함 쿠폰 삭제 -->
+	<delete id="deleteCoupon" parameterType="_int">
+		DELETE
+				TB_COUPON
+		 WHERE
+		 		COUPON_NO = #{ couponNo }
+	</delete>
+	
+	  			
+</mapper>  
