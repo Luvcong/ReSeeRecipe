@@ -93,22 +93,8 @@ public class RecipeDao {
 	 * @return : 레시피 카테고리 목록이 담긴 ArrayList배열
 	 */
 	public ArrayList<RecipeCategory> selectRecipeCategoryList(SqlSession sqlSession) {
-		
-		ArrayList<RecipeCategory> cList = new ArrayList();
-		String sql = prop.getProperty("selectRecipeCategoryList");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql);
-				ResultSet rset = pstmt.executeQuery()) {
-			while(rset.next()) {
-				RecipeCategory rc = new RecipeCategory();
-				rc.setRecipeCategoryNo(rset.getInt("RECIPE_CATEGORY_NO"));
-				rc.setRecipeCategoryName(rset.getString("RECIPE_CATEGORY_NAME"));
-				cList.add(rc);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return cList;
+	
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectRecipeCategoryList");
 	}
 	
 	

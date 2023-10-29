@@ -36,38 +36,38 @@ public interface RecipeService {
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<Ingredient> selectIngredientSingle(int recipeNo);
+	ArrayList<Ingredient> selectIngredientSingle(int recipeNo);
 	
 	/**
 	 * 레시피 번호로 해당 레시피의 요리 과정 테이블(TB_COOK_STEPS) 모든 정보를 조회하는 기능
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<CookSteps> selectCookStepsSingle(int recipeNo);
+	ArrayList<CookSteps> selectCookStepsSingle(int recipeNo);
 	
 	/**
 	 * 레시피 번호로 해당 레시피의 해시태그 테이블(TB_RECIPE_TAG) 모든 정보와 해시태그 이름, 날짜를 조회하는 기능
 	 * @param recipeNo
 	 * @return
 	 */
-	public ArrayList<RecipeTag> selectRecipeTagSingle(int recipeNo);
+	ArrayList<RecipeTag> selectRecipeTagSingle(int recipeNo);
 	
 	/**
 	 * 특정 번호 레시피(PK)에 달린 댓글 리스트를 조회하는 기능<br>
 	 */
-	public ArrayList<Reply> selectReplyListSingle(int recipeNo);
+	ArrayList<Reply> selectReplyListSingle(int recipeNo);
 	
 	/**
 	 * 레시피 카테고리 목록을 조회해 반환
 	 * @return : 레시피 카테고리 목록이 담긴 ArrayList배열
 	 */
-	public ArrayList<RecipeCategory> selectRecipeCategoryList();
+	ArrayList<RecipeCategory> selectRecipeCategoryList();
 	
 	/**
 	 * 레시피 개수 조회
 	 * @return : 글과 작성자의 STATUS가 유효한 레시피글의 총 개수
 	 */
-	public int selectRecipeListCount();
+	int selectRecipeListCount();
 	
 	
 	/**
@@ -80,7 +80,7 @@ public interface RecipeService {
 	 * > ArrayList<Recipe> rList : 페이지네이션 처리되어 조회된 레시피 글 정보를 Recipe객체로 만든 후 ArrayList에 담음<br>
 	 * 	 Recipe필드 :  recipeNo, recipeTitle, recipeCount, titleImg, memNickName, htCount<br>
 	 */
-	public ArrayList<Recipe> selectRecipeList(PageInfo pi);
+	ArrayList<Recipe> selectRecipeList(PageInfo pi);
 	
 	
 	
@@ -92,7 +92,7 @@ public interface RecipeService {
 	 * @param reply
 	 * @return
 	 */
-	public int deleteReqReplySingle(Reply reply);
+	int deleteReqReplySingle(Reply reply);
 	
 	
 	
@@ -103,20 +103,14 @@ public interface RecipeService {
 	 * @param insertRecipeMap
 	 * @return
 	 */
-	public int insertRecipe(HashMap<String, Object> insertRecipeMap);
+	int insertRecipe(HashMap<String, Object> insertRecipeMap);
 	
 	
 	/**
 	 * 특정 번호 레시피(PK)에 댓글을 입력하는 기능
 	 * @param reply : replyContent, memNo, recipeNo필드가 초기화된 Reply객체
 	 */
-	public int insertReply(Reply reply);
-	
-	
-	
-	
-	
-	
+	int insertReply(Reply reply);
 	
 	
 	

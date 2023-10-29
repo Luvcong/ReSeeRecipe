@@ -76,14 +76,12 @@ public class RecipeController {
 	 * 	 pageLimit(한 페이지에 보일 페이징 바의 최대 개수), boardLimit(한 페이지에 보일 게시글 최대 개수)<br>
 	 */
 	public String selectRecipeList(HttpServletRequest request, HttpServletResponse response) { // 최신순
-		
 		// 기본변수
 		String viewPath = "";
-		RecipeService rs = new RecipeServiceImpl();
-		
+		RecipeService recipeService = new RecipeServiceImpl();
 		// ---------------- 페이지네이션 ----------------
 		// pi값 계산은 여기서 (PagiInfo객체 화면단에 넘겨야하기때문에)
-		int listCount = rs.selectRecipeListCount();
+		int listCount = recipeService.selectRecipeListCount();
 		int currentPage = request.getParameter("currentPage") != null ?
 						  Integer.parseInt(request.getParameter("currentPage"))
 						  : 1;
@@ -91,7 +89,7 @@ public class RecipeController {
 		int boardLimit = 9; // 한 페이지에 보일 게시글 수
 		
 		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
-		ArrayList<Recipe> recipeList = rs.selectRecipeList(pi);
+		ArrayList<Recipe> recipeList = recipeService.selectRecipeList(pi);
 		
 		// 결과에 따라 화면 선택
 		if(!recipeList.isEmpty()) {
@@ -134,15 +132,15 @@ public class RecipeController {
 	 */
 	public String recipeDetail(HttpServletRequest request, HttpServletResponse response) {
 		String viewPath = "";
-		RecipeServiceImpl rs = new RecipeServiceImpl();
+		RecipeService recipeService = new RecipeServiceImpl();
 		
 		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
 		
-		Recipe recipe = rs.selectRecipeSingle(recipeNo);
-		ArrayList<RecipePic> reciepPicList = rs.selectRecipePicSingle(recipeNo);
-		ArrayList<Ingredient> ingredientList = rs.selectIngredientSingle(recipeNo);
-		ArrayList<CookSteps> cookStepsList = rs.selectCookStepsSingle(recipeNo);
-		ArrayList<RecipeTag> recipeTagList = rs.selectRecipeTagSingle(recipeNo);
+		Recipe recipe = recipeService.selectRecipeSingle(recipeNo);
+		ArrayList<RecipePic> reciepPicList = recipeService.selectRecipePicSingle(recipeNo);
+		ArrayList<Ingredient> ingredientList = recipeService.selectIngredientSingle(recipeNo);
+		ArrayList<CookSteps> cookStepsList = recipeService.selectCookStepsSingle(recipeNo);
+		ArrayList<RecipeTag> recipeTagList = recipeService.selectRecipeTagSingle(recipeNo);
 		
 		if( !(reciepPicList.isEmpty()
 			||ingredientList.isEmpty()
@@ -158,7 +156,7 @@ public class RecipeController {
 			request.setAttribute("recipeDetailMap", recipeDetailMap);
 			viewPath = "/views/board/recipe/recipeDetailView.jsp";
 		} else {
-			viewPath =  new SendError().sendError(request, "게시글 상세 조회에 실패했습니다");
+			viewPath = new SendError().sendError(request, "게시글 상세 조회에 실패했습니다");
 		}
 		return viewPath;
 	}

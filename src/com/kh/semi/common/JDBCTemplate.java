@@ -1,9 +1,9 @@
 package com.kh.semi.common;
 
 
-import static com.kh.semi.common.JDBCTemplate.close;
+/*import static com.kh.semi.common.JDBCTemplate.close;
 import static com.kh.semi.common.JDBCTemplate.commit;
-import static com.kh.semi.common.JDBCTemplate.rollback;
+import static com.kh.semi.common.JDBCTemplate.rollback;*/
 
 import java.io.FileInputStream;
 import java.io.IOException;

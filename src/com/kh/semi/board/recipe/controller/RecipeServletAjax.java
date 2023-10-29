@@ -37,8 +37,8 @@ public class RecipeServletAjax extends HttpServlet {
 		RecipeController rc = new RecipeController();
 		System.out.println("Ajax서블릿 도착 RecipeServletAjax");
 		
-		// POST 인코딩
-		request.setCharacterEncoding("UTF-8");
+		// POST 인코딩 => 필터에서
+		//request.setCharacterEncoding("UTF-8");
 		
 		// 문자열 추출
 		String uri = request.getRequestURI();

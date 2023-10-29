@@ -272,7 +272,7 @@
 	<!-- ㅠㅠㅠㅠㅠㅠ몰라 -->
 	
 	
-	<entry key="insertRecipePic">
+<!-- 	<entry key="insertRecipePic">
 		INSERT
 		  INTO
 		  	   TB_RECIPE_PIC
@@ -293,9 +293,9 @@
 			   ?,
 			   SEQ_RECIPE.CURRVAL
 			   )
-	</entry>
+	</entry> -->
 	
-	<entry key="insertIngredient">
+<!-- 	<entry key="insertIngredient">
 		INSERT
 		  INTO
 		  	   TB_INGREDIENT
@@ -312,10 +312,10 @@
 			  ?,
 			  SEQ_RECIPE.CURRVAL
 			  )
-	</entry>
+	</entry> -->
 	
 	
-	<entry key="insertCookSteps">
+<!-- 	<entry key="insertCookSteps">
 		INSERT
 		  INTO
 		  	   TB_COOK_STEPS
@@ -334,10 +334,10 @@
 			   ?,
 			   SEQ_RECIPE.CURRVAL
 			   )
-	</entry>
+	</entry> -->
 	
 	
-	<entry key="insertRecipeTag">
+<!-- 	<entry key="insertRecipeTag">
 		INSERT
 		  INTO
 		  	   TB_RECIPE_TAG
@@ -350,10 +350,10 @@
 			   ?,
 			   SEQ_RECIPE.CURRVAL
 			   )
-	</entry>
+	</entry> -->
 	
 	
-	<entry key="insertReply">
+<!-- 	<entry key="insertReply">
 		INSERT
 		  INTO
 		  	   TB_REPLY
@@ -370,7 +370,7 @@
 			   ?,
 			   ?
 			   )
-</entry>
+</entry> -->
 	
 	
 	
@@ -394,16 +394,17 @@
 	<!-- ***** 관리자 카테고리 ***** -->
 	
 	<!-- 카테고리 리스트 조회 SQL문 -->
-	<entry key="selectRecipeCategoryList">
+	<select id="selectRecipeCategoryList" resultMap="">
 		SELECT
 			   RECIPE_CATEGORY_NO,
 			   RECIPE_CATEGORY_NAME
 		  FROM
 		  	   TB_RECIPE_CATEGORY
-	</entry>
+	</select>
+
 	
 	<!-- 레시피 카테고리 추가 SQL문 -->
-	<entry key="insertCategory">
+<!-- 	<entry key="insertCategory">
 		INSERT
 		  INTO
 				TB_RECIPE_CATEGORY
@@ -412,10 +413,10 @@
 		 		SEQ_RECIPE_CATEGORY.NEXTVAL,
 		 		?
 		 		)
-	</entry>
-	
+	</entry> -->
+
 	<!-- 관리자 카테고리 리스트 화면 SQL문 -->
-	<entry key="selectCategoryListManager">
+<!-- 	<entry key="selectCategoryListManager">
 		SELECT *
           FROM (SELECT ROWNUM RNUM, A.*
                   FROM (SELECT
@@ -434,10 +435,10 @@
 		                            ON RC.RECIPE_CATEGORY_NO = CTGR_CNT.RECIPE_CATEGORY_NO
 		                 ORDER BY RECIPE_CATEGORY_NO ASC) A)
 		                 WHERE RNUM BETWEEN ? AND ?
-	</entry>
+	</entry> -->
 	
 	<!-- 카테고리 삭제시 레시피글 변경(STATUS = N && CATEGORY_NO = 0) SQL문 -->
-	<entry key="updateRecipeStatus">
+<!-- 	<entry key="updateRecipeStatus">
 		UPDATE
 				TB_RECIPE R
 		   SET
@@ -447,42 +448,42 @@
 		                                   FROM TB_RECIPE RR, TB_RECIPE_CATEGORY RC
 		                                  WHERE RR.RECIPE_CATEGORY_NO = ?
 		                                    AND RR.RECIPE_CATEGORY_NO = RC.RECIPE_CATEGORY_NO)
-	</entry>
+	</entry> -->
 
 	<!-- 카테고리 삭제 SQL문 -->
-	<entry key="deleteCategory">
+<!-- 	<entry key="deleteCategory">
 		DELETE
 		  FROM TB_RECIPE_CATEGORY
 		 WHERE RECIPE_CATEGORY_NO = ?
-	</entry>
+	</entry> -->
 	
 	<!-- 카테고리명 변경 SQL문 -->
-	<entry key="updateCategory">
+<!-- 	<entry key="updateCategory">
 		UPDATE TB_RECIPE_CATEGORY
 		   SET RECIPE_CATEGORY_NAME = ?
 		 WHERE RECIPE_CATEGORY_NAME = ?
-	</entry>
+	</entry> -->
 	
 	<!-- 카테고리명 중복여부 체크 SQL문 -->
-	<entry key="categoryNameCheck">
+<!-- 	<entry key="categoryNameCheck">
 		SELECT
 	        	COUNT(*)
 		  FROM
 		        TB_RECIPE_CATEGORY
 		 WHERE
 		        RECIPE_CATEGORY_NAME = ?
-	</entry>
+	</entry> -->
 	
 	<!-- 카테고리 리스트 행 조회 -->
-	<entry key="selectCategoryListCount">
+<!-- 	<entry key="selectCategoryListCount">
 		SELECT
 	        	COUNT(*)
 		  FROM
 		        TB_RECIPE_CATEGORY
-	</entry>
+	</entry> -->
 	
 	<!-- 카테고리 키워드 검색시 리스트 조회 -->
-	<entry key="checkCategory">
+<!-- 	<entry key="checkCategory">
 		SELECT
 		       RC.RECIPE_CATEGORY_NO,
 		       RC.RECIPE_CATEGORY_NAME,
@@ -498,14 +499,11 @@
 		    ON RC.RECIPE_CATEGORY_NO = CTGR_CNT.RECIPE_CATEGORY_NO
 		 WHERE RECIPE_CATEGORY_NAME LIKE '%'||?||'%'
 		 ORDER BY RC.RECIPE_CATEGORY_NO ASC
-	</entry>
+	</entry> -->
 	
 	
 	
-	
-	
-	
-	<entry key="selectUnRecipeForModal">
+<!-- 	<entry key="selectUnRecipeForModal">
 		SELECT
 			   UN_RECIPE_NO,
 			   UN_RECIPE_TITLE
@@ -513,7 +511,7 @@
 			   TB_UN_RECIPE
 		 WHERE
 			   UN_RECIPE_WRITER_NO = ?
-	</entry>
+	</entry> -->
 	
 
 </mapper>
