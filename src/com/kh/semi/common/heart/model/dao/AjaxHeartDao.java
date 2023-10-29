@@ -147,6 +147,7 @@ public class AjaxHeartDao {
 	/****************************************************************************/
 	
 
+	
 	/*************** 좋아요 추가/삭제(INSERT/DELETE) 기능 ******************************/
 	public int insertHeartRecipe(SqlSession sqlSession, Heart heart) {
 		

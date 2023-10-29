@@ -79,86 +79,86 @@
 
 	<!--===========================================================-->
 	<!-- 특정 유저가 특정 단일 대상에 좋아요 했는지 여부 -->
-	<select id="" parameterType="" resultType="_int">
-	</select>
-	<entry key="isHeartRecipe">
+	<select id="isHeartRecipe" parameterType="heart" resultType="_int">
 		SELECT
 			   RECIPE_NO
 		  FROM
 		  	   TB_HT_RECIPE
 		 WHERE
-		 	   MEM_NO = ?
+		 	   MEM_NO = ${memNo}
 		   AND
-		   	   RECIPE_NO = ?
+		   	   RECIPE_NO = ${htTargetNo}
 		 ORDER
 		 	BY
 		 	   HT_RECIPE_DATE
 		 	   DESC
-	</entry>
+	</select>
 
 
-	<entry key="isHeartBookmark">
+	<select id="isHeartBookmark" parameterType="heart" resultType="_int">
 		SELECT
 			   RECIPE_NO
 		  FROM
 		  	   TB_HT_BOOKMARK
 		 WHERE
-		 	   MEM_NO = ?
+		 	   MEM_NO = ${memNo}
 		   AND
-		   	   RECIPE_NO = ?
+		   	   RECIPE_NO = ${htTargetNo}
 		 ORDER
 		 	BY
 		 	   HT_BOOKMARK_DATE
 		 	   DESC
-	</entry>
+	</select>
+
 	
-	
-	<entry key="isHeartNotice">
+	<select id="isHeartNotice" parameterType="heart" resultType="_int">
 		SELECT
 			   NOTICE_NO
 		  FROM
 		  	   TB_HT_NOTICE
 		 WHERE
-		 	   MEM_NO = ?
+		 	   MEM_NO = ${memNo}
 		   AND
-		   	   NOTICE_NO = ?
+		   	   NOTICE_NO = ${htTargetNo}
 		 ORDER
 		 	BY
 		 	   HT_NOTICE_DATE
 		 	   DESC
-	</entry>
+	</select>	
+
 	
-	
-	<entry key="isHeartSubsc">
+	<select id="isHeartSubsc" parameterType="heart" resultType="_int">
 		SELECT
 			   CHEF_NO
 		  FROM
 		  	   TB_HT_SUBSC
 		 WHERE
-		 	   MEM_NO = ?
+		 	   MEM_NO = ${memNo}
 		   AND
-		   	   CHEF_NO = ?
+		   	   CHEF_NO = ${htTargetNo}
 		 ORDER
 		 	BY
 		 	   HT_SUBSC_DATE
 		 	   DESC
-	</entry>
+	</select>	
+
 	
-	
-	<entry key="isHeartReply">
+	<select id="isHeartReply" parameterType="heart" resultType="_int">
 		SELECT
 			   REPLY_NO
 		  FROM
 		  	   TB_HT_REPLY
 		 WHERE
-		 	   MEM_NO = ?
+		 	   MEM_NO = ${memNo}
 		   AND
-		   	   REPLY_NO = ?
+		   	   REPLY_NO = ${htTargetNo}
 		 ORDER
 		    BY
 		       HT_REPLY_DATE
 		       DESC
-	</entry>
+	</select>	
+
+
 	<!--===========================================================-->
 	
 	
