@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="heartMapper">
+
+
+	
+	<select id="htCountRecipe" parameterType="_int" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+			   TB_HT_RECIPE
+		 WHERE
+			   RECIPE_NO = #{htTargetNo}
+		 ORDER
+			BY
+			   HT_RECIPE_DATE
+			   DESC
+	</select>
+
+	
+	<select id="htCountBookmark" parameterType="_int" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+			   TB_HT_BOOKMARK
+		 WHERE
+			   RECIPE_NO = #{htTargetNo}
+		 ORDER
+		    BY
+			   HT_BOOKMARK_DATE
+			   DESC
+	</select>
+	
+	
+	<select id="htCountNotice" parameterType="_int" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+			   TB_HT_NOTICE
+		 WHERE
+		 	   NOTICE_NO = #{htTargetNo}
+		 ORDER
+			BY
+			   HT_NOTICE_DATE
+			   DESC
+	</select>
+	
+	<select id="htCountSubsc" parameterType="_int" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+			   TB_HT_SUBSC
+		 WHERE
+			   CHEF_NO = #{htTargetNo}
+		 ORDER
+			BY
+			   HT_SUBSC_DATE
+			   DESC
+	</select>
+	
+	
+	<select id="htCountReply" parameterType="_int" resultType="_int">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_HT_REPLY
+		 WHERE
+		 	   REPLY_NO = #{htTargetNo}
+		 ORDER
+			BY
+			   HT_REPLY_DATE
+			   DESC
+	</select>
+
+	
+
+	<!--===========================================================-->
+	<!-- 특정 유저가 특정 단일 대상에 좋아요 했는지 여부 -->
+	<select id="" parameterType="" resultType="_int">
+	</select>
+	<entry key="isHeartRecipe">
+		SELECT
+			   RECIPE_NO
+		  FROM
+		  	   TB_HT_RECIPE
+		 WHERE
+		 	   MEM_NO = ?
+		   AND
+		   	   RECIPE_NO = ?
+		 ORDER
+		 	BY
+		 	   HT_RECIPE_DATE
+		 	   DESC
+	</entry>
+
+
+	<entry key="isHeartBookmark">
+		SELECT
+			   RECIPE_NO
+		  FROM
+		  	   TB_HT_BOOKMARK
+		 WHERE
+		 	   MEM_NO = ?
+		   AND
+		   	   RECIPE_NO = ?
+		 ORDER
+		 	BY
+		 	   HT_BOOKMARK_DATE
+		 	   DESC
+	</entry>
+	
+	
+	<entry key="isHeartNotice">
+		SELECT
+			   NOTICE_NO
+		  FROM
+		  	   TB_HT_NOTICE
+		 WHERE
+		 	   MEM_NO = ?
+		   AND
+		   	   NOTICE_NO = ?
+		 ORDER
+		 	BY
+		 	   HT_NOTICE_DATE
+		 	   DESC
+	</entry>
+	
+	
+	<entry key="isHeartSubsc">
+		SELECT
+			   CHEF_NO
+		  FROM
+		  	   TB_HT_SUBSC
+		 WHERE
+		 	   MEM_NO = ?
+		   AND
+		   	   CHEF_NO = ?
+		 ORDER
+		 	BY
+		 	   HT_SUBSC_DATE
+		 	   DESC
+	</entry>
+	
+	
+	<entry key="isHeartReply">
+		SELECT
+			   REPLY_NO
+		  FROM
+		  	   TB_HT_REPLY
+		 WHERE
+		 	   MEM_NO = ?
+		   AND
+		   	   REPLY_NO = ?
+		 ORDER
+		    BY
+		       HT_REPLY_DATE
+		       DESC
+	</entry>
+	<!--===========================================================-->
+	
+	
+	<!--===========================================================-->
+	<!-- 하트 누르기(추가) -->
+	<entry key="insertHeartRecipe">
+		INSERT
+		  INTO
+		  	   TB_HT_RECIPE
+		  	   (
+		  	   MEM_NO,
+		  	   RECIPE_NO
+		  	   )
+		VALUES
+			   (
+			   ?,
+			   ?
+			   )
+	</entry>
+	
+	
+	<entry key="deleteHeartRecipe">
+		DELETE
+			   TB_HT_RECIPE
+		 WHERE
+			   MEM_NO = ?
+		   AND
+			   RECIPE_NO = ?
+	</entry>
+	
+	
+	<entry key="insertHeartBookmark">
+		INSERT
+		  INTO
+		  	   TB_HT_BOOKMARK
+		  	   (
+		  	   MEM_NO,
+		  	   RECIPE_NO
+		  	   )
+		VALUES
+			   (
+			   ?,
+			   ?
+			   )
+	</entry>
+	
+	
+	<entry key="deleteHeartBookmark">
+		DELETE
+			   TB_HT_BOOKMARK
+		 WHERE
+			   MEM_NO = ?
+		   AND
+			   RECIPE_NO = ?	
+	</entry>
+	
+	
+	<entry key="insertHeartNotice">
+		INSERT
+			   INTO TB_HT_NOTICE
+			   (
+			   MEM_NO,
+			   NOTICE_NO
+			   )
+		VALUES
+			   (
+			   ?,
+			   ?
+			   )
+	</entry>
+	
+	
+	<entry key="deleteHeartNotice">
+		DELETE
+			   TB_HT_NOTICE
+		 WHERE
+			   MEM_NO = ?
+		   AND
+			   NOTICE_NO = ?	
+	</entry>
+	
+	
+	<entry key="insertHeartSubsc">
+		INSERT
+		  INTO
+		  	   TB_HT_SUBSC
+		  	   (
+		  	   MEM_NO,
+		  	   CHEF_NO
+		  	   )
+		VALUES
+			   (
+			   ?,
+			   ?
+			   )
+	</entry>
+	
+	
+	<entry key="deleteHeartSubsc">
+		DELETE
+			   TB_HT_SUBSC
+		 WHERE
+			   MEM_NO = ?
+		   AND
+			   CHEF_NO = ?	
+	</entry>
+	
+	
+	<entry key="insertHeartReply">
+		INSERT
+		  INTO
+		  	   TB_HT_REPLY(
+		  	   MEM_NO,
+		  	   REPLY_NO
+		  	   )
+		VALUES
+			   (
+			   ?,
+			   ?
+			   )
+	</entry>
+	
+	
+	<entry key="deleteHeartReply">
+		DELETE
+			   TB_HT_REPLY
+		 WHERE
+			   MEM_NO = ?
+		   AND
+			   REPLY_NO = ?	
+	</entry>
+	<!--===========================================================-->
+
+	
+	<entry key="heartCountSubsc">
+		SELECT COUNT(*)
+		  FROM TB_HT_SUBSC
+		  JOIN
+			   (SELECT CHEF_NO
+				  FROM TB_CHEF
+				  JOIN TB_MEMBER
+					ON (CHEF_MEM_NO = MEM_NO)
+				 WHERE MEM_STATUS = 'Y'
+			   )
+		 USING
+		 	   (CHEF_NO)
+		  JOIN
+		  	   TB_MEMBER
+		 USING
+		 	   (MEM_NO)
+		 WHERE
+		       CHEF_NO = ?
+		   AND
+		       MEM_STATUS = 'Y'
+		 ORDER
+		    BY
+		       HT_SUBSC_DATE DESC
+	</entry>
+	
+	
+	<entry key="heartCountReply">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_HT_REPLY
+		  JOIN
+			   (SELECT REPLY_NO
+				 FROM TB_REPLY
+			     JOIN
+				      (SELECT RECIPE_NO
+						FROM TB_RECIPE
+						JOIN TB_MEMBER
+						  ON (RECIPE_WRITER_NO = MEM_NO)
+					   WHERE RECIPE_STATUS = 'Y'
+						 AND MEM_STATUS = 'Y'
+					  )
+				USING (RECIPE_NO)
+				 JOIN TB_MEMBER
+				   ON (REPLY_WRITER_NO = MEM_NO)
+				WHERE MEM_STATUS = 'Y'
+			   )
+		 USING
+		 	   (REPLY_NO)
+		  JOIN
+		  	   TB_MEMBER
+		 USING
+		 	   (MEM_NO)
+		 WHERE
+		 	   REPLY_NO = ?
+		   AND
+		   	   MEM_STATUS = 'Y'
+		 ORDER
+		    BY
+		       HT_REPLY_DATE DESC
+	</entry>
+
+</mapper>

@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.semi.common.heart.model.service.AjaxHeartService;
+import com.kh.semi.common.heart.model.service.AjaxHeartServiceImpl;
 import com.kh.semi.common.heart.model.vo.Heart;
 import com.kh.semi.member.model.vo.Member;
 
@@ -28,7 +28,7 @@ public class AjaxHeartController {
 		int htTargetNo = Integer.parseInt(request.getParameter("htTargetNo"));
 		System.out.println(htTargetNo);
 		// Service호출
-		int result = new AjaxHeartService().htCountRecipe(htTargetNo);
+		int result = new AjaxHeartServiceImpl().htCountRecipe(htTargetNo);
 		
 		return result;
 	}
@@ -39,7 +39,7 @@ public class AjaxHeartController {
 		// 값 추출 + 가공 
 		int htTargetNo = Integer.parseInt(request.getParameter("htTargetNo"));
 		// Service호출
-		int result = new AjaxHeartService().htCountBookmark(htTargetNo);
+		int result = new AjaxHeartServiceImpl().htCountBookmark(htTargetNo);
 		return result;
 	}
 	
@@ -49,7 +49,7 @@ public class AjaxHeartController {
 		// 값 추출 + 가공
 		int htTargetNo = Integer.parseInt(request.getParameter("htTargetNo"));
 		// Service호출
-		int result = new AjaxHeartService().htCountNotice(htTargetNo);
+		int result = new AjaxHeartServiceImpl().htCountNotice(htTargetNo);
 		
 		return result;
 	}
@@ -59,7 +59,7 @@ public class AjaxHeartController {
 		
 		// 값 추출 + 가공
 		int htTargetNo = Integer.parseInt(request.getParameter("htTargetNo"));
-		int result = new AjaxHeartService().htCountSubsc(htTargetNo);
+		int result = new AjaxHeartServiceImpl().htCountSubsc(htTargetNo);
 		return result;
 	}
 	
@@ -67,7 +67,7 @@ public class AjaxHeartController {
 	public int htCountReply(HttpServletRequest request, HttpServletResponse response) {
 		
 		int htTargetNo = Integer.parseInt(request.getParameter("htTargetNo"));
-		int result = new AjaxHeartService().htCountReply(htTargetNo);
+		int result = new AjaxHeartServiceImpl().htCountReply(htTargetNo);
 		return result;
 	}
 	/****************************************************************************/
@@ -86,7 +86,7 @@ public class AjaxHeartController {
 		if(isNumber(htTargetNoStr)) {
 			// 자료형 검사 통과 후 ht객체에 담기
 			Heart ht = new Heart(memNo, Integer.parseInt(htTargetNoStr));
-			result = new AjaxHeartService().htChangeRecipe(ht);
+			result = new AjaxHeartServiceImpl().htChangeRecipe(ht);
 		}
 		return result;
 	}
@@ -101,7 +101,7 @@ public class AjaxHeartController {
 		
 		if(isNumber(htTargetNoStr)) {
 			Heart ht = new Heart(memNo, Integer.parseInt(htTargetNoStr));
-			result = new AjaxHeartService().htChangeBookmark(ht);
+			result = new AjaxHeartServiceImpl().htChangeBookmark(ht);
 		}
 		return result;
 	}
@@ -116,7 +116,7 @@ public class AjaxHeartController {
 		
 		if(isNumber(htTargetNoStr)) {
 			Heart ht = new Heart(memNo, Integer.parseInt(htTargetNoStr));
-			result = new AjaxHeartService().htChangeNotice(ht);
+			result = new AjaxHeartServiceImpl().htChangeNotice(ht);
 		}
 		return result;
 	}
@@ -131,7 +131,7 @@ public class AjaxHeartController {
 		
 		if(isNumber(htTargetNoStr)) {
 			Heart ht = new Heart(memNo, Integer.parseInt(htTargetNoStr));
-			result = new AjaxHeartService().htChangeSubsc(ht);
+			result = new AjaxHeartServiceImpl().htChangeSubsc(ht);
 		}
 		return result;
 	}
@@ -146,7 +146,7 @@ public class AjaxHeartController {
 		
 		if(isNumber(htTargetNoStr)) {
 			Heart ht = new Heart(memNo, Integer.parseInt(htTargetNoStr));
-			result = new AjaxHeartService().htChangeReply(ht);
+			result = new AjaxHeartServiceImpl().htChangeReply(ht);
 		}
 		return result;
 	}

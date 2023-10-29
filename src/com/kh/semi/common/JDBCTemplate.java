@@ -1,9 +1,10 @@
+/*
 package com.kh.semi.common;
 
 
-/*import static com.kh.semi.common.JDBCTemplate.close;
+import static com.kh.semi.common.JDBCTemplate.close;
 import static com.kh.semi.common.JDBCTemplate.commit;
-import static com.kh.semi.common.JDBCTemplate.rollback;*/
+import static com.kh.semi.common.JDBCTemplate.rollback;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -15,7 +16,7 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class JDBCTemplate {
-	
+*/	
 	
 	/**
 	 * Connection객체, DML구문 수행 후의 int형 결과를 파라미터로 받는다<br>
@@ -25,7 +26,7 @@ public class JDBCTemplate {
 	 * @param result
 	 * @return
 	 */
-	/*
+/*
 	public static int doTransAction(Connection conn, int result) {
 		if(result > 0) {
 			commit(conn);
@@ -115,5 +116,6 @@ public class JDBCTemplate {
 		}
 	}
 	
-	*/
+
 }//class.end
+*/

@@ -38,7 +38,7 @@ public class RecipeServlet extends HttpServlet {
 		boolean flag = true;
 		String viewPath = "";
 		
-		RecipeController rc = new RecipeController();
+		RecipeController recipeController = new RecipeController();
 		
 		// 인코딩 세팅 => 필터에서함
 		//request.setCharacterEncoding("UTF-8");	
@@ -51,37 +51,37 @@ public class RecipeServlet extends HttpServlet {
 		// Controller로 분배
 		switch(mapping) {
 			/* 4. 카테고리 리스트 조회 */
-			case "selectRecipeCategoryList" : viewPath = rc.selectRecipeCategoryList(request, response); break;
+			case "selectRecipeCategoryList" : viewPath = recipeController.selectRecipeCategoryList(request, response); break;
 			
 			/* 1. 레시피 메인 보기 (전체조회 / 최신순==레시피PK번호순) */
-			case "selectRecipeList" : viewPath = rc.selectRecipeList(request, response); break;
+			case "selectRecipeList" : viewPath = recipeController.selectRecipeList(request, response); break;
 			
 			/* 2. 레시피 상세글 보기 (디테일 조회) */
-			case "recipeDetail" : viewPath = rc.recipeDetail(request, response); break;
+			case "recipeDetail" : viewPath = recipeController.recipeDetail(request, response); break;
 			
 			/* 3_1. 글작성하기 양식 요청 recipeEnrollForm */
-			case "recipeEnrollForm" : viewPath = rc.recipeEnrollForm(request, response); break;
+			case "recipeEnrollForm" : viewPath = recipeController.recipeEnrollForm(request, response); break;
 			
 			/* 3_2. 글작성양식에 입력된 값 받아 서버에 insert(작성) => 이후 redirecting, 에러의 경우 forwarding */
-			case "insertRecipe" : viewPath = rc.insertRecipe(request, response);
+			case "insertRecipe" : viewPath = recipeController.insertRecipe(request, response);
 								  flag = viewPath.contains("errorPage") ?  true : false;
 								  break;
 			
 			/* 1_2. 레시피보기 좋아요순 selectRecipeListHt */
-			//case "selectRecipeListHt" : viewPath = rc.selectRecipeListHt(request, response); break;
+			//case "selectRecipeListHt" : viewPath = recipeController.selectRecipeListHt(request, response); break;
 			
 			/* 1_3. 레시피보기 조회수순 selectRecipeListVw */
-			//case "selectRecipeListVw" : viewPath = rc.selectRecipeListVw(request, response); break;
+			//case "selectRecipeListVw" : viewPath = recipeController.selectRecipeListVw(request, response); break;
 			
 			/* 1_4. 레시피보기 인기셰프순 selectRecipeListPo */
-			//case "selectRecipeListPo" : viewPath = rc.selectRecipeListPo(request, response); break;
+			//case "selectRecipeListPo" : viewPath = recipeController.selectRecipeListPo(request, response); break;
 			
 			
 			/* 4. 레시피 키워드 검색하기 searchKeyWord (제목 / 작성자) */
-			//case "searchKeyWord" : viewPath = rc.searchKeyWord(request, response); break;
+			//case "searchKeyWord" : viewPath = recipeController.searchKeyWord(request, response); break;
 			
 			/* 예상하지 못한 매핑값으로 요청이 들어왔을 때 에러페이지로 리디렉팅 */
-			default : viewPath = rc.errorDefault(request, response); flag=false; break;
+			default : viewPath = recipeController.errorDefault(request, response); flag=false; break;
 		}
 		
 		// forward or sendRedirect ( flag = false로 만들면 redrect)

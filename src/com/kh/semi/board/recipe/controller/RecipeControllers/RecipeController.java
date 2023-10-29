@@ -355,7 +355,6 @@ public class RecipeController {
 		Reply reply = new Reply();
 		reply.setReplyNo(replyNo);
 		reply.setRecipeNo(recipeNo);
-		//@@@@@@@@@@@@@@@@@@@@@@@@@
 		
 		int result = 0;
 		

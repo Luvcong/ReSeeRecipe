@@ -18,7 +18,6 @@ public class Template {
 		try {
 			InputStream stream = Resources.getResourceAsStream(resource);
 			sqlSession = new SqlSessionFactoryBuilder().build(stream).openSession(false);
-		
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
