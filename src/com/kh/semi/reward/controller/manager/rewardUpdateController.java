@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.kh.semi.reward.model.service.RewardService;
+import com.kh.semi.reward.model.service.RewardServiceImpl;
 import com.kh.semi.reward.model.vo.Reward;
 
 /**
@@ -17,14 +18,14 @@ import com.kh.semi.reward.model.vo.Reward;
 @WebServlet("/jhupdate.rw")
 public class rewardUpdateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private RewardService rewardService;
+	private RewardServiceImpl rewardServiceImpl;
 	
     /**
      * @see HttpServlet#HttpServlet()
      */
     public rewardUpdateController() {
         super();
-        rewardService = new RewardService();
+        rewardServiceImpl = new RewardServiceImpl();
         // TODO Auto-generated constructor stub
     }
 
@@ -33,9 +34,6 @@ public class rewardUpdateController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 1) POST
-		request.setCharacterEncoding("UTF-8");
-		// 2) 전달값
 		int memNo = Integer.parseInt(request.getParameter("memNo"));
 		int rewardScore = Integer.parseInt(request.getParameter("rewardScore"));
 		String rewardReason = request.getParameter("rewardReason");
@@ -60,10 +58,10 @@ public class rewardUpdateController extends HttpServlet {
 		reward.setRewardScore(rewardScore);
 		reward.setRewardReason(rewardReason);
 		// 4)
-		int result = rewardService.updateReward(reward, selectReward);
+		int result = rewardServiceImpl.insertReward(reward);
 		// 5)
 		if(result > 0) {
-			request.getSession().setAttribute("successMsg", "리워드 업데이트가 완료되었습니다!");
+			request.getSession().setAttribute("successMsg", "리워드 등록이 완료되었습니다!");
 		} else {
 			request.getSession().setAttribute("failMsg", "Error 다시 시도해주세요!");
 		}
