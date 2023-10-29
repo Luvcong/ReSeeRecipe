@@ -2,6 +2,8 @@ package com.kh.semi.report.controller.manager;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.semi.report.model.service.ReportService;
+import com.kh.semi.report.model.service.ReportServiceImpl;
 import com.kh.semi.report.model.vo.Report;
 
 /**
@@ -18,7 +20,7 @@ import com.kh.semi.report.model.vo.Report;
 @WebServlet("/jhdetail.rp")
 public class reportDetailController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ReportService reportService;
+	private ReportServiceImpl reportServiceImpl;
 
        
     /**
@@ -26,7 +28,7 @@ public class reportDetailController extends HttpServlet {
      */
     public reportDetailController() {
         super();
-        reportService = new ReportService();
+        reportServiceImpl = new ReportServiceImpl();
         // TODO Auto-generated constructor stub
     }
 
@@ -35,14 +37,13 @@ public class reportDetailController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 1) 
-		request.setCharacterEncoding("UTF-8");
-		// 2) select xx / 식별값 뽑아야함
 		int reportNo = Integer.parseInt(request.getParameter("reportNo"));
-		String categoryName = request.getParameter("categoryName");
-		// 3) x
+//		Map<String, Object> map = new HashMap<String, Object>();
+//		map.put("reportNo", Integer.parseInt(request.getParameter("reportNo")));
+//		map.put("categoryName", request.getParameter("categoryName"));
+		
 		// 4)
-		ArrayList<Report> detailList = reportService.detailReportList(reportNo, categoryName);
+		ArrayList<Report> detailList = reportServiceImpl.detailReportList(reportNo);
 		request.setAttribute("detailList", detailList);
 		request.getRequestDispatcher("views/report/manager/reportListView.jsp").forward(request, response);
 	}

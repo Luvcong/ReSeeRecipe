@@ -1,0 +1,54 @@
+.modal .modal-title{
+	text-align: center;
+	font-weight: bold;
+}
+.modal .modal-content{
+	background-color: rgb(255, 217, 64);
+    padding: 5px 20px 30px 20px;
+}
+.modal .modal-body, .modal .modal-footer{
+	background-color: white;
+	padding:0;
+}
+.modal .modal-footer{
+	height: 50px;
+	border: 1px solid gray;
+	justify-content: center;
+}
+.modal-table {
+	width:100%;
+	text-align: center;
+}
+.modal-table th {
+	width: 170px;
+}
+.modal-table tr {
+	height: 40px;
+}
+.modal textarea {
+	width:100%;
+	height: 200px;
+	resize: none;
+	text-align: center;
+	border: none;
+}
+.modal input {
+    width: 100%;
+    height: 40px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+}
+.searchTable{
+	padding: 0 10px;
+}
+.paging-area{
+	padding-top: 65px;
+	text-align: center;
+}
+.asc::before {
+	content: "\25B2";
+}
+.desc::before {
+	content: "\25BC";
+}
