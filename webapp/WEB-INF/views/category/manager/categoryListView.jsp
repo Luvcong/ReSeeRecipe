@@ -1,17 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ page import="java.util.ArrayList, com.kh.semi.board.recipe.model.vo.RecipeCategory, com.kh.semi.common.model.vo.PageInfo" %> 
+<%@ page import="java.util.ArrayList, com.kh.semi.board.recipe.model.vo.RecipeCategory, com.kh.semi.common.model.vo.PageInfo" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-	ArrayList<RecipeCategory> list = (ArrayList<RecipeCategory>)request.getAttribute("list");
-	String successMsg = (String)session.getAttribute("successMsg");
-	String failMsg = (String)session.getAttribute("failMsg");
+//	ArrayList<RecipeCategory> list = (ArrayList<RecipeCategory>)request.getAttribute("list");
+//	String successMsg = (String)session.getAttribute("successMsg");
+//	String failMsg = (String)session.getAttribute("failMsg");
 	
-	PageInfo pi = (PageInfo)request.getAttribute("pi");
+/* 	PageInfo pi = (PageInfo)request.getAttribute("pi");
 	int categoryListCount = pi.getListCount();
 	int categoryListPage = pi.getCurrentPage();
 	int categoryStartPage = pi.getStartPage();
 	int categoryEndPage = pi.getEndPage();
-	int categoryMaxPage = pi.getMaxPage();
+	int categoryMaxPage = pi.getMaxPage(); */
 %>            
 <!DOCTYPE html>
 <html>
@@ -25,12 +26,11 @@
 <!-- categoryListView / script & css -->
 <link rel="stylesheet" href="resources/css/category/category_manager.css">
 <link rel="shortcut icon" href="#">
-<script src="resources/js/category/category_manager.js"></script>
 </head>
 <body>
-
-	<%@ include file="../../manager/navbar.jsp" %>
 	
+	<jsp:include page="../../manager/navbar.jsp" />
+	<script src="resources/js/category/category_manager.js"></script>
 	
     <div class="rs-content">        
         <div class="header">
@@ -38,14 +38,13 @@
                 [메뉴 관리] 카테고리 관리
             </div>
             <div class="searchTable">
-            <!-- <form action="<%= contextPath %>/jhcheck.ct" method="post"> -->
             	<table id="check-table">
             		<tr>
             			<td>
-            				<input class="form-control form-control-sm" id="checkName" name="checkCategoryName" onkeydown="checkSearchName()" type="text" placeholder="검색할 카테고리명을 입력하세요" size="30">
+            				<input class="form-control form-control-sm" id="searchName" name="searchCategoryName" onkeydown="searchNameKeydown()" type="text" placeholder="검색할 카테고리명을 입력하세요" size="30">
            				</td>
            				<td>
-            				<button onclick="checkCategory()" class="btn btn-sm btn-warning">조회</button>
+            				<button onclick="searchCategory()" class="btn btn-sm btn-warning">조회</button>
            				</td>
             		</tr>
             	</table>
@@ -53,7 +52,7 @@
             </div>	<!-- searchTable -->
             <div class="h-content d-flex p-3">  <!-- 패딩 1rem -->
                 <div class="mr-auto">
-                    등록 카테고리 <span class="selectCount"><%= pi.getListCount() %></span><span>개</span>
+                    등록 카테고리 <span class="selectCount">${ requestScope.pi.listCount }</span><span>개</span>
                 </div>
                 <div >
                     <button onclick="showAddCategorydModal()" class="btn btn-sm btn-warning">카테고리 추가</button>
@@ -61,7 +60,7 @@
                     <button onclick="deleteCategory()" class="btn btn-sm btn-secondary">카테고리 삭제</button>
                 </div>
             </div>
-        </div>
+        </div>	<!-- header  -->
         <div class="tableBody">
             <table id='tb-category' class="table table-sm table-hover">
                 <thead>
@@ -73,45 +72,41 @@
                     </tr>
                 </thead>
                 <tbody>
-                	<% if(list == null || list.isEmpty()) { %>
+                	<c:choose>
+                		<c:when test="${ requestScope.list eq null || empty requestScope.list }">
    	                <tr>
 	                    <td colspan="4">등록한 카테고리가 없습니다</td>
 	                </tr>
-                    <% } else { %>
-                    	<% for(RecipeCategory recipeCategory : list) { %>
+                		</c:when>
+                		<c:otherwise>
+                			<c:forEach var="recipeCategory" items="${ requestScope.list }">
 	                    <tr>
 	                        <td><input type="checkbox" onclick="checkOnce()"></td>
-	                        <td><%= recipeCategory.getRecipeCategoryNo() %></td>
-	                        <td><%= recipeCategory.getRecipeCategoryName() %></td>
-	                        <td><%= recipeCategory.getRecipeCategoryCount() %></td>
+	                        <td>${ recipeCategory.recipeCategoryNo }</td>
+	                        <td>${ recipeCategory.recipeCategoryName }</td>
+	                        <td>${ recipeCategory.recipeCategoryCount }</td>
 	                    </tr>	
-	                    <% } %>
-					<% } %>    
+                			</c:forEach>
+                		</c:otherwise>
+	               	</c:choose>
                 </tbody>
             </table>	<!-- tb-category -->
         </div>	<!-- tableBody  -->
         
 	   	<!-- 페이징바 -->
 		<div class="paging-area">
-			<% if(categoryListPage != 1) { %>
-				<button onclick="page('<%= categoryListPage -1 %>');" class="btn btn-warning">&lt;</button>
-			<% } %>
-			<% for(int i = categoryStartPage; i <= categoryEndPage; i++) { %>
-				<% if(categoryListPage != i) { %>
-					<button onclick="page('<%= i %>');" class="btn btn-warning"><%= i %></button>
-				<% } else { %>
-					<button disabled class="btn btn-warning"><%= i %></button>
-				<% } %>
-			<% } %>
-			<% if(categoryListPage != categoryMaxPage) { %>
-				<button onclick="page('<%= categoryListPage + 1 %>');" class="btn btn-warning">&gt;</button>
-			<% } %>
-		</div>	<!-- 페이징바 -->
+			<c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }">
+				<button onclick="location.href='${ pageContext.request.contextPath }/jhselect.ct?page=${ p }';" class="btn btn-warning">${ p }</button>
+			</c:forEach>
+		</div>	
+		
 		
 		<div style="display: none" class="list-btn">
 			<!-- 카테고리 삭제 후 눌렀을경우 history.back은 바로 반영이 되지 않음 -->
 			<!-- <button type="button" class="btn btn-sm btn-outline-info" onclick="history.back()">목록으로</button>  -->
-			<button type="button" class="btn btn-sm btn-outline-warning" onclick="location.href = '<%=contextPath %>/jhselect.ct?page=1';">목록으로</button>
+			<button type="button" class="btn btn-sm btn-outline-warning" onclick="location.href='${ pageContext.request.contextPath }/jhselect.ct?page=1';">목록으로</button>
+			<!-- ${ pageContext.request.contextPath } ==  pageContext.getRequest().getContextPath() %>
+				: pageContext는 JSP의 내장객체 > 현재 JSP 페이지의 Context를 나타낸다 (서버에서 설정한 context path가 출력) -->
 		</div>
 	
    	</div>  <!-- rs-content -->
@@ -119,7 +114,7 @@
    	
 	<!-- 카테고리 추가  modal창 -->
  	<div class="modal" id="addCategoryForm">
-		<form method="get" action="<%= contextPath %>/jhinsert.ct">
+		<form method="get" action="jhinsert.ct">
 	        <div class="modal-dialog">
 	            <div class="modal-content">
 	                <!-- Modal Header -->
@@ -156,7 +151,7 @@
   
 	<!-- 카테고리 수정  modal창 -->
 	<div class="modal" id="updateCategoryForm">
-		<form method="post" action="<%= contextPath %>/jhupdate.ct">
+		<form method="post" action="jhupdate.ct">
 			<div class="modal-dialog">
 			    <div class="modal-content">
 			        <!-- Modal Header -->
@@ -195,22 +190,21 @@
 	</div>	<!-- 카테고리 수정 modal -->
   
  	<!-- alertMsg script -->
- 	<script>
-		var successMsg = '<%= successMsg %>';
-		var failMsg = '<%= failMsg %>';
-		
-		if(successMsg != 'null'){
-			Swal.fire('성공', successMsg, 'success');	// alert대신 swal 라이브러리 사용
-		}
-		
-		if(failMsg != 'null'){
-			Swal.fire('실패', failMsg, 'error');
-		}
-		
-		<% session.removeAttribute("successMsg"); %>
-		<% session.removeAttribute("failMsg"); %>
- 	</script>
-	
+ 	<c:choose>
+ 		<c:when test="${ sessionScope.successMsg ne null && not empty sessionScope.successMsg }">
+ 			<script>
+	 			Swal.fire('성공', '${ successMsg }', 'success');
+ 			</script>
+ 		</c:when>
+ 		<c:when test="${ sessionScope.failMsg ne null && not empty sessionScope.failMsg }">
+ 			<script>
+ 			Swal.fire('실패', '${ failMsg }', 'error');
+ 			</script>
+ 		</c:when>
+ 	</c:choose>
+ 	
+ 	<c:remove var="successMsg" />
+ 	<c:remove var="failMsg" />
 	
 
 </body>
