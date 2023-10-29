@@ -5,6 +5,7 @@ import static com.kh.semi.common.template.Template.getSqlSession;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.kh.semi.board.recipe.model.dao.RecipeDao;
@@ -99,7 +100,11 @@ public class RecipeServiceImpl implements RecipeService {
 	@Override
 	public ArrayList<Recipe> selectRecipeList(PageInfo pi) {
 		SqlSession sqlSession = getSqlSession();
-		ArrayList<Recipe> recipeList = recipeDao.selectRecipeList(sqlSession, pi);
+		RowBounds rowBounds = new RowBounds(
+										   ((pi.getCurrentPage() - 1) * pi.getBoardLimit()),
+											 pi.getBoardLimit()
+										   );
+		ArrayList<Recipe> recipeList = recipeDao.selectRecipeList(sqlSession, rowBounds);
 		sqlSession.close();
 		return recipeList;
 	}

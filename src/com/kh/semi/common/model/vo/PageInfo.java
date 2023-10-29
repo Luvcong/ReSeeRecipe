@@ -20,6 +20,7 @@ public class PageInfo {
 	public PageInfo() {
 		super();
 	}
+
 	public PageInfo(int listCount, int currentPage, int pageLimit, int boardLimit, int maxPage, int startPage,
 			int endPage) {
 		super();

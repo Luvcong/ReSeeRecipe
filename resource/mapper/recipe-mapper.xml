@@ -119,7 +119,7 @@
 	</select>
 	
 	
-	<select id="selectIngredientSingle" parameterType="recipeNo" resultMap="ingredientResultMap">
+	<select id="selectIngredientSingle" parameterType="_int" resultMap="ingredientResultMap">
 		SELECT
 			   INGREDIENT_NO,
 			   INGREDIENT,
@@ -132,79 +132,58 @@
 	</select>
 	
 	
-	
-	
-	
-	
-
-	
-	
-	<entry key="selectCookStepsSingle">
-	SELECT
-		   COOK_STEPS_NO,
-		   COOK_STEPS_TITLE,
-		   COOK_STEPS_CONTENT,
-		   COOK_STEPS_LEV,
-		   RECIPE_NO
-	  FROM
-		   TB_COOK_STEPS
-	 WHERE
-		   RECIPE_NO = ?
-	</entry>
-	
-	
-	<entry key="selectRecipeTagSingle">
-	SELECT
-		   TAG_NO,
-		   TAG_RECIPE_NO,
-		   TAG_NAME,
-		   TO_CHAR(TAG_DATE, 'YYYY"년" MM"월" DD"일"') TAG_DATE
-	  FROM
-		   TB_RECIPE_TAG
-	  JOIN
-		   TB_TAG
-	 USING
-	 	   (TAG_NO)
-	 WHERE
-		   TAG_RECIPE_NO = ?
-	</entry>
-	
-	<entry key="selectReplyListSingle">
+	<select id="selectCookStepsSingle" parameterType="_int" resultMap="cookStepsResultMap">
 		SELECT
-			   REPLY_NO,
-			   REPLY_CONTENT,
-			   TO_CHAR(REPLY_DATE, 'YYYY"년" MM"월" DD"일"') REPLY_DATE,
-			   REPLY_MODIFIED,
-			   REPLY_WRITER_NO,
-			   RECIPE_NO,
-			   MEM_NICKNAME
+			   COOK_STEPS_NO,
+			   COOK_STEPS_TITLE,
+			   COOK_STEPS_CONTENT,
+			   COOK_STEPS_LEV,
+			   RECIPE_NO
 		  FROM
-			   TB_REPLY
-		  JOIN
-			   TB_MEMBER ON(REPLY_WRITER_NO = MEM_NO)
+			   TB_COOK_STEPS
 		 WHERE
-		 	   REPLY_STATUS = 'Y'
-		   AND
-			   RECIPE_NO = ?
-	</entry>
+			   RECIPE_NO = #{recipeNo}
+	</select>
 	
 	
+	<select id="selectRecipeTagSingle" parameterType="_int" resultMap="recipeTagResultMap">
+		SELECT
+			   TAG_NO,
+			   TAG_RECIPE_NO,
+			   TAG_NAME,
+			   TO_CHAR(TAG_DATE, 'YYYY"년" MM"월" DD"일"') TAG_DATE
+		  FROM
+			   TB_RECIPE_TAG
+		  JOIN
+			   TB_TAG
+		 USING
+		 	   (TAG_NO)
+		 WHERE
+			   TAG_RECIPE_NO = #{recipeNo}
+	</select>
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	<select id="selectReplyListSingle" parameterType="_int" resultType="replyResultMap">
+		SELECT
+		   REPLY_NO,
+		   REPLY_CONTENT,
+		   TO_CHAR(REPLY_DATE, 'YYYY"년" MM"월" DD"일"') REPLY_DATE,
+		   REPLY_MODIFIED,
+		   REPLY_WRITER_NO,
+		   RECIPE_NO,
+		   MEM_NICKNAME
+	  FROM
+		   TB_REPLY
+	  JOIN
+		   TB_MEMBER ON(REPLY_WRITER_NO = MEM_NO)
+	 WHERE
+	 	   REPLY_STATUS = 'Y'
+	   AND
+		   RECIPE_NO = #{recipeNo}
+	</select>
 
-	
 	
 	<!-- 글과 작성자의 STATUS가 유효한 레시피글의 총 개수 조회 -->
-	<entry key="selectRecipeListCount">
+	<select id="selectRecipeListCount" resultType="_int">
 		SELECT
 			   COUNT(*)
 		  FROM
@@ -215,52 +194,45 @@
 		 	   RECIPE_STATUS = 'Y'
 		   AND
 		   	   MEM_STATUS = 'Y'
-	</entry>
+	</select>
 	
-	<entry key="selectRecipeList">
+	<select id="selectRecipeList">
 		SELECT
-			   RNUM, RECIPE_NO, RECIPE_TITLE, RECIPE_COUNT, TITLEIMG, MEM_NICKNAME, HT_COUNT
+		       RECIPE_NO,
+		       RECIPE_TITLE,
+		       RECIPE_COUNT,
+		       RECIPE_PIC_PATH||RECIPE_PIC_NAME_UPLOAD TITLEIMG,
+		       MEM_NICKNAME,
+		       HT_COUNT
 		  FROM
-		  	   (SELECT
-		  	           ROWNUM RNUM, RECIPE_NO, RECIPE_TITLE, RECIPE_COUNT, TITLEIMG, MEM_NICKNAME, HT_COUNT
-				  FROM
-					   (SELECT
-				  			   RECIPE_NO, RECIPE_TITLE, RECIPE_COUNT, RECIPE_PIC_PATH||RECIPE_PIC_NAME_UPLOAD TITLEIMG, MEM_NICKNAME
-						  FROM
-						  	   TB_RECIPE
-						  JOIN
-						  	   TB_MEMBER ON(RECIPE_WRITER_NO = MEM_NO)
-						  JOIN
-						  	   TB_RECIPE_PIC ON(RECIPE_NO = REF_RNO)
-						 WHERE
-						 	   RECIPE_STATUS = 'Y'
-						   AND
-						   	   MEM_STATUS = 'Y'
-						   AND
-						   	   RECIPE_PIC_STATUS = 'Y'
-						   AND
-						   	   RECIPE_PIC_LEV = 1
-						 ORDER
-						    BY
-						       RECIPE_NO DESC
-					   )
-          		  LEFT
-          		  JOIN
-        	   		   (SELECT
-        	   		   		   COUNT(*) HT_COUNT, RECIPE_NO
-        		  		  FROM
-        		  	   		   TB_HT_RECIPE
-        		 		 GROUP
-        		 	  		BY
-        		 	  		   RECIPE_NO
-        		 	   ) USING (RECIPE_NO)
-			   )
+		       TB_RECIPE
+		  JOIN
+		       TB_MEMBER ON(RECIPE_WRITER_NO = MEM_NO)
+		  JOIN
+		       TB_RECIPE_PIC ON(RECIPE_NO = REF_RNO)
+		  LEFT
+		  JOIN
+		      (SELECT
+		      		  COUNT(*) HT_COUNT, RECIPE_NO
+		  		 FROM
+		  		 	  TB_HT_RECIPE
+		 		GROUP
+		    	   BY
+		    	      RECIPE_NO) USING (RECIPE_NO)
 		 WHERE
-		 	   RNUM BETWEEN ? AND ?
+		       RECIPE_STATUS = 'Y'
+		   AND
+		       MEM_STATUS = 'Y'
+		   AND
+		       RECIPE_PIC_STATUS = 'Y'
+		   AND
+		       RECIPE_PIC_LEV = 1
 		 ORDER
-		 	BY
-			   RNUM
-	</entry>
+		    BY
+		       RECIPE_NO DESC
+	</select>
+	
+	
 	<!-- ******* 레시피 관련 SELECT구문 끝 ******* -->
 	
 	

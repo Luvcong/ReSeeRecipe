@@ -1,14 +1,11 @@
 package com.kh.semi.board.recipe.model.dao;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Properties;
 
+import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.SqlSession;
 
 import com.kh.semi.board.recipe.model.vo.CookSteps;
@@ -18,7 +15,6 @@ import com.kh.semi.board.recipe.model.vo.RecipeCategory;
 import com.kh.semi.board.recipe.model.vo.RecipePic;
 import com.kh.semi.board.recipe.model.vo.RecipeTag;
 import com.kh.semi.board.recipe.model.vo.Reply;
-import com.kh.semi.common.model.vo.PageInfo;
 
 public class RecipeDao {
 	
@@ -53,26 +49,8 @@ public class RecipeDao {
 	 * @return
 	 */
 	public ArrayList<Ingredient> selectIngredientSingle(SqlSession sqlSession, int recipeNo) {
-		ArrayList<Ingredient> ingredientList = new ArrayList();
-		String sql = prop.getProperty("selectIngredientSingle");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, recipeNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					Ingredient ingredient = new Ingredient();
-					ingredient.setIngredientNo(rset.getInt("INGREDIENT_NO"));
-					ingredient.setIngredient(rset.getString("INGREDIENT"));
-					ingredient.setIngredientAmount(rset.getString("INGREDIENT_AMOUNT"));
-					ingredient.setRecipeNo(rset.getInt("RECIPE_NO"));
-					ingredientList.add(ingredient);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return ingredientList;
+
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectIngredientSingle", recipeNo);
 	}
 	
 	
@@ -83,26 +61,8 @@ public class RecipeDao {
 	 * @return
 	 */
 	public ArrayList<CookSteps> selectCookStepsSingle(SqlSession sqlSession, int recipeNo) {
-		ArrayList<CookSteps> cookStepsList = new ArrayList();
-		String sql = prop.getProperty("selectCookStepsSingle");
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, recipeNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					CookSteps cooksteps = new CookSteps();
-					cooksteps.setCookStepsNo(rset.getInt("COOK_STEPS_NO"));
-					cooksteps.setCookStepsTitle(rset.getString("COOK_STEPS_TITLE"));
-					cooksteps.setCookStepsContent(rset.getString("COOK_STEPS_CONTENT"));
-					cooksteps.setCookStepsLev(rset.getInt("COOK_STEPS_LEV"));
-					cooksteps.setRecipeNo(rset.getInt("RECIPE_NO"));
-					cookStepsList.add(cooksteps);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return cookStepsList;
+		
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectCookStepsSingle", recipeNo);
 	}
 	
 	
@@ -113,26 +73,8 @@ public class RecipeDao {
 	 * @return
 	 */
 	public ArrayList<RecipeTag> selectRecipeTagSingle(SqlSession sqlSession, int recipeNo) {
-		ArrayList<RecipeTag> recipeTagList = new ArrayList();
-		String sql = prop.getProperty("selectRecipeTagSingle");
 		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, recipeNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					RecipeTag recipeTag = new RecipeTag();
-					recipeTag.setTagNo(rset.getInt("TAG_NO"));
-					recipeTag.setTagRecipeNo(rset.getInt("TAG_RECIPE_NO"));
-					recipeTag.setTagName(rset.getString("TAG_NAME"));
-					recipeTag.setTagDate(rset.getString("TAG_DATE"));
-					recipeTagList.add(recipeTag);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return recipeTagList;
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectRecipeTagSingle", recipeNo);
 	}
 	
 	
@@ -140,52 +82,10 @@ public class RecipeDao {
 	 * 특정 번호 레시피(PK)에 달린 댓글 리스트를 조회하는 기능<br>
 	 */
 	public ArrayList<Reply> selectReplyListSingle(SqlSession sqlSession, int recipeNo) {
-		ArrayList<Reply> replyList = new ArrayList();
-		String sql = prop.getProperty("selectReplyListSingle");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, recipeNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					Reply reply = new Reply();
-					reply.setReplyNo(rset.getInt("REPLY_NO"));
-					reply.setReplyContent(rset.getString("REPLY_CONTENT"));
-					reply.setReplyDate(rset.getString("REPLY_DATE"));
-					reply.setReplyModified(rset.getString("REPLY_MODIFIED"));
-					reply.setReplyWriterNo(rset.getInt("REPLY_WRITER_NO"));
-					reply.setRecipeNo(rset.getInt("RECIPE_NO"));
-					replyList.add(reply);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return replyList;
+
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectReplyListSingle", recipeNo);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	/***/
 	
 	/**
 	 * 레시피 카테고리 목록을 조회해 반환
@@ -218,19 +118,8 @@ public class RecipeDao {
 	 * @return : 글과 작성자의 STATUS가 유효한 레시피글의 총 개수
 	 */
 	public int selectRecipeListCount(SqlSession sqlSession) {
-		
-		int listCount = 0;
-		String sql = prop.getProperty("selectRecipeListCount");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql);
-			ResultSet rset = pstmt.executeQuery()) {
-				if(rset.next()) {
-					listCount = rset.getInt("COUNT(*)");
-				}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return listCount;
+
+		return sqlSession.selectOne("recipeMapper.selectRecipeListCount");
 	}
 	
 	
@@ -241,7 +130,7 @@ public class RecipeDao {
 	 * @param pi : 페이지네이션 처리를 위한 정보가 담긴 PageInfo객체<br>
 	 * @return
 	 */
-	public ArrayList<Recipe> selectRecipeList(SqlSession sqlSession, PageInfo pi) {
+	public ArrayList<Recipe> selectRecipeList(SqlSession sqlSession, RowBounds rowBounds) {
 		
 		ArrayList<Recipe> recipeList = new ArrayList();
 		String sql = prop.getProperty("selectRecipeList");
@@ -266,7 +155,7 @@ public class RecipeDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return recipeList;
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectRecipeList", null, rowBounds);
 	}
 	
 	

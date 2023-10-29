@@ -12,7 +12,6 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
-import com.kh.semi.board.recipe.model.service.RecipeService;
 import com.kh.semi.board.recipe.model.service.RecipeServiceImpl;
 import com.kh.semi.board.recipe.model.service.UnRecipeService;
 import com.kh.semi.board.recipe.model.vo.CookSteps;
@@ -26,6 +25,7 @@ import com.kh.semi.board.recipe.model.vo.UnRecipe;
 import com.kh.semi.common.MyFileRenamePolicy;
 import com.kh.semi.common.SendError;
 import com.kh.semi.common.model.vo.PageInfo;
+import com.kh.semi.common.template.Pagination;
 import com.kh.semi.member.model.vo.Member;
 import com.kh.semi.tag.model.service.TagService;
 import com.kh.semi.tag.model.vo.Tag;
@@ -74,30 +74,28 @@ public class RecipeController {
 	 * 	 PageInfo필드 : listCount(현재 게시글 총 개수), currentPage(요청온 페이지 번호),<br>
 	 * 	 pageLimit(한 페이지에 보일 페이징 바의 최대 개수), boardLimit(한 페이지에 보일 게시글 최대 개수)<br>
 	 */
-	public String selectRecipeList(HttpServletRequest request, HttpServletResponse response) {
+	public String selectRecipeList(HttpServletRequest request, HttpServletResponse response) { // 최신순
 		
-		// 변수세팅
-		String viewPath = "/selectRecipeList.re";
+		// 기본변수
+		String viewPath = "";
 		RecipeServiceImpl rs = new RecipeServiceImpl();
 		
-		int listCount = rs.selectRecipeListCount(); // 레시피 개수 조회
+		// ---------------- 페이지네이션 ----------------
+		// pi값 계산은 여기서 (PagiInfo객체 화면단에 넘겨야하기때문에)
+		int listCount = rs.selectRecipeListCount();
 		int currentPage = request.getParameter("currentPage") != null ?
 						  Integer.parseInt(request.getParameter("currentPage"))
 						  : 1;
 		int pageLimit = 10; // 페이징 바 개수
 		int boardLimit = 9; // 한 페이지에 보일 게시글 수
 		
-		PageInfo pi = new PageInfo(listCount, currentPage, pageLimit, boardLimit);
-
-		// 페이지네이션을 위한 정보를 넘기며 서비스호출
-		// Recipe정보들 + 썸네일 사진 필요
-		//ArrayList<Recipe> rList = rs.selectRecipeList(pi);
+		PageInfo pi = Pagination.getPageInfo(listCount, currentPage, pageLimit, boardLimit);
 		ArrayList<Recipe> recipeList = rs.selectRecipeList(pi);
+		
+		// 결과에 따라 화면 선택
 		if(!recipeList.isEmpty()) {
-			// 넘길 값 지정
 			request.setAttribute("pi", pi);
 			request.setAttribute("recipeList", recipeList);
-			// 응답화면지정 (페이징적용 / 최신순 레시피 조회)
 			viewPath = "/views/board/recipe/recipeMainView.jsp";
 		} else {
 			viewPath = new SendError().sendError(request, "조회된 게시글이 없습니다");
