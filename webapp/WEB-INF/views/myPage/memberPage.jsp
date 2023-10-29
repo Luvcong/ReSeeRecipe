@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="com.kh.semi.member.model.vo.Member" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <% String contextPath = request.getContextPath(); %>
 <% Member loginMember = (Member)session.getAttribute("loginMember"); %>
 <!DOCTYPE html>
@@ -226,7 +227,14 @@
         <div id="sideTop">
             <p>내 리워드: ${ sessionScope.loginMember.memReward }</p>
             <div id="memberPic">
-                <img id="profile" src="<%= contextPath %>/${ sessionScope.loginMember.memPicture }" alt="profile picture">
+            	<c:choose>
+            		<c:when test="${ sessionScope.loginMember.memPicture ne null }">
+                		<img id="profile" src="<%= contextPath %>/${ sessionScope.loginMember.memPicture }" alt="profile picture">
+                	</c:when>
+                	<c:otherwise>
+                		<img id="profile" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiJ77jbjsG1bGoS5Kn6gm83uk-iiWcuMLRzw&usqp=CAU" alt="profile picture">
+                	</c:otherwise>
+                </c:choose>
             </div>
                 <div id="nickName">
                     <p>${ sessionScope.loginMember.memNickname }</p>
@@ -316,7 +324,7 @@
 
        
       
-	<c:include page="/WEB-INF/views/common/footer.jsp" />
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
         
     
 </body>
