@@ -29,31 +29,8 @@ public class RecipeDao {
 	 * 레시피 번호로 해당 레시피의 레시피테이블(TB_RECIPE) 모든 정보와 작성자 닉네임, 카테고리 번호와 이름을 조회하는 기능
 	 */
 	public Recipe selectRecipeSingle(SqlSession sqlSession, int recipeNo) {
-		Recipe recipe = null;
-		String sql = prop.getProperty("selectRecipeSingle");
 		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, recipeNo);
-
-			try(ResultSet rset = pstmt.executeQuery()) {
-				if(rset.next()) {
-					recipe = new Recipe();
-					recipe.setRecipeNo(rset.getInt("RECIPE_NO"));
-					recipe.setRecipeTitle(rset.getString("RECIPE_TITLE"));
-					recipe.setRecipeDate(rset.getString("RECIPE_DATE"));
-					recipe.setRecipeModified(rset.getString("RECIPE_MODIFIED"));
-					recipe.setRecipeStatus(rset.getString("RECIPE_STATUS"));
-					recipe.setRecipeCount(rset.getInt("RECIPE_COUNT"));
-					recipe.setRecipeWriterNo(rset.getInt("RECIPE_WRITER_NO"));
-					recipe.setRecipeCategoryNo(rset.getInt("RECIPE_CATEGORY_NO"));
-					recipe.setRecipeCategoryName(rset.getString("RECIPE_CATEGORY_NAME"));
-					recipe.setMemNickName(rset.getString("MEM_NICKNAME"));
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return recipe;
+		return sqlSession.selectOne("recipeMapper.selectRecipeSingle", recipeNo);
 	}
 	
 	
@@ -64,30 +41,8 @@ public class RecipeDao {
 	 * @return
 	 */
 	public ArrayList<RecipePic> selectRecipePicSingle(SqlSession sqlSession, int recipeNo) {
-		ArrayList<RecipePic> recipePicList = new ArrayList();
-		String sql = prop.getProperty("selectRecipePicSingle");
 		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setInt(1, recipeNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					RecipePic recipePic = new RecipePic();
-					recipePic.setRecipePicNo(rset.getInt("RECIPE_PIC_NO"));
-					recipePic.setRecipePicNameOrigin(rset.getString("RECIPE_PIC_NAME_ORIGIN"));
-					recipePic.setRecipePicNameUpload(rset.getString("RECIPE_PIC_NAME_UPLOAD"));
-					recipePic.setRecipePicPath(rset.getString("RECIPE_PIC_PATH"));
-					recipePic.setRecipePicDate(rset.getString("RECIPE_PIC_DATE"));
-					recipePic.setRecipePicLev(rset.getInt("RECIPE_PIC_LEV"));
-					recipePic.setRecipePicStatus(rset.getString("RECIPE_PIC_STATUS"));
-					recipePic.setRefRno(rset.getInt("REF_RNO"));
-					recipePicList.add(recipePic);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return recipePicList;
+		return (ArrayList)sqlSession.selectList("recipeMapper.selectRecipePicSingle", recipeNo);
 	}
 	
 	

@@ -3,7 +3,9 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="recipeMapper">
-	
+<!-- mapper태그가 Root Element / namespace => xml밖에서 이 매퍼를 구분할 이름 -->
+
+	<!-- resultMap => ResultSet과 자바타입 field매핑 (type은 config의 alias) -->
 	<resultMap id="cookStepsResultMap" type="cookSteps">
 		<result column="COOK_STEPS_NO" property="cookStepsNo" />
 		<result column="COOK_STEPS_TITLE" property="cookStepsTitle" />
@@ -11,6 +13,7 @@
 		<result column="COOK_STEPS_LEV" property="cookStepsLev" />
 		<result column="RECIPE_NO" property="recipeNo" />
 	</resultMap>
+
 	
 	<resultMap id="ingredientResultMap" type="ingredient">
 		<result column="INGREDIENT_NO" property="ingredientNo" />
@@ -68,6 +71,479 @@
 		<result column="MEM_NICKNAME" property="memNickName" />
 	</resultMap>
 	
+	
+	<!-- SQL구문 id / parameterType(자바타입 or 경로나 alias) / resultType="자바" resultMap="resultMapId" -->
+	
+	<!-- ******* 레시피 관련 SELECT구문 시작 ******* -->
+	<select id="selectRecipeSingle" parameterType="_int" resultMap="recipeResultMap">
+		SELECT
+			   RECIPE_NO,
+			   RECIPE_TITLE,
+			   TO_CHAR(RECIPE_DATE, 'YYYY"년" MM"월" DD"일"') RECIPE_DATE,
+			   RECIPE_MODIFIED,
+			   RECIPE_STATUS,
+			   RECIPE_COUNT,
+			   RECIPE_WRITER_NO,
+			   RECIPE_CATEGORY_NO,
+			   RECIPE_CATEGORY_NAME,
+			   MEM_NICKNAME
+		  FROM
+			   TB_RECIPE
+		  JOIN
+			   TB_RECIPE_CATEGORY
+		 USING
+			   (RECIPE_CATEGORY_NO)
+		  JOIN
+			   TB_MEMBER
+			ON
+			   (RECIPE_WRITER_NO = MEM_NO)
+		 WHERE
+			   RECIPE_NO = #{recipeNo}	
+	</select> 
+	
+
+	<select id="selectRecipePicSingle" parameterType="_int" resultMap="recipePicResultMap">
+		SELECT
+			   RECIPE_PIC_NO,
+			   RECIPE_PIC_NAME_ORIGIN,
+			   RECIPE_PIC_NAME_UPLOAD,
+			   RECIPE_PIC_PATH,
+			   TO_CHAR(RECIPE_PIC_DATE, 'YYYY"년" MM"월" DD"일"') RECIPE_PIC_DATE,
+			   RECIPE_PIC_LEV,
+			   RECIPE_PIC_STATUS,
+			   REF_RNO
+		  FROM
+			   TB_RECIPE_PIC
+		  WHERE
+			   REF_RNO = #{recipeNo}
+	</select>
+	
+	
+	<select id="selectIngredientSingle" parameterType="recipeNo" resultMap="ingredientResultMap">
+		SELECT
+			   INGREDIENT_NO,
+			   INGREDIENT,
+			   INGREDIENT_AMOUNT,
+			   RECIPE_NO
+		  FROM
+			   TB_INGREDIENT
+		 WHERE
+			   RECIPE_NO = #{recipeNo}
+	</select>
+	
+	
+	
+	
+	
+	
+
+	
+	
+	<entry key="selectCookStepsSingle">
+	SELECT
+		   COOK_STEPS_NO,
+		   COOK_STEPS_TITLE,
+		   COOK_STEPS_CONTENT,
+		   COOK_STEPS_LEV,
+		   RECIPE_NO
+	  FROM
+		   TB_COOK_STEPS
+	 WHERE
+		   RECIPE_NO = ?
+	</entry>
+	
+	
+	<entry key="selectRecipeTagSingle">
+	SELECT
+		   TAG_NO,
+		   TAG_RECIPE_NO,
+		   TAG_NAME,
+		   TO_CHAR(TAG_DATE, 'YYYY"년" MM"월" DD"일"') TAG_DATE
+	  FROM
+		   TB_RECIPE_TAG
+	  JOIN
+		   TB_TAG
+	 USING
+	 	   (TAG_NO)
+	 WHERE
+		   TAG_RECIPE_NO = ?
+	</entry>
+	
+	<entry key="selectReplyListSingle">
+		SELECT
+			   REPLY_NO,
+			   REPLY_CONTENT,
+			   TO_CHAR(REPLY_DATE, 'YYYY"년" MM"월" DD"일"') REPLY_DATE,
+			   REPLY_MODIFIED,
+			   REPLY_WRITER_NO,
+			   RECIPE_NO,
+			   MEM_NICKNAME
+		  FROM
+			   TB_REPLY
+		  JOIN
+			   TB_MEMBER ON(REPLY_WRITER_NO = MEM_NO)
+		 WHERE
+		 	   REPLY_STATUS = 'Y'
+		   AND
+			   RECIPE_NO = ?
+	</entry>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	
+	
+	<!-- 글과 작성자의 STATUS가 유효한 레시피글의 총 개수 조회 -->
+	<entry key="selectRecipeListCount">
+		SELECT
+			   COUNT(*)
+		  FROM
+		  	   TB_RECIPE
+		  JOIN
+		  	   TB_MEMBER ON (RECIPE_WRITER_NO = MEM_NO)
+		 WHERE
+		 	   RECIPE_STATUS = 'Y'
+		   AND
+		   	   MEM_STATUS = 'Y'
+	</entry>
+	
+	<entry key="selectRecipeList">
+		SELECT
+			   RNUM, RECIPE_NO, RECIPE_TITLE, RECIPE_COUNT, TITLEIMG, MEM_NICKNAME, HT_COUNT
+		  FROM
+		  	   (SELECT
+		  	           ROWNUM RNUM, RECIPE_NO, RECIPE_TITLE, RECIPE_COUNT, TITLEIMG, MEM_NICKNAME, HT_COUNT
+				  FROM
+					   (SELECT
+				  			   RECIPE_NO, RECIPE_TITLE, RECIPE_COUNT, RECIPE_PIC_PATH||RECIPE_PIC_NAME_UPLOAD TITLEIMG, MEM_NICKNAME
+						  FROM
+						  	   TB_RECIPE
+						  JOIN
+						  	   TB_MEMBER ON(RECIPE_WRITER_NO = MEM_NO)
+						  JOIN
+						  	   TB_RECIPE_PIC ON(RECIPE_NO = REF_RNO)
+						 WHERE
+						 	   RECIPE_STATUS = 'Y'
+						   AND
+						   	   MEM_STATUS = 'Y'
+						   AND
+						   	   RECIPE_PIC_STATUS = 'Y'
+						   AND
+						   	   RECIPE_PIC_LEV = 1
+						 ORDER
+						    BY
+						       RECIPE_NO DESC
+					   )
+          		  LEFT
+          		  JOIN
+        	   		   (SELECT
+        	   		   		   COUNT(*) HT_COUNT, RECIPE_NO
+        		  		  FROM
+        		  	   		   TB_HT_RECIPE
+        		 		 GROUP
+        		 	  		BY
+        		 	  		   RECIPE_NO
+        		 	   ) USING (RECIPE_NO)
+			   )
+		 WHERE
+		 	   RNUM BETWEEN ? AND ?
+		 ORDER
+		 	BY
+			   RNUM
+	</entry>
+	<!-- ******* 레시피 관련 SELECT구문 끝 ******* -->
+	
+	
+	<!-- ******* 레시피 관련 UPDATE구문 시작 ******* -->
+	<entry key="deleteReqReplySingle">
+		UPDATE
+			   TB_REPLY
+		   SET
+			   REPLY_STATUS = 'N'
+		 WHERE
+			   REPLY_NO = ?
+		   AND
+			   RECIPE_NO = ?
+	</entry>
+	
+	
+	
+	<!-- ******* 레시피 관련 UPDATE구문 끝 ******* -->
+	
+	
+	<!-- ******* 레시피 관련 INSERT구문 시작 ******* -->
+	<entry key="insertRecipe">
+		INSERT
+		  INTO
+		  	   TB_RECIPE
+		  	   (
+		  	   RECIPE_NO,
+		  	   RECIPE_TITLE,
+		  	   RECIPE_WRITER_NO,
+		  	   RECIPE_CATEGORY_NO
+		  	   )
+		VALUES
+			   (
+			   SEQ_RECIPE.NEXTVAL,
+			   ?,
+			   ?,
+			   ?
+			   )
+	</entry>
+	
+	
+	<entry key="insertRecipePic">
+		INSERT
+		  INTO
+		  	   TB_RECIPE_PIC
+		  	   (
+		  	   RECIPE_PIC_NO,
+		  	   RECIPE_PIC_NAME_ORIGIN,
+		  	   RECIPE_PIC_NAME_UPLOAD,
+		  	   RECIPE_PIC_PATH,
+		  	   RECIPE_PIC_LEV,
+		  	   REF_RNO
+		  	   )
+		VALUES
+			   (
+			   SEQ_RECIPE_PIC.NEXTVAL,
+			   ?,
+			   ?,
+			   ?,
+			   ?,
+			   SEQ_RECIPE.CURRVAL
+			   )
+	</entry>
+	
+	<entry key="insertIngredient">
+		INSERT
+		  INTO
+		  	   TB_INGREDIENT
+		  	   (
+		  	   INGREDIENT_NO,
+		  	   INGREDIENT,
+		  	   INGREDIENT_AMOUNT,
+		  	   RECIPE_NO
+		  	   )
+		VALUES
+			  (
+			  SEQ_INGREDIENT.NEXTVAL,
+			  ?,
+			  ?,
+			  SEQ_RECIPE.CURRVAL
+			  )
+	</entry>
+	
+	
+	<entry key="insertCookSteps">
+		INSERT
+		  INTO
+		  	   TB_COOK_STEPS
+		  	   (
+		  	   COOK_STEPS_NO,
+		  	   COOK_STEPS_TITLE,
+		  	   COOK_STEPS_CONTENT,
+		  	   COOK_STEPS_LEV,
+		  	   RECIPE_NO
+		  	   )
+		VALUES
+			   (
+			   SEQ_COOK_STEPS.NEXTVAL,
+			   ?,
+			   ?,
+			   ?,
+			   SEQ_RECIPE.CURRVAL
+			   )
+	</entry>
+	
+	
+	<entry key="insertRecipeTag">
+		INSERT
+		  INTO
+		  	   TB_RECIPE_TAG
+		  	   (
+		  	   TAG_NO,
+		  	   TAG_RECIPE_NO
+		  	   )
+		VALUES
+			   (
+			   ?,
+			   SEQ_RECIPE.CURRVAL
+			   )
+	</entry>
+	
+	
+	<entry key="insertReply">
+		INSERT
+		  INTO
+		  	   TB_REPLY
+		  	   (
+			   REPLY_NO,
+			   REPLY_CONTENT,
+			   REPLY_WRITER_NO,
+			   RECIPE_NO
+			   )
+		VALUES
+			   (
+			   SEQ_REPLY.NEXTVAL,
+			   ?,
+			   ?,
+			   ?
+			   )
+</entry>
+	
+	
+	
+	
+	
+	
+	
+	<!-- ******* 레시피 관련 INSERT구문 끝 ******* -->
+
+
+
+
+
+
+
+
+
+
+
+
+	<!-- ***** 관리자 카테고리 ***** -->
+	
+	<!-- 카테고리 리스트 조회 SQL문 -->
+	<entry key="selectRecipeCategoryList">
+		SELECT
+			   RECIPE_CATEGORY_NO,
+			   RECIPE_CATEGORY_NAME
+		  FROM
+		  	   TB_RECIPE_CATEGORY
+	</entry>
+	
+	<!-- 레시피 카테고리 추가 SQL문 -->
+	<entry key="insertCategory">
+		INSERT
+		  INTO
+				TB_RECIPE_CATEGORY
+		 VALUES
+		 		(
+		 		SEQ_RECIPE_CATEGORY.NEXTVAL,
+		 		?
+		 		)
+	</entry>
+	
+	<!-- 관리자 카테고리 리스트 화면 SQL문 -->
+	<entry key="selectCategoryListManager">
+		SELECT *
+          FROM (SELECT ROWNUM RNUM, A.*
+                  FROM (SELECT
+		                       RC.RECIPE_CATEGORY_NO,
+		                       RC.RECIPE_CATEGORY_NAME,
+		                       NVL(CTGR_CNT.CNT, 0) AS RECIPE_CATEGORY_CNT
+		                  FROM 
+		                       TB_RECIPE_CATEGORY RC
+		                  LEFT OUTER JOIN
+		                                (SELECT
+		                                        RECIPE_CATEGORY_NO, COUNT(*) CNT
+		                                  FROM 
+		                                        TB_RECIPE
+		                              GROUP BY
+		                                        RECIPE_CATEGORY_NO) CTGR_CNT
+		                            ON RC.RECIPE_CATEGORY_NO = CTGR_CNT.RECIPE_CATEGORY_NO
+		                 ORDER BY RECIPE_CATEGORY_NO ASC) A)
+		                 WHERE RNUM BETWEEN ? AND ?
+	</entry>
+	
+	<!-- 카테고리 삭제시 레시피글 변경(STATUS = N && CATEGORY_NO = 0) SQL문 -->
+	<entry key="updateRecipeStatus">
+		UPDATE
+				TB_RECIPE R
+		   SET
+		   		RECIPE_STATUS = 'N', RECIPE_CATEGORY_NO = 0
+		 WHERE
+		 		R.RECIPE_CATEGORY_NO IN (SELECT RR.RECIPE_CATEGORY_NO
+		                                   FROM TB_RECIPE RR, TB_RECIPE_CATEGORY RC
+		                                  WHERE RR.RECIPE_CATEGORY_NO = ?
+		                                    AND RR.RECIPE_CATEGORY_NO = RC.RECIPE_CATEGORY_NO)
+	</entry>
+
+	<!-- 카테고리 삭제 SQL문 -->
+	<entry key="deleteCategory">
+		DELETE
+		  FROM TB_RECIPE_CATEGORY
+		 WHERE RECIPE_CATEGORY_NO = ?
+	</entry>
+	
+	<!-- 카테고리명 변경 SQL문 -->
+	<entry key="updateCategory">
+		UPDATE TB_RECIPE_CATEGORY
+		   SET RECIPE_CATEGORY_NAME = ?
+		 WHERE RECIPE_CATEGORY_NAME = ?
+	</entry>
+	
+	<!-- 카테고리명 중복여부 체크 SQL문 -->
+	<entry key="categoryNameCheck">
+		SELECT
+	        	COUNT(*)
+		  FROM
+		        TB_RECIPE_CATEGORY
+		 WHERE
+		        RECIPE_CATEGORY_NAME = ?
+	</entry>
+	
+	<!-- 카테고리 리스트 행 조회 -->
+	<entry key="selectCategoryListCount">
+		SELECT
+	        	COUNT(*)
+		  FROM
+		        TB_RECIPE_CATEGORY
+	</entry>
+	
+	<!-- 카테고리 키워드 검색시 리스트 조회 -->
+	<entry key="checkCategory">
+		SELECT
+		       RC.RECIPE_CATEGORY_NO,
+		       RC.RECIPE_CATEGORY_NAME,
+		       NVL(CTGR_CNT.CNT, 0) AS RECIPE_CATEGORY_CNT
+		  FROM 
+		       TB_RECIPE_CATEGORY RC
+		  LEFT OUTER JOIN
+		                (SELECT
+		                        RECIPE_CATEGORY_NO, COUNT(*) CNT
+		                   FROM 
+		                        TB_RECIPE
+		               GROUP BY RECIPE_CATEGORY_NO) CTGR_CNT
+		    ON RC.RECIPE_CATEGORY_NO = CTGR_CNT.RECIPE_CATEGORY_NO
+		 WHERE RECIPE_CATEGORY_NAME LIKE '%'||?||'%'
+		 ORDER BY RC.RECIPE_CATEGORY_NO ASC
+	</entry>
+	
+	
+	
+	
+	
+	
+	<entry key="selectUnRecipeForModal">
+		SELECT
+			   UN_RECIPE_NO,
+			   UN_RECIPE_TITLE
+		  FROM
+			   TB_UN_RECIPE
+		 WHERE
+			   UN_RECIPE_WRITER_NO = ?
+	</entry>
 	
 
 </mapper>
