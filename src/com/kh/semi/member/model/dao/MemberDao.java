@@ -2,14 +2,15 @@ package com.kh.semi.member.model.dao;
 
 import static com.kh.semi.common.JDBCTemplate.close;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Properties;
+
+import org.apache.ibatis.session.SqlSession;
 
 import com.kh.semi.common.model.vo.PageInfo;
 import com.kh.semi.member.model.vo.Member;
@@ -21,6 +22,7 @@ public class MemberDao {
 	private Properties prop = new Properties();
 	
 	// 기본생성자 호출 시 member-mapper.xml파일 읽어오기
+	/*
 	public MemberDao() {
 		
 		String file = MemberDao.class.getResource("/sql/member/member-mapper.xml").getPath();
@@ -31,366 +33,53 @@ public class MemberDao {
 			e.printStackTrace();
 		}
 	}
+	*/
 	
 	// 로그인시 로그인 한 유저 DB정보 가져오기
-	public Member loginMember(Connection conn, String memberId, String memberPwd) {
-		
-		Member m = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("loginMember");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, memberId);
-			pstmt.setString(2, memberPwd);
-			
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				m = new Member(rset.getInt("MEM_NO"),
-							   rset.getString("MEM_ID"),
-							   rset.getString("MEM_PWD"),
-							   rset.getString("MEM_NAME"),
-							   rset.getString("MEM_NICKNAME"),
-							   rset.getString("MEM_EMAIL"),
-							   rset.getString("MEM_STATUS"),
-							   rset.getDate("ENROLL_DATE"),
-							   rset.getDate("MODIFY_DATE"),
-							   rset.getDate("DELETE_DATE"),
-							   rset.getString("MEM_PICTURE"),
-							   rset.getInt("MEM_GRADE_NUMBER"),
-							   rset.getString("MEM_GRADE_NAME"),
-							   rset.getInt("MEM_COUPON_COUNT"),
-							   rset.getInt("MEM_REWARD"));
-			}	
-
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return m;
+	public Member loginMember(SqlSession sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.loginMember", m);
 	}
 	
 	// 리워드 조회
-	public int memReward(Connection conn, int memNo) {
-		
-		int mReward = -1;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("memReward");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setInt(1, memNo);
-			
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				mReward = rset.getInt("REWARD");
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return mReward;
+	public int memReward(SqlSession sqlSession, int memNo) {
+		return sqlSession.selectOne("memberMapper.selectMemReward", memNo);
 	}
+	
 	
 	// 회원가입
-	/**
-	 * @param conn : Connection 객체
-	 * @param m : 회원가입하는 Member객체
-	 * @return : 회원insert 성공 여부에 따른 결과값(성공1 또는 실패0)
-	 */
-	public int insertMember(Connection conn, Member m) {
-		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("insertMember");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, m.getMemName());
-			pstmt.setString(2, m.getMemNickname());
-			pstmt.setString(3, m.getMemId());
-			pstmt.setString(4, m.getMemPwd());
-			pstmt.setString(5, m.getMemEmail());
-			
-			result = pstmt.executeUpdate();
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
-		}
-		return result;
+
+	public int insertMember(SqlSession sqlSession, Member m) {
+		return sqlSession.insert("memberMapper.insertMember", m);
 	}
 	
-	// 회원가입 시 nickname 중복체크
-	/**
-	 * @param conn : Connection 객체
-	 * @param checkNickname : 회원가입에 쓸 사용자 nickname 입력값
-	 * @return : 이미 존재하는 아이디 1 또는 사용가능 0
-	 */
-	public int nicknameCheck(Connection conn, String checkNickname) {
-		
-		int count = 0;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("nicknameCheck");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, checkNickname);
-			
-			rset = pstmt.executeQuery();
-			if(rset.next()) {
-				count = rset.getInt("COUNT(*)");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return count;
-	}
-	
-	// 회원가입시 id 중복체크
-	/**
-	 * @param conn : Connection 객체
-	 * @param checkId : 회원가입에 쓸 사용자 id 입력값
-	 * @return : 이미 존재하는 아이디 1 또는 사용가능 0
-	 */
-	public int idCheck(Connection conn, String checkId) {
-		
-		int count = 0;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("idCheck");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, checkId);
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				count = rset.getInt("COUNT(*)");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return count;
-	}
-	
-	// 회원가입시 email 중복체크
-	/**
-	 * @param conn : Connection 객체
-	 * @param checkEmail : 회원가입에 쓸 사용자 email 입력값
-	 * @return : 이미 사용중인 이메일 1 또는 사용가능 0
-	 */
-	public int emailCheck(Connection conn, String checkEmail) {
-		
-		int count = 0;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("emailCheck");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, checkEmail);
-			
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				count = rset.getInt("COUNT(*)");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return count;
+	// 중복체크
+	public int checkDupl(SqlSession sqlSession, HashMap map) {
+		return sqlSession.selectOne("memberMapper.checkDupl", map);
 	}
 	
 	// 아이디 찾기
-	/**
-	 * @param conn : Connection 객체
-	 * @param memberName : 아이디를 찾고자 하는 사용자 이름 입력값
-	 * @param memberEmail : 아이디를 찾고자 하는 사용자 이메일 입력값
-	 * @return : 조회된 회원
-	 */
-	public Member searchMemberId(Connection conn, String memberName, String memberEmail) {
-
-		Member searchMember = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("searchMemberId");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, memberName);
-			pstmt.setString(2, memberEmail);
-			
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				searchMember = new Member(rset.getInt("MEM_NO"),
-										  rset.getString("MEM_ID"),
-										  rset.getString("MEM_PWD"),
-										  rset.getString("MEM_NAME"),
-										  rset.getString("MEM_NICKNAME"),
-										  rset.getString("MEM_EMAIL"),
-										  rset.getString("MEM_STATUS"),
-										  rset.getDate("ENROLL_DATE"),
-										  rset.getDate("MODIFY_DATE"),
-										  rset.getDate("DELETE_DATE"),
-										  rset.getString("MEM_PICTURE"),
-										  rset.getInt("MEM_GRADE"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return searchMember;
+	public Member searchMemberId(SqlSession sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.searchMemberId", m);
 	}
 	
 	// 비밀번호 찾기
-	/**
-	 * @param conn : Connection 객체
-	 * @param memberId : 비밀번호를 찾고자 하는 사용자 아이디 입력값
-	 * @param memberEmail : 비밀번호를 찾고자 하는 사용자 이메일 입력값
-	 * @return : 조회된 결과가 있다면 1 반환
-	 */
-	public int searchMemberPwd(Connection conn, String memberId, String memberEmail) {
-		
-		int result = 0;
-		ResultSet rset = null;
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("searchMemberPwd");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, memberId);
-			pstmt.setString(2, memberEmail);
-			
-			rset = pstmt.executeQuery();
-			if(rset.next()) {
-				result = rset.getInt("COUNT(*)");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return result;
+	public int searchMemberPwd(SqlSession sqlSession, Member m) {
+		return sqlSession.selectOne("memberMapper.searchMemberPwd", m);
 	}
 	
 	// 회원 비밀번호 재설정
-	public int updateMemberPwd(Connection conn, String memberId, String memberPwd) {
-		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("updateMemberPwd");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setString(1, memberPwd);
-			pstmt.setString(2, memberId);
-			
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
-		}
-		return result;
-	}
-	
-	// 회원 정보 변경 시 비밀번호 확인
-	public String memberUpdateConfirm(Connection conn, int memberNo) {
-		
-		String checkPwd = null;
-		PreparedStatement pstmt = null;
-		ResultSet rset = null;
-		String sql = prop.getProperty("memberUpdateConfirm");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, memberNo);
-			rset = pstmt.executeQuery();
-			
-			if(rset.next()) {
-				checkPwd = rset.getString("MEM_PWD");
-			}
-			System.out.println(checkPwd);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(rset);
-			close(pstmt);
-		}
-		return checkPwd;
+	public int updateMemberPwd(SqlSession sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updateMemberPwd", m);
 	}
 	
 	// 회원 정보 변경
-	public int memberUpdate(Connection conn, Member m, String memberPicture) {
-		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("memberUpdate");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			// 변경할 이름, 닉네임, 이메일, 사진(경로 + 수정명)
-			pstmt.setString(1, m.getMemName());
-			pstmt.setString(2, m.getMemNickname());
-			pstmt.setString(3, m.getMemEmail());
-			pstmt.setString(4, memberPicture);
-			pstmt.setString(5, m.getMemId());
-			
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
-		}
-		return result;
+	public int updateMember(SqlSession sqlSession, Member m) {
+		return sqlSession.update("memberMapper.updateMember", m);
 	}
 	
 	// 회원 삭제(탈퇴)
-	public int memberDelete(Connection conn, int memberNo) {
-		
-		int result = 0;
-		PreparedStatement pstmt = null;
-		String sql = prop.getProperty("memberDelete");
-		
-		try {
-			pstmt = conn.prepareStatement(sql);
-			pstmt.setInt(1, memberNo);
-			result = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally {
-			close(pstmt);
-		}
-		return result;
+	public int deleteMember(SqlSession sqlSession, int memberNo) {
+		return sqlSession.delete("memberMapper.deleteMember", memberNo);
 	}
 
 	

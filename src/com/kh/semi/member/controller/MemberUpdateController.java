@@ -1,6 +1,7 @@
 package com.kh.semi.member.controller;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -35,8 +36,6 @@ public class MemberUpdateController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		request.setCharacterEncoding("UTF-8");
 		
 		if(ServletFileUpload.isMultipartContent(request)) {
 			
@@ -80,9 +79,11 @@ public class MemberUpdateController extends HttpServlet {
 				// 파일경로 + 파일수정명을 넘겨줄거임(DB에 MEM_PICTURE컬럼에 저장)
 				memberPicture = "/resources/profile_upfiles/" + multiRequest.getFilesystemName("profileInput");
 			} 
+			m.setMemPicture(memberPicture);
+
 			
 			// Service로 수정할 회원 정보와 파일정보를 넘겨 요청
-			int result = new MemberService().memberUpdate(m, memberPicture);
+			int result = new MemberService().updateMember(m);
 			
 			// update 성공 시
 			if(result > 0) {
@@ -90,7 +91,11 @@ public class MemberUpdateController extends HttpServlet {
 				// 회원의 정보를 다시 SELECT해와야함 
 				// => 왜냐면 loginMember에 들어있는 정보는 update후 갱신이 안되어 있음
 				
-				Member updatedMember = new MemberService().loginMember(memberId, memberPwd);
+				Member loginMember = new Member();
+				loginMember.setMemId(memberId);
+				loginMember.setMemPwd(memberPwd);
+				
+				Member updatedMember = new MemberService().loginMember(loginMember);
 				
 				request.getSession().setAttribute("loginMember", updatedMember);
 				// 나중에 마이페이지 메인으로 바꿀 것

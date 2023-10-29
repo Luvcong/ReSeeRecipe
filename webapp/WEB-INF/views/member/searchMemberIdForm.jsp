@@ -16,7 +16,7 @@
 </head>
 <body>
 	<!-- header부분 (상단 메인 메뉴바) -->
-	<%@ include file="/views/common/header.jspf" %>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
     <!-- ajax로 처리할 것 
     <form action="yrsearchMemberId.me" method="post"> -->
@@ -29,12 +29,12 @@
           <!-- <button type="submit">확인</button> -->
           <button type="button" onclick="searchMemberId();">확인</button>
           <div id="searchMemberId"> </div>
-          <button type="button" onclick="location.href='<%= contextPath %>/yrloginForm.me'">로그인하러 가기</button>
+          <button type="button" onclick="location.href='yrloginForm.me'">로그인하러 가기</button>
         </div>
       <!-- </form> -->
       
     <!-- footer 푸터영역 -->
-	<%@ include file="/views/common/footer.jspf" %>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
   <script src="resources/js/member/searchMemberIdForm.js"></script>
 

@@ -46,8 +46,8 @@
 						</div>
 						<div id="header_3_1_2">
 							<c:choose>
-								<c:when test="${ sessionScope.loginMember }">
-									<a href="$yrloginForm.me"> <i
+								<c:when test="${ sessionScope.loginMember eq null }">
+									<a href="yrloginForm.me"> <i
 										class="fa-regular fa-user"></i><br> <img src="" alt="">로그인
 									</a>
 								</c:when>
@@ -60,7 +60,7 @@
 						</div>
 						<div id="header_3_1_3">
 							<c:choose>
-								<c:when test="${ sessionScope.loginMember }">
+								<c:when test="${ sessionScope.loginMember eq null }">
 								<a href="yrenrollForm.me">
 									<i class="fa-regular fa-handshake"></i><br> <img src="" alt="">회원가입
 								</a>

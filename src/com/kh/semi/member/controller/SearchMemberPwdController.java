@@ -34,7 +34,11 @@ public class SearchMemberPwdController extends HttpServlet {
 		String memberId = request.getParameter("memberId");
 		String memberEmail = request.getParameter("memberEmail");
 		
-		int result = new MemberService().searchMemberPwd(memberId, memberEmail);
+		Member m = new Member();
+		m.setMemId(memberId);
+		m.setMemEmail(memberEmail);
+		
+		int result = new MemberService().searchMemberPwd(m);
 		
 		response.setContentType("text/html; charset=UTF-8");
 		

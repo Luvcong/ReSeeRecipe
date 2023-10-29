@@ -1,195 +1,147 @@
 package com.kh.semi.member.model.service;
 
 import static com.kh.semi.common.JDBCTemplate.close;
+import static com.kh.semi.common.JDBCTemplate.commit;
 import static com.kh.semi.common.JDBCTemplate.getConnection;
-import static com.kh.semi.common.JDBCTemplate.*;
+import static com.kh.semi.common.JDBCTemplate.rollback;
 
 import java.sql.Connection;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.ibatis.session.SqlSession;
 
 import com.kh.semi.common.model.vo.PageInfo;
+import com.kh.semi.common.template.Template;
 import com.kh.semi.member.model.dao.MemberDao;
 import com.kh.semi.member.model.vo.Member;
 import com.kh.semi.member.model.vo.MemberUpdate;
 
-public class MemberService {
+
+public class MemberService implements MemberServiceI{
 	
-	public Member loginMember(String memberId, String memberPwd) {
+	private MemberDao memberDao = new MemberDao();
+	
+	// 로그인
+	@Override
+	public Member loginMember(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		Member m = new MemberDao().loginMember(conn, memberId, memberPwd);
+		Member loginMember = memberDao.loginMember(sqlSession, m);
 		
-		close(conn);
+		sqlSession.close();
 		
-		return m;
+		return loginMember;
 	}
 	
 	public int memReward(int memNo) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		int mReward = new MemberDao().memReward(conn, memNo);
+		int mReward = new MemberDao().memReward(sqlSession, memNo);
 		
-		close(conn);
+		sqlSession.close();
 		
 		return mReward;
 	}
 	
+	
 	// 회원가입
-	/**
-	 * @param m : 회원가입하는 Member객체
-	 * @return : 회원insert 성공 여부에 따른 결과값(성공1 또는 실패0)
-	 */
+	@Override
 	public int insertMember(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		int result = new MemberDao().insertMember(conn, m);
+		int result = memberDao.insertMember(sqlSession, m);
 		
-		// 회원가입 성공 / 실패
-		if(result > 0) commit(conn);
-		else rollback(conn);
+		if(result > 0) sqlSession.commit();
 		
-		close(conn);
+		sqlSession.close();
 		
 		return result;
 	}
 	
-	// 회원가입 시 nickname 중복체크
-	/**
-	 * @param checkNickname : 회원가입에 쓸 사용자 nickname 입력값
-	 * @return : 이미 존재하는 닉네임 1 또는 사용가능 0
-	 */
-	public int nicknameCheck(String checkNickname) {
-		Connection conn = getConnection();
+	@Override
+	public int checkDupl(HashMap<String, String> map) {
 		
-		int count = new MemberDao().nicknameCheck(conn, checkNickname);
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		close(conn);
+		int count = memberDao.checkDupl(sqlSession, map);
 		
-		return count;
+		return 0;
 	}
 	
-	
-	// 회원가입 시 id 중복체크
-	/**
-	 * @param checkId : 회원가입에 쓸 사용자 id 입력값
-	 * @return : 이미 존재하는 아이디 1 또는 사용가능 0
-	 */
-	public int idCheck(String checkId) {
-		Connection conn = getConnection();
-		
-		int count = new MemberDao().idCheck(conn, checkId);
-		
-		close(conn);
-		
-		return count;
-	}
-	
-	// 회원가입 시 email 중복체크
-	/**
-	 * @param checkEmail : 회원가입에 쓸 사용자 email 입력값
-	 * @return : 이미 존재하는 아이디 1 또는 사용가능 0
-	 */
-	public int emailCheck(String checkEmail) {
-		Connection conn = getConnection();
-		
-		int count = new MemberDao().emailCheck(conn, checkEmail);
-		
-		close(conn);
-		
-		return count;
-	}
 	
 	// 아이디 찾기
-	/**
-	 * @param memberName : 아이디를 찾고자 하는 사용자 이름 입력값
-	 * @param memberEmail : 아이디를 찾고자 하는 사용자 이메일 입력값
-	 * @return : 조회된 회원
-	 */
-	public Member searchMemberId(String memberName, String memberEmail) {
+	@Override
+	public Member searchMemberId(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		Member searchMember = new MemberDao().searchMemberId(conn, memberName, memberEmail);
+		Member searchMember = memberDao.searchMemberId(sqlSession, m);
 		
-		close(conn);
+		sqlSession.close();
 		
 		return searchMember;
 	}
 	
 	// 비밀번호 찾기
-	/**
-	 * @param memberId : 비밀번호를 찾고자 하는 사용자 아이디 입력값
-	 * @param memberEmail : 비밀번호를 찾고자 하는 사용자 이메일 입력값
-	 * @return : 조회된 결과가 있다면 1 반환
-	 */
-	public int searchMemberPwd(String memberId, String memberEmail) {
+	@Override
+	public int searchMemberPwd(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		int result = new MemberDao().searchMemberPwd(conn, memberId, memberEmail);
+		int result = memberDao.searchMemberPwd(sqlSession, m);
 		
-		close(conn);
+		if(result > 0) sqlSession.commit();
+		
+		sqlSession.close();
 		
 		return result;
 	}
 	
 	// 회원 비밀번호 재설정
-	public int updateMemberPwd(String memberId, String memberPwd) {
+	@Override
+	public int updateMemberPwd(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		int result = new MemberDao().updateMemberPwd(conn, memberId, memberPwd);
+		int result = memberDao.updateMemberPwd(sqlSession, m);
 		
-		if(result > 0) commit(conn);
-		else rollback(conn);
+		if(result > 0) sqlSession.commit();
 		
-		close(conn);
+		sqlSession.close();
 		
 		return result;
 	}
 	
-	// 회원 정보 변경 시 비밀번호 확인
-	public String memberUpdateConfirm(int memberNo) {
-		
-		Connection conn = getConnection();
-		
-		String checkPwd = new MemberDao().memberUpdateConfirm(conn, memberNo);
-		
-		close(conn);
-		
-		return checkPwd;
-	}
-	
 	// 회원 정보 변경
-	public int memberUpdate(Member m, String memberPicture) {
+	public int updateMember(Member m) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		int result = new MemberDao().memberUpdate(conn, m, memberPicture);
+		int result = memberDao.updateMember(sqlSession, m);
 		
-		if(result > 0) commit(conn);
-		else rollback(conn);
+		if(result > 0) sqlSession.commit();
 		
-		close(conn);
+		sqlSession.close();
 		
 		return result;
 	}
 	
 	// 회원 삭제(탈퇴)
-	public int memberDelete(int memberNo) {
+	public int deleteMember(int memberNo) {
 		
-		Connection conn = getConnection();
+		SqlSession sqlSession = Template.getSqlSession();
 		
-		int result = new MemberDao().memberDelete(conn, memberNo);
+		int result = memberDao.deleteMember(sqlSession, memberNo);
 		
-		if(result > 0) commit(conn);
-		else rollback(conn);
+		if(result > 0) sqlSession.commit();
 		
-		close(conn);
+		sqlSession.close();
+		
 		return result;
 	}
 
@@ -273,7 +225,7 @@ public class MemberService {
 	 * @param mno 삭제할 회원 번호
 	 * @return 회원 상태(N) UPDATE 수행 결과(성공1 실패0)
 	 */
-	public int deleteMember(int mno) {
+	public int deleteMember2(int mno) {
 		
 		Connection conn = getConnection();
 		
@@ -340,4 +292,5 @@ public class MemberService {
 		
 		return list;
 	}
+
 }

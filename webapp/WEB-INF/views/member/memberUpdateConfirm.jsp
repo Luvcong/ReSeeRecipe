@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<% String checkPwd = (String)session.getAttribute("checkPwd"); %>
-
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,22 +19,23 @@
 </head>
 <body>
     <!-- header부분 (상단 메인 메뉴바) -->
-	<%@ include file="/views/common/header.jspf" %>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
     <div>
-        <form action="<%= contextPath %>/yrmemberUpdateConfirm.me" method="post">
+        <form action="yrmemberUpdateConfirm.me" method="post">
             <h1 id="title"><b>회원정보변경</b></h1>
             <div class="container">
                 <p>본인확인을 위한 비밀번호 입력창입니다.</p>
 	            <input type="password" name="checkPwd" placeholder="비밀번호를 입력해 주세요." required>
-	            <input type="hidden" name="memberNo" value="<%= loginMember.getMemNo() %>">
-	            <input type="hidden" name="memberPwd" value="<%= loginMember.getMemPwd() %>">
+	            <input type="hidden" name="memberNo" value="${ sessionScope.loginMember.memNo }">
+	            <input type="hidden" name="memberPwd" value="${ sessionScope.loginMember.memPwd }">
 	            <button type="submit" onclick="error();">확인</button>
             </div>
         </form>
     </div>
     
-    <% if(checkPwd != null && loginMember != null && !checkPwd.equals(loginMember.getMemPwd())) { %>
+    
+    <c:if test="${ checkPwd ne null and sessionScope.loginMember ne null and checkPwd ne sessionScope.loginMember.memPwd }" >
     	<script>
 		Swal.fire({
 			icon: 'error',
@@ -43,14 +43,11 @@
 			text: '비밀번호가 일치하지 않습니다!'
     	})
          </script>
-         
-    <% //checkPwd = null; 
-    } %>
-    
-
-
+         <c:remove var="checkPwd" scope="session" />
+	</c:if>
+	
     <!-- footer 푸터영역 -->
-	<%@ include file="/views/common/footer.jspf" %>
+    <jsp:include page="/WEB-INF/views/common/footer.jsp"/>
 
 </body>
 </html>

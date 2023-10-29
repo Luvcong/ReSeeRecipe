@@ -30,10 +30,7 @@ public class MemberEnrollController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// 1. POST방식 인코딩설정
-		request.setCharacterEncoding("UTF-8");
-		
+
 		// 2. request객체로부터 요청 시 전달값 뽑기(이름, 닉네임, 아이디, 비밀번호, 이메일)
 		String memberName = request.getParameter("memberName");
 		String memberNickname = request.getParameter("memberNickname");
@@ -51,7 +48,7 @@ public class MemberEnrollController extends HttpServlet {
 		int result = new MemberService().insertMember(m);
 		
 		if(result > 0) {
-			request.getRequestDispatcher("views/member/memberEnrollSuccess.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/member/memberEnrollSuccess.jsp").forward(request, response);
 		} else {
 			request.setAttribute("errorMsg", "회원가입에 실패하셨습니다.");
 			request.getRequestDispatcher(request.getContextPath() + "/yrenrollForm.me").forward(request, response);

@@ -21,7 +21,7 @@
 </head>
 <body>
 	<!-- header부분 (상단 메인 메뉴바) -->
-	<%@ include file="/views/common/header.jspf" %>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
     <!-- ajax로 처리 
     <form action="yrsearchMemberPwd.me" method="post">
@@ -48,13 +48,13 @@
             <label for="memberPwdCheck">* 비밀번호가 일치하지 않습니다.</label>
 	      	  <button type="button" id="updatePwdBtn" onclick="updateMemberPwd();">비밀번호 재설정하기</button>
           </div>
-	          <button type="button" onclick="location.href='<%= contextPath %>/yrloginForm.me'">로그인하러 가기</button>
+	          <button type="button" onclick="location.href='yrloginForm.me'">로그인하러 가기</button>
         </div>
         
       <!-- </form> -->
       
     <!-- footer 푸터영역 -->
-	<%@ include file="/views/common/footer.jspf" %>
+	<jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
   <script src="resources/js/member/searchMemberPwdForm.js"></script>
 
@@ -79,7 +79,7 @@
                               confirmButtonText: '확인'
                         }).then((result) => {
                           if (result.isConfirmed) {
-                              $(location).attr("href", "<%= contextPath %>/yrloginForm.me");
+                              $(location).attr("href", "yrloginForm.me");
                           }
                         })
 
@@ -93,7 +93,7 @@
                               confirmButtonText: '확인'
                         }).then((result) => {
                           if (result.isConfirmed) {
-                              $(location).attr("href", "<%= contextPath %>/yrsearchMemberPwdForm.me");
+                              $(location).attr("href", "yrsearchMemberPwdForm.me");
                           }
                         })
                     }

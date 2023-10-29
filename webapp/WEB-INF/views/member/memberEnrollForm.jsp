@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,16 +17,20 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>    
 
     <link rel="stylesheet" href="resources/css/member/memberEnrollForm.css">
+    <script src="resources/js/member/memberEnrollForm.js"></script>
+
 </head>
   <body>
   	<!-- header부분 (상단 메인 메뉴바) -->
-  	<jsp:include page="/WEB-INF//views/common/header.jsp">
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 	
-	<c:if test="${ requestScope.errorMsg ne null }">
+	<c:if test="${ errorMsg ne null }" >
 		<script>
 			alert("${ requestScope.errorMsg }");
 		</script>
 	</c:if>
+	
+
   
     <form action="yrenroll.me" method="post">
 

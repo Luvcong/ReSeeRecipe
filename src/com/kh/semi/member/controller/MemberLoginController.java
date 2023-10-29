@@ -32,9 +32,6 @@ public class MemberLoginController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		// 로그인 POST방식 인코딩
-		request.setCharacterEncoding("UTF-8");
-		
 		// 사용자가 입력한 id와 pwd 값 뽑기
 		String memberId = request.getParameter("memberId");
 		String memberPwd = request.getParameter("memberPwd");
@@ -42,30 +39,32 @@ public class MemberLoginController extends HttpServlet {
 		// 추가
 		String buy = request.getParameter("buy");
 		
+		Member m = new Member();
+		m.setMemId(memberId);
+		m.setMemPwd(memberPwd);
+		
 		// Service 호출
-		Member loginMember = new MemberService().loginMember(memberId, memberPwd);
-		//System.out.println("loginMem >> " + loginMember); 작동 잘 해서 블러처리하였습니다 - MJY
+		Member loginMember = new MemberService().loginMember(m);
 
 		// 로그인 실패 시
 		if(loginMember == null) {
 			request.setAttribute("errorMsg", "로그인에 실패하셨습니다.");
-			// request.getRequestDispatcher("views/common/errorPage.jsp").forward(request, response);
-			request.getRequestDispatcher("views/member/memberLogin.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/member/memberLogin.jsp").forward(request, response);
 		} else { // 로그인 성공 시
-			int mReward = new MemberService().memReward(loginMember.getMemNo());
-			if(mReward > -1) {
+			//int mReward = new MemberService().memReward(loginMember.getMemNo());
+			//if(mReward > -1) {
 				HttpSession session = request.getSession();
 				session.setAttribute("loginMember", loginMember);
-				session.setAttribute("mReward", mReward);
+				//session.setAttribute("mReward", mReward);
 				if(buy.equals("buy")) {
 					response.sendRedirect(request.getContextPath() + "/main.po");
 				} else {
 					response.sendRedirect(request.getContextPath());
 				}
-			} else {
-				request.setAttribute("errorMsg", "리워드조회 실패");
-				request.getRequestDispatcher("views/member/memberLogin.jsp").forward(request, response);
-			}
+			//} else {
+				//request.setAttribute("errorMsg", "리워드조회 실패");
+				//request.getRequestDispatcher("WEB-INF/views/member/memberLogin.jsp").forward(request, response);
+			//}
 		}
 	}
 

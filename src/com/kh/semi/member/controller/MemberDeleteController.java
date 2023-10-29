@@ -30,23 +30,13 @@ public class MemberDeleteController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		
-		// request.setCharacterEncoding("UTF-8");
-		
 		// 삭제할 회원 번호
 		int memberNo = Integer.parseInt(request.getParameter("memberNo"));
 		
-		int result = new MemberService().memberDelete(memberNo);
+		int result = new MemberService().deleteMember(memberNo);
 		
-		/*
-		if(result > 0) {
-			request.setAttribute("successMsg", "탈퇴되었습니다.");
-			response.sendRedirect(request.getContextPath());
-		} else {
-			request.setAttribute("errorMsg", "탈퇴에 실패하셨습니다. 오류가 반복되는 경우 관리자에게 문의하세요.");
-			response.sendRedirect(request.getContextPath() + "/blog.me");
-		}
-		*/
+		// 로그인되어있는거 날려주기(앞단에서 해도되겠지만 여기서 간단쓰)
+		request.getSession().setAttribute("loginMember", null);
 		// ajax처리
 		response.setContentType("text/html; charset=UTF-8");
 		

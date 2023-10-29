@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 
-<!-- 초본_231006_yr -->
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +18,7 @@
 <body>
 
     <!-- header부분 (상단 메인 메뉴바) -->
-    <jsp:include page="/WEB-INF/views/common/header.jsp" />
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
     <div class="container">
         <div class="success">
@@ -32,7 +31,7 @@
 
 
     <!-- footer 푸터영역 -->
-    <jsp:include page="/WEB-INF//views/common/footer.jsp" />
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
 </body>
 </html>

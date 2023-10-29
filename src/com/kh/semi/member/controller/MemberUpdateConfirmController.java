@@ -43,7 +43,7 @@ public class MemberUpdateConfirmController extends HttpServlet {
 		
 		// 비밀번호가 일치한다면
 		if(checkPwd.equals(memberPwd)) {
-			request.getRequestDispatcher("views/member/memberUpdateForm.jsp").forward(request, response);
+			request.getRequestDispatcher("WEB-INF/views/member/memberUpdateForm.jsp").forward(request, response);
 			// ★★★★★★★★★여기서 response로 보내도 되나?
 			// response.sendRedirect("views/member/memberUpdateForm");
 		// 비밀번호 불일치
@@ -62,7 +62,7 @@ public class MemberUpdateConfirmController extends HttpServlet {
 			request.getSession().setAttribute("memberPwd", memberPwd);
 			// 사용자가 입력한 비밀번호
 			request.getSession().setAttribute("checkPwd", checkPwd);
-			response.sendRedirect("views/member/memberUpdateConfirm.jsp");
+			response.sendRedirect("yrmemberUpdateConfirmForm.me");
 			
 		}
 	}

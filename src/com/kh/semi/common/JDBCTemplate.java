@@ -1,6 +1,6 @@
 package com.kh.semi.common;
 
-/*
+
 import static com.kh.semi.common.JDBCTemplate.close;
 import static com.kh.semi.common.JDBCTemplate.commit;
 import static com.kh.semi.common.JDBCTemplate.rollback;
@@ -25,7 +25,7 @@ public class JDBCTemplate {
 	 * @param result
 	 * @return
 	 */
-	/*
+	
 	public static int doTransAction(Connection conn, int result) {
 		if(result > 0) {
 			commit(conn);
@@ -117,4 +117,3 @@ public class JDBCTemplate {
 	
 
 }//class.end
-*/

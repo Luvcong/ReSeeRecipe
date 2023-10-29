@@ -36,7 +36,11 @@ public class SearchMemberIdController extends HttpServlet {
 		String memberName = request.getParameter("memberName");
 		String memberEmail = request.getParameter("memberEmail");
 		
-		Member searchMember = new MemberService().searchMemberId(memberName, memberEmail);
+		Member m = new Member();
+		m.setMemName(memberName);
+		m.setMemEmail(memberEmail);
+		
+		Member searchMember = new MemberService().searchMemberId(m);
 		
 		JSONObject jObj = new JSONObject();
 		// 조회된 아이디가 없다면 => 문자열 null 반환 => 조회된 아이디가 없습니다 처리

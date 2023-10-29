@@ -1,5 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="com.kh.semi.member.model.vo.Member" %>
+<% String contextPath = request.getContextPath(); %>
+<% Member loginMember = (Member)session.getAttribute("loginMember"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -20,26 +24,29 @@
 </head>
   <body>
   	<!-- header부분 (상단 메인 메뉴바) -->
-	<%@ include file="/views/common/header.jspf" %> 
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
-    <form enctype="multipart/form-data" action="<%= contextPath %>/yrmemberUpdate.me" method="post">
+    <form enctype="multipart/form-data" action="yrmemberUpdate.me" method="post">
 
       <h1 id="title"><b>회원정보변경</b></h1>
       
       <!-- 사진을 바꿀 회원의 번호를 hidden으로 같이 넘겨주기  -->
-      <input type="hidden" name="memberNo" id="memberNo" value="<%= loginMember.getMemNo() %>">
+      <input type="hidden" name="memberNo" id="memberNo" value="${ sessionScope.loginMember.memNo }">
       <!-- 회원이 이미 등록된 사진이 있다면 hidden으로 같이 넘겨주기 -->
-      <input type="hidden" name="memberPicture" value="<%= loginMember.getMemPicture() %>">
+      <input type="hidden" name="memberPicture" value="${ sessionScope.loginMember.memPicture }">
       <!-- 변경에 필요한 로그인된 비밀번호 hidden으로 같이 넘겨주기 -->
-      <input type="hidden" name="loginMemberPwd" value="<%= loginMember.getMemPwd() %>">
+      <input type="hidden" name="loginMemberPwd" value="${ sessionScope.loginMember.memPwd }">
 
       <!-- 사진 -->
       <div class="container">
-        <% if(loginMember.getMemPicture() != null) { %> 
-        	<img src="<%= contextPath %>/<%= loginMember.getMemPicture() %>" alt="프로필사진" id="profileImg" width="150" height="150">
-        <% } else { %>
+      	<c:choose>
+      	<c:when test="${ sessionScope.loginMember.memPicture ne null }" >
+        	<img src="<%= contextPath %>/${ sessionScope.loginMember.memPicture }" alt="프로필사진" id="profileImg" width="150" height="150">
+       	</c:when>
+       	<c:otherwise>
         	<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiJ77jbjsG1bGoS5Kn6gm83uk-iiWcuMLRzw&usqp=CAU" alt="프로필사진" id="profileImg" width="150" height="150">
-       	<% } %>
+       	</c:otherwise>
+       	</c:choose>
         <input type="file" name="profileInput" id="profileInput" onchange="loadImg(this);">
       </div>
 
@@ -49,24 +56,24 @@
 		
 		  <!-- value에 loginUser를 update된 걸 넣음 -->
         <p class="tag">이름</p>
-        <input type="text" value="<%=loginMember.getMemName() %>" name="memberName" id="memberName" maxlength="5" required>
+        <input type="text" value="${ sessionScope.loginMember.memName }" name="memberName" id="memberName" maxlength="5" required>
         <label for="memberName">* 한글 2 ~ 5자로 입력 가능합니다.</label>
         
         <p class="tag">닉네임(활동명)</p>
-        <input type="text" value="<%= loginMember.getMemNickname() %>" name="memberNickname" id="memberNickname" maxlength="8" required>
+        <input type="text" value="${ sessionScope.loginMember.memNickname }" name="memberNickname" id="memberNickname" maxlength="8" required>
         <label for="memberNickname">* 영문, 한글, 숫자 3 ~ 8자로 입력 가능합니다. </label>
 
         <p class="tag">아이디(변경불가)</p>
-        <input type="text" value="<%= loginMember.getMemId() %>" readonly name="memberId" id="memberId" maxlength="20" required>
+        <input type="text" value="${ sessionScope.loginMember.memId }" readonly name="memberId" id="memberId" maxlength="20" required>
         <label for="memberId">* 영문, 숫자 5 ~ 20자로 입력 가능합니다.</label>
         
         <p class="tag">이메일</p>
-        <input type="text" value="<%= loginMember.getMemEmail() %>" name="memberEmail" id="memberEmail" maxlength="50" required>
+        <input type="text" value="${ sessionScope.loginMember.memEmail }" name="memberEmail" id="memberEmail" maxlength="50" required>
         <label for="memberEmail">* 인증받을 이메일을 입력해 주세요.</label>
 
         <!-- 현재 로그인된 값 비교할 수 있게 값 뽑기 -->
-        <p class="compare" id="loginMemNickname"><%= loginMember.getMemNickname() %></p>
-        <p class="compare" id="loginMemEmail"><%= loginMember.getMemEmail() %></p>
+        <p class="compare" id="loginMemNickname">${ sessionScope.loginMember.memNickname }</p>
+        <p class="compare" id="loginMemEmail">${ sessionScope.loginMember.memEmail }</p>
         
         <!-- 제출버튼!!!!!!!!!!!!!!!!!! onclick = "return validate();"-->
         <button type="submit" id="submitBtn" >변경하기</button>
@@ -101,7 +108,7 @@
                   <!-- Modal footer -->
                   <div class="modal-footer">
                       <!-- 아이디 같이 보내주기 -->
-                      <!-- <button type="submit" action="<%= contextPath %>/yrupdateMemberPwd.me?memberId=<%= loginMember.getMemId() %>" method="post"></button> -->
+                      <!-- <button type="submit" action="yrupdateMemberPwd.me?memberId=${ sessionScope.loginMember.memId }" method="post"></button> -->
                       <button type="button" class="btn btn-danger" id="updatePwdBtn" onclick="updateMemberPwd();" data-dismiss="modal" >비밀번호 변경</button>
                   </div>
                   
@@ -123,7 +130,7 @@
     </form>
       
     <!-- footer 푸터영역 -->
-    <%@ include file="/views/common/footer.jspf" %>
+    <jsp:include page="/WEB-INF/views/common/footer.jsp" />
 
     <script>
       // 필요한 변수 선언

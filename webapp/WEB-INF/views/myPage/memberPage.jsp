@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ page import="com.kh.semi.member.model.vo.Member" %>
+<% String contextPath = request.getContextPath(); %>
+<% Member loginMember = (Member)session.getAttribute("loginMember"); %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -218,31 +221,31 @@
 </head>
 <body>
     	
-<%@ include file="/views/common/header.jspf" %>
+	<jsp:include page="/WEB-INF/views/common/header.jsp" />
         <div id="pageCenter">
         <div id="sideTop">
-            <p>내 리워드: <%= loginMember.getMemReward() %></p>
+            <p>내 리워드: ${ sessionScope.loginMember.memReward }</p>
             <div id="memberPic">
-                <img id="profile" src="<%= contextPath %>/<%= loginMember.getMemPicture() %>" alt="profile picture">
+                <img id="profile" src="<%= contextPath %>/${ sessionScope.loginMember.memPicture }" alt="profile picture">
             </div>
                 <div id="nickName">
-                    <p><%= loginMember.getMemNickname() %></p>
+                    <p>${ sessionScope.loginMember.memNickname }</p>
                 </div>
                 <div id="md">
-                    <p>LV. <%= loginMember.getMemGradeName() %></p>
+                    <p>LV. ${ sessionScope.loginMember.memGradeName }</p>
                 </div>
             
             <div id="sideMenu">
                 <ul>
-                   <li id="listMenu"><a href="<%= contextPath %>/yrmemberUpdateConfirmForm.me">회원정보 변경</a></li>
-                   <li id="listMenu"><a href="<%= contextPath %>/yrmemberRewardList.mp?memNo=<%= loginMember.getMemNo() %>">리워드</a></li>
-                   <li id="listMenu"><a href="<%= contextPath %>/yrmemberCouponList.mp?memNo=<%= loginMember.getMemNo() %>">쿠폰</a></li>
+                   <li id="listMenu"><a href="yrmemberUpdateConfirmForm.me">회원정보 변경</a></li>
+                   <li id="listMenu"><a href="yrmemberRewardList.mp?memNo=${ sessionScope.loginMember.memNo }">리워드</a></li>
+                   <li id="listMenu"><a href="yrmemberCouponList.mp?memNo=${ sessionScope.loginMember.memNo }">쿠폰</a></li>
                    <li id="listMenu"><a href="">선물함</a></li>
-                   <li id="listMenu"><a href="<%= contextPath %>/recipeBook.me">레시피북</a></li>
-                   <li id="listMenu"><a href="<%= contextPath %>/subscribeChef.me">구독셰프</a></li>
-                   <li id="listMenu"><a href="<%= contextPath %>/recipe.me">게시물관리</a></li>
+                   <li id="listMenu"><a href="recipeBook.me">레시피북</a></li>
+                   <li id="listMenu"><a href="subscribeChef.me">구독셰프</a></li>
+                   <li id="listMenu"><a href="recipe.me">게시물관리</a></li>
                    <li id="listMenu"><a href="">쇼핑정보</a></li>
-                   <li id="listMenu"><a href="<%= contextPath %>/dm.me">쪽지</a></li>
+                   <li id="listMenu"><a href="dm.me">쪽지</a></li>
                 </ul>
                 
             </div>
@@ -312,11 +315,8 @@
         </div>
 
        
-       
-       
-       
       
-<%@ include file="/views/common/footer.jspf" %>
+	<c:include page="/WEB-INF/views/common/footer.jsp" />
         
     
 </body>
