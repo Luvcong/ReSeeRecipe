@@ -11,8 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.kh.semi.coupon.model.service.manager.CouponService;
-import com.kh.semi.coupon.model.vo.Coupon;
+import com.kh.semi.coupon.model.service.manager.CouponServiceImpl;
 
 /**
  * Servlet implementation class CouponDeleteController
@@ -20,14 +19,14 @@ import com.kh.semi.coupon.model.vo.Coupon;
 @WebServlet("/jhdelete.cp")
 public class CouponDeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private CouponService couponService;
+	private CouponServiceImpl couponServiceImpl;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public CouponDeleteController() {
         super();
-        couponService = new CouponService();
+        couponServiceImpl = new CouponServiceImpl();
         // TODO Auto-generated constructor stub
     }
 
@@ -45,7 +44,7 @@ public class CouponDeleteController extends HttpServlet {
 		JsonArray successList = new JsonArray();
 		for(String list : couponList) {
 			int couponNo = Integer.parseInt(list);
-			int result = couponService.deleteCoupon(couponNo);
+			int result = couponServiceImpl.deleteCoupon(couponNo);
 			if(result > 0) {
 				successList.add(couponNo);
 			}
@@ -65,3 +64,4 @@ public class CouponDeleteController extends HttpServlet {
 	}
 
 }
+

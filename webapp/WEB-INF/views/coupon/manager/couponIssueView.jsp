@@ -1,18 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.ArrayList, com.kh.semi.coupon.model.vo.Coupon, com.kh.semi.common.model.vo.PageInfo" %>
-<%
-	ArrayList<Coupon> list = (ArrayList<Coupon>)request.getAttribute("list");
-	String successMsg = (String)session.getAttribute("successMsg");
-	String failMsg = (String)session.getAttribute("failMsg");
-	
-	PageInfo pi = (PageInfo)request.getAttribute("pi");
-	int couponListCount = pi.getListCount();
-	int couponListPage = pi.getCurrentPage();
-	int couponStartPage = pi.getStartPage();
-	int couponEndPage = pi.getEndPage();
-	int couponMaxPage = pi.getMaxPage();
-%>             
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,12 +14,11 @@
 <!-- categoryListView / script & css -->
 <link rel="stylesheet" href="resources/css/coupon/coupon_manager.css">
 <link rel="shortcut icon" href="#">
+<script src="resources/js/coupon/coupon_manager.js"></script>
 
 </head>
 <body>
-
-	<%@ include file="../../manager/navbar.jsp" %>
-	<script src="resources/js/coupon/coupon_manager.js"></script>
+	<jsp:include page="../../manager/navbar.jsp" />
 
 	<div class="rs-content">
 	    <div class="header">
@@ -55,7 +43,7 @@
             </div>
             <div class="h-content d-flex p-3">  <!-- 패딩 1rem -->
                 <div class="mr-auto">	
-                    조회수 <span class="selectCount"><%= pi.getListCount() %></span><span>개</span>
+                    조회수 <span class="selectCount">${ requestScope.pi.listCount }</span><span>개</span>
                 </div>
                 <div >
                     <button type="submit" onclick="showAddCouponModal()" class="btn btn-sm btn-warning">쿠폰등록</button>
@@ -80,53 +68,46 @@
                     </tr>
                 </thead>
                 <tbody>
-                <% if(list == null || list.isEmpty()) { %>
+                <c:choose>
+                	<c:when test="${ requestScope.list eq null || empty requestScope.list }">
    	                <tr>
 	                    <td colspan="9">쿠폰 등록 내역이 없습니다</td>
 	                </tr>
-	            	<% } else { %>
-	            		<% for(Coupon coupon : list) { %>
+                	</c:when>
+                	<c:otherwise>
+                		<c:forEach var="coupon" items="${ requestScope.list }">
 	                    <tr>
 	                        <td><input type="checkbox" onclick="checkOnce()"></td>
-	                        <td><%= coupon.getCouponNo() %></td>
-	                        <td><%= coupon.getCouponName() %></td>
-	                        <td><%= coupon.getCouponRatio() %>%</td>
-	                        <td><%= coupon.getCouponStartdate() %></td>
-	                        <td><%= coupon.getCouponEndDate() %></td>
-	                        <td><%= coupon.getIssueCouponCount() %></td>
-	                        <td><%= coupon.getUsesCouponCount() %></td>
-	                        <td class="<%= coupon.getCouponAvail().equals("Y") ? "replied" : "waiting"%>">
-	                        	사용<%= coupon.getCouponAvail().equals("Y") ? "중": "중지"  %>
+	                        <td>${ coupon.couponNo }</td>
+	                        <td>${ coupon.couponName }</td>
+	                        <td>${ coupon.couponRatio }</td>
+	                        <td>${ coupon.couponStartdate }</td>
+	                        <td>${ coupon.couponEndDate }</td>
+	                        <td>${ coupon.issueCouponCount }</td>
+	                        <td>${ coupon.usesCouponCount }</td>
+	                        <td class=${ coupon.couponAvail eq "Y" ? "replied" : "waiting" }>
+	                        	  사용${ coupon.couponAvail eq "Y" ? "중" : "중지" }
 	                        </td>
-	                        <td style="display: none"><%= coupon.getCouponReason() %></td>
+	                        <td style="display: none">${ coupon.couponReason }</td>
 	                    </tr>
-	                    <% } %>
-                    <% } %>
+                		</c:forEach>
+                	</c:otherwise>
+                </c:choose>
                 </tbody>
             </table>	<!-- tb-report -->
         </div>	<!-- tableBody  -->
         
         <!-- 페이징바 -->
 		<div class="paging-area">
-			<% if(couponListPage != 1) { %>
-				<button onclick="page('<%= couponListPage -1 %>');" class="btn btn-warning">&lt;</button>
-			<% } %>
-			<% for(int i = couponStartPage; i <= couponEndPage; i++) { %>
-				<% if(couponListPage != i) { %>
-					<button onclick="page('<%= i %>');" class="btn btn-warning"><%= i %></button>
-				<% } else { %>
-					<button disabled class="btn btn-warning"><%= i %></button>
-				<% } %>
-			<% } %>
-			<% if(couponListPage != couponMaxPage) { %>
-				<button onclick="page('<%= couponListPage + 1 %>');" class="btn btn-warning">&gt;</button>
-			<% } %>
+			<c:forEach var="p" begin="${ requestScope.pi.startPage }" end="${ requestScope.pi.endPage }">
+				<button onclick="location.href='${ pageContext.request.contextPath }/jhselect.cp?page=${ p }';"class="btn btn-warning">${ p }</button>
+			</c:forEach>
 		</div>	<!-- 페이징바 -->
    	</div>  <!-- rs-content -->
    	
 	<!-- 쿠폰 등록 modal창 -->
 	<div class="modal" id="addCouponForm">
-		<form method="post" action="<%= contextPath %>/jhinsert.cp">
+		<form method="post" action="${ pageContext.request.contextPath }/jhinsert.cp">
 		       <div class="modal-dialog">
 		           <div class="modal-content">
 		               <!-- Modal Header -->
@@ -177,21 +158,21 @@
 	 </div> <!-- 쿠폰 등록 modal창 -->
 	 
   	<!-- alertMsg script : DmListController에서 사용 -->
-	<script>
-		var successMsg = '<%= successMsg %>';
-		var failMsg = '<%= failMsg %>';
-		
-		if(successMsg != 'null'){
-			Swal.fire('성공', successMsg, 'success');	// alert대신 swal 라이브러리 사용
-		}
-		
-		if(failMsg != 'null'){
-			Swal.fire('실패', failMsg, 'error');
-		}
-		
-		<% session.removeAttribute("successMsg"); %>
-		<% session.removeAttribute("failMsg"); %>
-	</script>	
+  	<c:choose>
+  		<c:when test="${ sessionScope.successMsg ne null && not empty sessionScope.successMsg }">
+  			<script>
+  				Swal.fire('성공', '${ successMsg }', 'success');
+  			</script>
+  		</c:when>
+  		<c:when test="${ sessionScope.failMsg ne null && not empty sessionScope.failMsg }">
+  			<script>
+  				Swal.fire('실패', '${ failMsg }', 'error');
+  			</script>
+  		</c:when>
+  	</c:choose>
+  	
+  	<c:remove var="successMsg" />
+  	<c:remove var="failMsg" />
   	
 
 </body>
