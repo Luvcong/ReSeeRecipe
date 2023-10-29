@@ -231,30 +231,27 @@
 		    BY
 		       RECIPE_NO DESC
 	</select>
-	
-	
 	<!-- ******* 레시피 관련 SELECT구문 끝 ******* -->
 	
 	
+	
 	<!-- ******* 레시피 관련 UPDATE구문 시작 ******* -->
-	<entry key="deleteReqReplySingle">
+	<update id="deleteReqReplySingle" parameterType="reply">
 		UPDATE
 			   TB_REPLY
 		   SET
 			   REPLY_STATUS = 'N'
 		 WHERE
-			   REPLY_NO = ?
+			   REPLY_NO = #{replyNo}
 		   AND
-			   RECIPE_NO = ?
-	</entry>
-	
-	
-	
+			   RECIPE_NO = #{recipeNo}
+	</update>
 	<!-- ******* 레시피 관련 UPDATE구문 끝 ******* -->
 	
 	
+	
 	<!-- ******* 레시피 관련 INSERT구문 시작 ******* -->
-	<entry key="insertRecipe">
+	<insert id="insertRecipe" parameterType="java.util.List">
 		INSERT
 		  INTO
 		  	   TB_RECIPE
@@ -267,11 +264,12 @@
 		VALUES
 			   (
 			   SEQ_RECIPE.NEXTVAL,
-			   ?,
-			   ?,
-			   ?
+			   #{recipeTitle},
+			   #{recipeWriterNo},
+			   #{recipeCategoryNo}
 			   )
-	</entry>
+	</insert>
+	<!-- ㅠㅠㅠㅠㅠㅠ몰라 -->
 	
 	
 	<entry key="insertRecipePic">

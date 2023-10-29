@@ -132,33 +132,8 @@ public class RecipeDao {
 	 */
 	public ArrayList<Recipe> selectRecipeList(SqlSession sqlSession, RowBounds rowBounds) {
 		
-		ArrayList<Recipe> recipeList = new ArrayList();
-		String sql = prop.getProperty("selectRecipeList");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql);) {
-			
-			pstmt.setInt(1, pi.getStartRow());
-			pstmt.setInt(2, pi.getEndRow());
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				while(rset.next()) {
-					Recipe recipe = new Recipe();
-					recipe.setRecipeNo(rset.getInt("RECIPE_NO"));
-					recipe.setRecipeTitle(rset.getString("RECIPE_TITLE"));
-					recipe.setRecipeCount(rset.getInt("RECIPE_COUNT"));
-					recipe.setTitleImg(rset.getString("TITLEIMG"));
-					recipe.setMemNickName(rset.getString("MEM_NICKNAME"));
-					recipe.setHtCount(rset.getInt("HT_COUNT"));
-					recipeList.add(recipe);
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 		return (ArrayList)sqlSession.selectList("recipeMapper.selectRecipeList", null, rowBounds);
 	}
-	
-	
 	
 	
 	
@@ -173,16 +148,6 @@ public class RecipeDao {
 	public int deleteReqReplySingle(SqlSession sqlSession, Reply reply) {
 		
 		return sqlSession.update("recipeMapper.deleteReqReplySingle", reply);
-		/*
-		 * int result = 0; String sql = prop.getProperty("deleteReqReplySingle");
-		 * 
-		 * try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-		 * pstmt.setInt(1, reply.getReplyNo());
-		 * pstmt.setInt(2, reply.getRecipeNo());
-		 * 
-		 * result = pstmt.executeUpdate(); } catch (SQLException e) {
-		 * e.printStackTrace(); }
-		 */
 	}
 	
 	
@@ -200,15 +165,6 @@ public class RecipeDao {
 	public int insertRecipe(SqlSession sqlSession, Recipe recipe) {
 		
 		return sqlSession.insert("recipeMapper", recipe);
-		/*
-		 * int result = 0; String sql = prop.getProperty("insertRecipe");
-		 * try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-		 * pstmt.setString(1, recipe.getRecipeTitle()); pstmt.setInt(2,
-		 * recipe.getRecipeWriterNo()); pstmt.setInt(3, recipe.getRecipeCategoryNo());
-		 * 
-		 * result = pstmt.executeUpdate(); } catch (SQLException e) {
-		 * e.printStackTrace(); } return result;
-		 */
 	}
 	
 	
@@ -224,8 +180,6 @@ public class RecipeDao {
 	 * INSERT구문 수행이 성공한 행의 개수
 	 */
 	public int insertRecipePic(SqlSession sqlSession, ArrayList<RecipePic> recipePicList) {
-		
-		
 		/*
 		// 1로 초기화 후 executeUpdate결과를 곱함 => 하나라도 실패 시 0반환
 		int result = 1;
@@ -245,9 +199,10 @@ public class RecipeDao {
 		}
 		return result;
 		*/
+		// 몰라...
+		return sqlSession.insert("recipeMapper.insertRecipePic", recipePicList);
 	}
-	int result = 1;
-	result *= sqlSession.insert("recipeMapper.insertRecipePic", recipePicList);
+	
 	
 	/**
 	 * 레시피 재료, 재료량 정보가 담긴 ArrayList를 받아<br>

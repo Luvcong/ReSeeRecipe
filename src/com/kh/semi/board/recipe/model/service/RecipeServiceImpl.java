@@ -118,9 +118,7 @@ public class RecipeServiceImpl implements RecipeService {
 		SqlSession sqlSession = getSqlSession();
 		int result = recipeDao.deleteReqReplySingle(sqlSession, reply);
 		
-		if(result > 0) {
-			sqlSession.commit(); // 단일 DML
-		}
+		if(result > 0) sqlSession.commit(); // 단일 DML
 		sqlSession.close();
 		return result;
 	}

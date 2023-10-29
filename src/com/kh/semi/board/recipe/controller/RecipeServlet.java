@@ -40,8 +40,8 @@ public class RecipeServlet extends HttpServlet {
 		
 		RecipeController rc = new RecipeController();
 		
-		// 인코딩 세팅
-		request.setCharacterEncoding("UTF-8");	
+		// 인코딩 세팅 => 필터에서함
+		//request.setCharacterEncoding("UTF-8");	
 		
 		// uri 매핑문자열 추출
 		String uri = request.getRequestURI();

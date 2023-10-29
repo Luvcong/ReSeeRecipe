@@ -12,6 +12,7 @@ import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.kh.semi.board.recipe.model.service.RecipeService;
 import com.kh.semi.board.recipe.model.service.RecipeServiceImpl;
 import com.kh.semi.board.recipe.model.service.UnRecipeService;
 import com.kh.semi.board.recipe.model.vo.CookSteps;
@@ -78,7 +79,7 @@ public class RecipeController {
 		
 		// 기본변수
 		String viewPath = "";
-		RecipeServiceImpl rs = new RecipeServiceImpl();
+		RecipeService rs = new RecipeServiceImpl();
 		
 		// ---------------- 페이지네이션 ----------------
 		// pi값 계산은 여기서 (PagiInfo객체 화면단에 넘겨야하기때문에)

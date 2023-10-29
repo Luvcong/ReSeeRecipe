@@ -25,7 +25,7 @@ public class JDBCTemplate {
 	 * @param result
 	 * @return
 	 */
-	
+	/*
 	public static int doTransAction(Connection conn, int result) {
 		if(result > 0) {
 			commit(conn);
@@ -36,7 +36,7 @@ public class JDBCTemplate {
 		return result;
 	}
 	
-	
+
 	public static Connection getConnection() {
 		Connection conn = null;
 		Properties prop = new Properties();
@@ -59,7 +59,7 @@ public class JDBCTemplate {
 		}
 		return conn;
 	}
-	
+
 	
 	public static void commit(Connection conn) {
 		try {
@@ -115,5 +115,5 @@ public class JDBCTemplate {
 		}
 	}
 	
-
+	*/
 }//class.end
