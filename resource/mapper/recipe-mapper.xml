@@ -352,8 +352,7 @@
 			   )
 	</entry> -->
 	
-	
-<!-- 	<entry key="insertReply">
+	<insert id="insertReply" parameterType="reply">
 		INSERT
 		  INTO
 		  	   TB_REPLY
@@ -366,18 +365,11 @@
 		VALUES
 			   (
 			   SEQ_REPLY.NEXTVAL,
-			   ?,
-			   ?,
-			   ?
+			   #{replyContent},
+			   #{replyWriterNo},
+			   #{recipeNo}
 			   )
-</entry> -->
-	
-	
-	
-	
-	
-	
-	
+	</insert>
 	<!-- ******* 레시피 관련 INSERT구문 끝 ******* -->
 
 

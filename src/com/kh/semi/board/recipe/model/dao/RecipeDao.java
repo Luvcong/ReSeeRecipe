@@ -283,43 +283,9 @@ public class RecipeDao {
 	 * @param reply : replyContent, memNo, recipeNo필드가 초기화된 Reply객체
 	 */
 	public int insertReply(SqlSession sqlSession, Reply reply) {
-		int result = 0;
-		String sql = prop.getProperty("insertReply");
-		
-		try(PreparedStatement pstmt = conn.prepareStatement(sql)) {
-			pstmt.setString(1, reply.getReplyContent());
-			pstmt.setInt(2, reply.getReplyWriterNo());
-			pstmt.setInt(3, reply.getRecipeNo());
-			
-			result = pstmt.executeUpdate();		
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return result;
+
+		return sqlSession.insert("recipeMapper.insertReply", reply);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	/*
