@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.semi.dm.model.service.DmService;
+import com.kh.semi.dm.model.service.DmServiceImpl;
 import com.kh.semi.dm.model.vo.Dm;
 
 /**
@@ -18,14 +18,14 @@ import com.kh.semi.dm.model.vo.Dm;
 public class DmUpdateReplyController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private DmService dmService;
+	private DmServiceImpl dmServiceImpl;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public DmUpdateReplyController() {
         super();
-        dmService = new DmService();
+        dmServiceImpl = new DmServiceImpl();
         // TODO Auto-generated constructor stub
     }
 
@@ -33,9 +33,6 @@ public class DmUpdateReplyController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		// 1) post
-		request.setCharacterEncoding("UTF-8");
 		
 		// 2) 전달값
 		String dmReply = request.getParameter("dmReply");
@@ -45,14 +42,15 @@ public class DmUpdateReplyController extends HttpServlet {
 		String pageStr = request.getParameter("page");
 		if(pageStr == null)		// null처리
 			pageStr = "1"; 
-
+		
+		System.out.println(pageStr);
 		// 3) 데이터 가공
 		Dm dm = new Dm();
 		dm.setDmReply(dmReply);
 		dm.setDmNo(dmNo);
 		
 		// 4)
-		int result = dmService.updateReply(dm);
+		int result = dmServiceImpl.updateReply(dm);
 		
 		// 5)
 		if(result > 0) {

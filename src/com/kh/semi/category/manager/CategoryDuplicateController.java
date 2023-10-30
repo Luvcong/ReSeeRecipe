@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.semi.board.recipe.model.service.CategoryService;
+import com.kh.semi.board.recipe.model.service.CategoryServiceImpl;
 
 /**
  * Servlet implementation class CategoryOverlapController
@@ -16,14 +16,14 @@ import com.kh.semi.board.recipe.model.service.CategoryService;
 @WebServlet("/jhduplicate.ct")
 public class CategoryDuplicateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private CategoryService categoryService;
+	private CategoryServiceImpl categoryServiceImpl;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public CategoryDuplicateController() {
         super();
-        categoryService = new CategoryService();
+        categoryServiceImpl = new CategoryServiceImpl();
         // TODO Auto-generated constructor stub
     }
 
@@ -32,12 +32,9 @@ public class CategoryDuplicateController extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// 1)
-		request.setCharacterEncoding("UTF-8");
-		// 2)
-		String addCategoryName = request.getParameter("addCategoryName");
+		String categoryNewName = request.getParameter("addCategoryName");
 		// System.out.println(addCategoryName);	// 값 ok
-		int count = categoryService.duplicateCheckCategory(addCategoryName);
+		int count = categoryServiceImpl.duplicateCheckCategory(categoryNewName);
 		response.setContentType("text/html; charset=UTF-8");
 		if(count > 0) {
 			response.getWriter().print("N");

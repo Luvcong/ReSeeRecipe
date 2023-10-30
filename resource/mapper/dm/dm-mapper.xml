@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="dmMapper">
+
+	<resultMap id="dmResultSet" type="dm">
+		<result column="DM_NO" property="dmNo"/>
+		<result column="MEM_ID" property="memId"/>
+		<result column="MEM_NICKNAME" property="memNickname"/>
+		<result column="DM_CONTENT" property="dmContent"/>
+		<result column="SEND_DATE" property="sendDate"/>
+		<result column="DM_STATUS" property="dmStatus"/>
+		<result column="DM_REPLY" property="dmReply"/>
+	</resultMap>
+	
+	
+	<!-- 쪽지함 리스트 조회 -->
+	<select id="selectDmList" resultMap="dmResultSet">
+		SELECT
+				DM_NO,
+				MEM_ID,
+				MEM_NICKNAME,
+				DM_CONTENT,
+				SEND_DATE,
+				DM_STATUS,
+				DM_REPLY
+		 FROM
+		 		TB_DM
+		 JOIN
+		 		TB_MEMBER ON(SEND_MEM = MEM_NO)
+		 ORDER
+		    BY
+		    	DM_NO DESC
+	</select>
+	
+	
+	<!-- 쪽지함 리스트 행 수 조회 -->
+	<select id="selectDmListCount" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+		  		TB_DM
+	</select>
+	
+	
+	<!-- 쪽지함 쪽지 답변 -->
+	<update id="updateReply" parameterType="dm">
+		UPDATE 
+				TB_DM
+		   SET
+        		DM_REPLY = #{ dmReply },
+        		DM_STATUS = 'Y'
+		 WHERE 
+		 		DM_NO = #{ dmNo }
+		   AND
+		   		DM_STATUS = 'N'
+	</update>
+	
+	
+	<!-- 쪽지 삭제 SQL문 -->
+	<delete id="deleteDm" parameterType="_int">
+		DELETE
+        		TB_DM
+		 WHERE
+        		DM_NO = #{ dmNo }
+	</delete>
+	
+	
+	<!-- 쪽지 답변 개수 카운트 -->
+	<select id="repliedCount" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+		  		TB_DM
+		 WHERE
+				DM_STATUS = 'Y'
+	</select>
+
+
+
+
+</mapper>  

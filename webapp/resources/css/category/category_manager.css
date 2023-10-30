@@ -1,0 +1,77 @@
+.paging-area{
+	text-align: center;
+	padding: 65px;
+}
+.sort {
+	display: inline-block;
+	padding-left: 10px;
+	color: darkgray;
+}
+.table th:hover {
+	cursor: pointer;
+}
+.asc::before {
+	content: "\25B2";
+}
+.desc::before {
+	content: "\25BC";
+}
+.modal .modal-title{
+	text-align: center;
+	font-weight: bold;
+}
+.modal .modal-content{
+	background-color: rgb(255, 217, 64);
+    padding: 5px 20px 30px 20px;
+}
+.modal .modal-body, .modal .modal-footer{
+	background-color: white;
+	padding:0;
+}
+.modal .modal-footer{
+	height: 50px;
+	border: 1px solid gray;
+	justify-content: center;
+}
+.modal-table {
+	width:100%;
+	text-align: center;
+}
+/* .modal-table th {
+	width: 130px;
+} */
+.modal-table tr {
+	height: 50px;
+}
+.modal-table tr td > label {
+	font-size: 12px;
+}
+.modal input {
+    width: 100%;
+    height: 50px;
+    cursor: pointer;
+    border: none;
+    text-align: center;
+}
+.searchTable{
+	padding: 0 10px;
+}
+.btn-check-r{
+	border-right: none;
+}
+.btn-check-l{
+	border-left: none;
+	width: 105px;
+}
+#updateCategoryForm th{
+	width: 170px;
+	height: 80px;
+}
+#updateCategoryForm td input{
+	height: 80px;
+}
+
+.list-btn{
+	text-align: center;
+    padding-top: 30px;
+}

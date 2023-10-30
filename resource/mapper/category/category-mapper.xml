@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="categoryMapper">
+	
+	<resultMap id="categoryResultSet" type="category">
+		<result column="RECIPE_CATEGORY_NO" property="recipeCategoryNo" />
+		<result column="RECIPE_CATEGORY_NAME" property="recipeCategoryName" />
+		<result column="RECIPE_CATEGORY_CNT" property="recipeCategoryCount" />
+	</resultMap>
+	
+	<!-- 카테고리 리스트 조회 -->
+	<select id="selectCategoryList" resultMap="categoryResultSet">
+		SELECT
+				RC.RECIPE_CATEGORY_NO,
+				RC.RECIPE_CATEGORY_NAME,
+				NVL(CTGR_CNT.CNT, 0) AS RECIPE_CATEGORY_CNT
+		  FROM
+		  		TB_RECIPE_CATEGORY RC
+          LEFT OUTER JOIN
+                         (SELECT
+                                 RECIPE_CATEGORY_NO, COUNT(*) CNT
+                            FROM 
+                                 TB_RECIPE
+                           GROUP
+                              BY
+                                 RECIPE_CATEGORY_NO) CTGR_CNT
+                              ON
+                           		 RC.RECIPE_CATEGORY_NO = CTGR_CNT.RECIPE_CATEGORY_NO
+       					   ORDER
+       					      BY
+       					   		 RECIPE_CATEGORY_NO ASC
+	</select>
+	
+	
+	<!-- 카테고리 리스트 행 수 조회 -->
+	<select id="selectCategoryListCount" resultType="_int">
+		SELECT
+	        	COUNT(*)
+		  FROM
+		        TB_RECIPE_CATEGORY
+	</select>
+	
+	
+	<!-- 카테고리 추가 -->
+	<insert id="insertCategory" parameterType="_int">
+		INSERT
+		  INTO
+				TB_RECIPE_CATEGORY
+		 VALUES
+		 		(
+		 		SEQ_RECIPE_CATEGORY.NEXTVAL,
+		 		#{ recipeCategoryName }
+		 		)
+	</insert>
+
+
+	<!-- 카테고리 삭제 -->
+	<delete id="deleteCategory" parameterType="_int">
+		DELETE
+		  FROM
+		  		TB_RECIPE_CATEGORY
+		 WHERE
+		 		RECIPE_CATEGORY_NO = #{ recipeCategoryNo }
+	</delete>
+	
+
+	<!-- 카테고리 삭제시 레시피글 변경(STATUS = N && CATEGORY_NO = 0) SQL문 -->
+	<update id="updateRecipeStatus" parameterType="_int">
+		UPDATE
+				TB_RECIPE R
+		   SET
+		   		RECIPE_STATUS = 'N', RECIPE_CATEGORY_NO = 0
+		 WHERE
+		 		R.RECIPE_CATEGORY_NO IN (SELECT RR.RECIPE_CATEGORY_NO
+		                                   FROM TB_RECIPE RR, TB_RECIPE_CATEGORY RC
+		                                  WHERE RR.RECIPE_CATEGORY_NO = #{ categoryNo }
+		                                    AND RR.RECIPE_CATEGORY_NO = RC.RECIPE_CATEGORY_NO)
+	</update>
+	
+	
+	<!-- 카테고리명 변경 SQL문 -->
+	<update id="updateCateogry" parameterType="hashmap">
+		UPDATE
+				TB_RECIPE_CATEGORY
+		   SET
+		   		RECIPE_CATEGORY_NAME = #{ categoryUpdateName }
+		 WHERE
+		 		RECIPE_CATEGORY_NAME = #{ categoryName }
+	</update>
+
+
+	<!-- 카테고리명 중복여부 체크 SQL문 -->
+	<select id="categoryNameCheck" resultType="_int" parameterType="hashmap">
+		SELECT
+	        	COUNT(*)
+		  FROM
+		        TB_RECIPE_CATEGORY
+		 WHERE
+		        RECIPE_CATEGORY_NAME = #{ categoryNewName }
+	</select>
+	
+	
+	<!-- 카테고리 키워드 검색시 리스트 조회 -->
+ 	<select id="searchCategory" resultMap="categoryResultSet" parameterType="string">
+		SELECT
+		       RC.RECIPE_CATEGORY_NO,
+		       RC.RECIPE_CATEGORY_NAME,
+		       NVL(CTGR_CNT.CNT, 0) AS RECIPE_CATEGORY_CNT
+		  FROM 
+		       TB_RECIPE_CATEGORY RC
+		  LEFT OUTER JOIN
+		                (SELECT
+		                        RECIPE_CATEGORY_NO, COUNT(*) CNT
+		                   FROM 
+		                        TB_RECIPE
+		               GROUP BY RECIPE_CATEGORY_NO) CTGR_CNT
+		    ON RC.RECIPE_CATEGORY_NO = CTGR_CNT.RECIPE_CATEGORY_NO
+		 WHERE RECIPE_CATEGORY_NAME LIKE '%' || #{ checkCategoryName } || '%'
+		 ORDER BY RC.RECIPE_CATEGORY_NO ASC
+	</select>
+
+
+
+
+
+
+</mapper>

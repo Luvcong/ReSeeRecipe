@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="rewardMapper">
+	
+	<resultMap id="rewardResultSet" type="reward">
+		<result column="REWARD_NO" property="rewardNo" />
+		<result column="MEM_ID" property="memId" />
+		<result column="MEM_NICKNAME" property="memNickname" />
+		<result column="MEM_GRADE_NAME" property="memGradeName" />
+		<result column="REWARD_DATE" property="rewardDate" />
+		<result column="REWARD_REASON" property="rewardReason" />
+		<result column="REWARD_SCORE" property="rewardScore" />
+		<result column="REWARD_SUM" property="sumRewardScore" />
+		<result column="MEM_NO" property="memNo" />
+	
+	</resultMap>
+	
+	<!-- 관리자 리워드 리스트 조회 -->
+	<select id="selectRewardList" resultMap="rewardResultSet">
+		SELECT
+				REWARD_NO,
+				MEM_ID,
+				MEM_NICKNAME,
+				MEM_GRADE_NAME,
+				REWARD_DATE,
+				NVL(REWARD_REASON, '-') AS REWARD_REASON,
+				REWARD_SCORE,
+				SUM(REWARD_SCORE) OVER(PARTITION BY MEM_NO ORDER BY REWARD_NO ASC) AS REWARD_SUM,
+				MEM_NO
+		 FROM 
+		 		TB_MEMBER M
+		 JOIN 
+		 		TB_REWARD R USING (MEM_NO)
+		 JOIN 
+		 		TB_MEMBER_GRADE MG ON (M.MEM_GRADE = MG.MEM_GRADE_NO)
+		WHERE
+				 M.MEM_STATUS = 'Y'
+		ORDER 
+		   BY
+		   		R.REWARD_NO DESC
+	</select>
+	
+	
+	<!-- 리워드 리스트 행 조회 -->
+	<select id="selectRewardListCount" resultType="_int">
+		SELECT
+				COUNT(*)
+		  FROM
+		  		TB_REWARD
+	</select>
+	
+	
+	<!-- 리워드 지급 및 차감 -->
+	<insert id="insertReward" parameterType="reward">
+		INSERT
+		  INTO
+				TB_REWARD
+	    VALUES 
+	    		(
+	    		SEQ_REWARD.NEXTVAL,
+	    		SYSDATE,
+	    		#{ rewardReason },
+	    		#{ rewardScore },
+	    		#{ memNo }
+	    		)
+	</insert>
+
+</mapper>

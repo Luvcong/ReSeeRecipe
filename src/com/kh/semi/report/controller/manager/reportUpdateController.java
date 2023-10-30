@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.kh.semi.report.model.service.ReportService;
+import com.kh.semi.report.model.service.ReportServiceImpl;
 
 /**
  * Servlet implementation class reportUpdateController
@@ -16,14 +16,14 @@ import com.kh.semi.report.model.service.ReportService;
 @WebServlet("/jhupdate.rp")
 public class reportUpdateController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private ReportService reportService;
+	private ReportServiceImpl reportServiceImpl;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public reportUpdateController() {
         super();
-        reportService = new ReportService();
+        reportServiceImpl = new ReportServiceImpl();
         // TODO Auto-generated constructor stub
     }
 

@@ -1,8 +1,6 @@
 package com.kh.semi.dm.controller.manager;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
-import com.kh.semi.dm.model.service.DmService;
+import com.kh.semi.dm.model.service.DmServiceImpl;
 
 /**
  * Servlet implementation class DmDeleteController
@@ -21,14 +19,14 @@ import com.kh.semi.dm.model.service.DmService;
 public class DmDeleteController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	private DmService dmService;
+	private DmServiceImpl dmServiceImpl;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
     public DmDeleteController() {
         super();
-        dmService = new DmService();
+        dmServiceImpl = new DmServiceImpl();
         // TODO Auto-generated constructor stub
     }
 
@@ -53,7 +51,7 @@ public class DmDeleteController extends HttpServlet {
 		JsonArray successList = new JsonArray();
 		for(String arr : dmNoArr) {
 			int dmNo = Integer.parseInt(arr);
-			int result = dmService.deleteDm(dmNo);
+			int result = dmServiceImpl.deleteDm(dmNo);
 			if(result == 1)
 				successList.add(dmNo);
 		}
