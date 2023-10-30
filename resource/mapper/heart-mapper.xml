@@ -6,7 +6,6 @@
 <mapper namespace="heartMapper">
 
 
-	
 	<select id="htCountRecipe" parameterType="_int" resultType="_int">
 		SELECT
 			   COUNT(*)
@@ -164,6 +163,9 @@
 	
 	<!--===========================================================-->
 	<!-- 하트 누르기(추가) -->
+	<insert id="" parameterType="" resultType="_int">
+	
+	</insert>
 	<entry key="insertHeartRecipe">
 		INSERT
 		  INTO
@@ -189,7 +191,9 @@
 			   RECIPE_NO = ?
 	</entry>
 	
+	<insert id="" parameterType="" resultType="_int">
 	
+	</insert>	
 	<entry key="insertHeartBookmark">
 		INSERT
 		  INTO
@@ -215,7 +219,9 @@
 			   RECIPE_NO = ?	
 	</entry>
 	
+	<insert id="" parameterType="" resultType="_int">
 	
+	</insert>	
 	<entry key="insertHeartNotice">
 		INSERT
 			   INTO TB_HT_NOTICE
@@ -240,7 +246,9 @@
 			   NOTICE_NO = ?	
 	</entry>
 	
+	<insert id="" parameterType="" resultType="_int">
 	
+	</insert>	
 	<entry key="insertHeartSubsc">
 		INSERT
 		  INTO
@@ -266,7 +274,9 @@
 			   CHEF_NO = ?	
 	</entry>
 	
+	<insert id="" parameterType="" resultType="_int">
 	
+	</insert>	
 	<entry key="insertHeartReply">
 		INSERT
 		  INTO
