@@ -30,7 +30,6 @@ import com.kh.semi.common.template.Pagination;
 import com.kh.semi.member.model.vo.Member;
 import com.kh.semi.tag.model.service.TagService;
 import com.kh.semi.tag.model.vo.Tag;
-import com.oracle.webservices.internal.api.message.ContentType;
 import com.oreilly.servlet.MultipartRequest;
 
 public class RecipeController {
@@ -338,8 +337,20 @@ public class RecipeController {
 	public ArrayList<Tag> ajaxSelectTag(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
 		
 		// 해시태그 정보 조회
-		ArrayList<Tag> tagList = new TagService().selectALlTagname();
-		return tagList;
+		return new TagService().selectALlTagname();
+	}
+	
+	
+	/**
+	 * 특정 번호 레시피(PK)에 달린 댓글 리스트를 조회하는 기능<br>
+	 * (페이징처리 나중에)
+	 * @param request : 레시피 PK
+	 * @param response : 리플목록이 담긴 ArrayList
+	 */
+	public ArrayList<Reply> ajaxSelectRecipeReplyList(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
+		
+		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
+		return new RecipeServiceImpl().selectReplyListSingle(recipeNo);
 	}
 	
 	
@@ -350,16 +361,12 @@ public class RecipeController {
 	 * @param response
 	 */
 	public int ajaxModifyRecipeReply(HttpServletRequest request, HttpServletResponse response) {
-		int replyNo = Integer.parseInt(request.getParameter("replyNo"));
-		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
 		
 		Reply reply = new Reply();
-		reply.setReplyNo(replyNo);
-		reply.setRecipeNo(recipeNo);
+		reply.setReplyNo(Integer.parseInt(request.getParameter("replyNo")));
+		reply.setRecipeNo(Integer.parseInt(request.getParameter("recipeNo")));
 		
-		int result = 0;
-		
-		return result;
+		return new RecipeServiceImpl().ajaxModifyRecipeReply(reply);
 		
 	}
 	
@@ -371,40 +378,14 @@ public class RecipeController {
 	 * @param response
 	 * @throws IOException 
 	 */
-	public void ajaxDeleteRecipeReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
-		int replyNo = Integer.parseInt(request.getParameter("replyNo"));
-		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
-		
+	public int ajaxDeleteRecipeReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
 		Reply reply = new Reply();
-		reply.setReplyNo(replyNo);
-		reply.setRecipeNo(recipeNo);
+		reply.setReplyNo(Integer.parseInt(request.getParameter("replyNo")));
+		reply.setRecipeNo(Integer.parseInt(request.getParameter("recipeNo")));
 		
-		int result = new RecipeServiceImpl().deleteReqReplySingle(reply);
-		
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print(result);
+		return new RecipeServiceImpl().deleteReqReplySingle(reply);
 	}
-	
-	
-	/**
-	 * 특정 번호 레시피(PK)에 달린 댓글 리스트를 조회하는 기능<br>
-	 * (페이징처리 나중에)
-	 * @param request : 레시피 PK
-	 * @param response : 리플목록이 담긴 ArrayList
-	 */
-	public void ajaxSelectRecipeReplyList(HttpServletRequest request, HttpServletResponse response) throws JsonIOException, IOException {
-		
-		// 변수세팅 + 값뽑기
-		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
-		System.out.println("인트인트" + recipeNo);
-		// Service요청
-		ArrayList<Reply> replyList = new RecipeServiceImpl().selectReplyListSingle(recipeNo);
-		
-		// 형식+인코딩 지정 & 응답 Gson
-		response.setContentType("application/json; charset=UTF-8");
-		new Gson().toJson(replyList, response.getWriter());
-	}
-	
 	
 	/**
 	 * 특정 번호 레시피(PK)에 댓글을 입력하는 기능<br>
@@ -413,14 +394,10 @@ public class RecipeController {
 	 */
 	public int ajaxInsertRecipeReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
-		String replyContent = (String)request.getParameter("replyContent");
-		int memNo = ((Member)request.getSession().getAttribute("loginMember")).getMemNo();
-		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
-		
 		Reply reply = new Reply();
-		reply.setReplyContent(replyContent);
-		reply.setReplyWriterNo(memNo);
-		reply.setRecipeNo(recipeNo);
+		reply.setReplyContent((String)request.getParameter("replyContent"));
+		reply.setReplyWriterNo(((Member)request.getSession().getAttribute("loginMember")).getMemNo());
+		reply.setRecipeNo(Integer.parseInt(request.getParameter("recipeNo")));
 		
 		return new RecipeServiceImpl().insertReply(reply);
 	}

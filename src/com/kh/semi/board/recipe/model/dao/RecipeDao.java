@@ -215,7 +215,9 @@ public class RecipeDao {
 				e.printStackTrace();
 			}
 		}
-		return result;
+		
+		
+		return sqlSession.insert("recipeMapper.insertIngredient", ingredientList);
 	}
 	 
 	 
