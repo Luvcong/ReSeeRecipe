@@ -16,7 +16,7 @@ import com.kh.semi.board.recipe.model.vo.RecipeCategory;
 /**
  * Servlet implementation class CategoryCheckController
  */
-@WebServlet("/jhcheck.ct2")
+@WebServlet("/jhcheck.ct")
 public class CategorySearchController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private CategoryServiceImpl categoryServiceImpl;
