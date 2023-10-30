@@ -182,7 +182,6 @@ public class RecipeServiceImpl implements RecipeService {
 		
 		int result = recipeDao.insertReply(sqlSession, reply);
 		if(result > 0) sqlSession.commit();
-		
 		sqlSession.close();
 		return result;
 	}

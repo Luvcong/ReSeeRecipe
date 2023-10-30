@@ -30,6 +30,7 @@ import com.kh.semi.common.template.Pagination;
 import com.kh.semi.member.model.vo.Member;
 import com.kh.semi.tag.model.service.TagService;
 import com.kh.semi.tag.model.vo.Tag;
+import com.oracle.webservices.internal.api.message.ContentType;
 import com.oreilly.servlet.MultipartRequest;
 
 public class RecipeController {
@@ -410,7 +411,7 @@ public class RecipeController {
 	 * @param request
 	 * @param response
 	 */
-	public void ajaxInsertRecipeReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public int ajaxInsertRecipeReply(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		
 		String replyContent = (String)request.getParameter("replyContent");
 		int memNo = ((Member)request.getSession().getAttribute("loginMember")).getMemNo();
@@ -421,10 +422,7 @@ public class RecipeController {
 		reply.setReplyWriterNo(memNo);
 		reply.setRecipeNo(recipeNo);
 		
-		int result = new RecipeServiceImpl().insertReply(reply);
-		
-		response.setContentType("text/html; charset=UTF-8");
-		response.getWriter().print(result);
+		return new RecipeServiceImpl().insertReply(reply);
 	}
 	
 	

@@ -55,7 +55,12 @@ public class RecipeServletAjax extends HttpServlet {
 			case "ajaxModifyRecipeReply" : rc.ajaxModifyRecipeReply(request, response); break;
 			case "ajaxDeleteRecipeReply" : rc.ajaxDeleteRecipeReply(request, response); break;
 			case "ajaxSelectRecipeReplyList" : rc.ajaxSelectRecipeReplyList(request, response); break;
-			case "ajaxInsertRecipeReply" : rc.ajaxInsertRecipeReply(request, response); break;
+			case "ajaxInsertRecipeReply" : int result = rc.ajaxInsertRecipeReply(request, response);
+			
+			
+			response.setContentType("text/html; charset=UTF-8");
+			response.getWriter().print(result);
+			break;
 			default : response.sendRedirect(rc.errorDefault(request, response)); break;
 		}
 		//2 값 여러개 : Json (JS의 배열형태 or 객체형태)
