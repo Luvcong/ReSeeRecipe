@@ -17,6 +17,7 @@ import com.kh.semi.board.recipe.model.vo.RecipePic;
 import com.kh.semi.board.recipe.model.vo.RecipeTag;
 import com.kh.semi.board.recipe.model.vo.Reply;
 import com.kh.semi.common.model.vo.PageInfo;
+import com.kh.semi.common.template.Template;
 
 public class RecipeServiceImpl implements RecipeService {
 	
@@ -90,7 +91,7 @@ public class RecipeServiceImpl implements RecipeService {
 	
 	@Override
 	public int selectRecipeListCount() {
-		SqlSession sqlSession = getSqlSession();
+		SqlSession sqlSession = Template.getSqlSession();
 		int listCount = recipeDao.selectRecipeListCount(sqlSession);
 		sqlSession.close();
 		return listCount;

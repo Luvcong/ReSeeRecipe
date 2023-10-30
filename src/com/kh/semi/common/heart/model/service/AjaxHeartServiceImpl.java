@@ -48,8 +48,8 @@ public class AjaxHeartServiceImpl implements AjaxHeartService {
 	
 	public int htCountSubsc(int htTargetNo) {
 		
-		SqlSession sqlSession = getSqlSession();;
-		int result = new AjaxHeartDao().htCountSubsc(conn, htTargetNo);
+		SqlSession sqlSession = getSqlSession();
+		int result = new AjaxHeartDao().htCountSubsc(sqlSession, htTargetNo);
 		sqlSession.close();
 		return result;
 	}
@@ -57,8 +57,8 @@ public class AjaxHeartServiceImpl implements AjaxHeartService {
 	
 	public int htCountReply(int htTargetNo) {
 		
-		SqlSession sqlSession = getSqlSession();;
-		int result = new AjaxHeartDao().htCountReply(conn, htTargetNo);
+		SqlSession sqlSession = getSqlSession();
+		int result = new AjaxHeartDao().htCountReply(sqlSession, htTargetNo);
 		sqlSession.close();
 		return result;
 	}

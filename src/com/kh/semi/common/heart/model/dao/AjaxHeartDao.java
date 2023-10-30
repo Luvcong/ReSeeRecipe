@@ -21,22 +21,7 @@ public class AjaxHeartDao {
 	 * @return : 특정 레시피에 눌린 좋아요 수 총 합산
 	 */
 	public int htCountRecipe(SqlSession sqlSession, int htTargetNo) {
-		/*
-		int result = 0;
-		String sql = prop.getProperty("htCountRecipe");
-		
-		try(PreparedStatement pstmt = sqlSession.prepareStatement(sql)) {
-			pstmt.setInt(1, htTargetNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()){
-				if(rset.next()) {
-					result = rset.getInt("COUNT(*)");
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		*/
+ 
 		return sqlSession.selectOne("heartMapper.htCountRecipe", htTargetNo);
 	}
 	
@@ -49,22 +34,7 @@ public class AjaxHeartDao {
 	 * @return : 특정 레시피가 북마킹된 수 총 합산
 	 */
 	public int htCountBookmark(SqlSession sqlSession, int htTargetNo) {
-		/*
-		int result = 0;
-		String sql = prop.getProperty("htCountBookmark");
-		
-		try(PreparedStatement pstmt = sqlSession.prepareStatement(sql)) {
-			pstmt.setInt(1, htTargetNo);
-			
-			try(ResultSet rset = pstmt.executeQuery()) {
-				if(rset.next()) {
-					result = rset.getInt("COUNT(*)");
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		*/
+ 
 		return sqlSession.selectOne("heartMapper.htCountBookmark", htTargetNo);
 	}
 	

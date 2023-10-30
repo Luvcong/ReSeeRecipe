@@ -54,20 +54,20 @@
 	</resultMap>
 	
 	<resultMap id="recipeTagResultMap" type="recipeTag">
-		<result column="TAG_NO" property="" />
-		<result column="TAG_RECIPE_NO" property="" />
+		<result column="TAG_NO" property="tagNo" />
+		<result column="TAG_RECIPE_NO" property="tagRecipeNo" />
 		<result column="TAG_NAME" property="tagName" />
 		<result column="TAG_DATE" property="tagDate" />
 	</resultMap>
 	
 	<resultMap id="replyResultMap" type="reply">
-		<result column="REPLY_NO" property="" />
-		<result column="REPLY_CONTENT" property="" />
-		<result column="REPLY_DATE" property="" />
-		<result column="REPLY_MODIFIED" property="" />
-		<result column="REPLY_WRITER_NO" property="" />
-		<result column="RECIPE_NO" property="" />
-		<result column="REPLY_STATUS" property="" />
+		<result column="REPLY_NO" property="replyNo" />
+		<result column="REPLY_CONTENT" property="replyContent" />
+		<result column="REPLY_DATE" property="replyDate" />
+		<result column="REPLY_MODIFIED" property="replyModified" />
+		<result column="REPLY_WRITER_NO" property="replyWriterNo" />
+		<result column="RECIPE_NO" property="recipeNo" />
+		<result column="REPLY_STATUS" property="replyStatus" />
 		<result column="MEM_NICKNAME" property="memNickName" />
 	</resultMap>
 	
