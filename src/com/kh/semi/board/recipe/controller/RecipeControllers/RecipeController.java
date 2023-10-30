@@ -57,7 +57,7 @@ public class RecipeController {
 		
 		if(!cList.isEmpty()) {
 			request.setAttribute("cList", cList);
-			viewPath = "/views/board/recipe_frag/recipeCategoryBar.jsp";
+			viewPath = "/WEB-INF/views/board/recipe_frag/recipeCategoryBar.jsp";
 		} else {
 			viewPath =  new SendError().sendError(request, "카테고리 조회에 실패했습니다");
 		}
@@ -96,7 +96,7 @@ public class RecipeController {
 		if(!recipeList.isEmpty()) {
 			request.setAttribute("pi", pi);
 			request.setAttribute("recipeList", recipeList);
-			viewPath = "/views/board/recipe/recipeMainView.jsp";
+			viewPath = "/WEB-INF/views/board/recipe/recipeMainView.jsp";
 		} else {
 			viewPath = new SendError().sendError(request, "조회된 게시글이 없습니다");
 		}
@@ -120,7 +120,7 @@ public class RecipeController {
 		
 		request.setAttribute("unReList", unReList);
 		
-		viewPath = "/views/board/recipe/recipeEnrollFormView.jsp";
+		viewPath = "/WEB-INF//views/board/recipe/recipeEnrollFormView.jsp";
 		return viewPath;
 	}
 	
@@ -155,7 +155,7 @@ public class RecipeController {
 				recipeDetailMap.put("recipeTagList", recipeTagList);
 			}
 			request.setAttribute("recipeDetailMap", recipeDetailMap);
-			viewPath = "/views/board/recipe/recipeDetailView.jsp";
+			viewPath = "/WEB-INF/views/board/recipe/recipeDetailView.jsp";
 		} else {
 			viewPath = new SendError().sendError(request, "게시글 상세 조회에 실패했습니다");
 		}
@@ -315,7 +315,7 @@ public class RecipeController {
 				
 				if(result > 0) {
 					request.getSession().setAttribute("alertMsg", "게시글 작성 성공");
-					viewPath = "recipe/selectRecipeList.re";
+					viewPath = "/WEB-INF/recipe/selectRecipeList.re";
 				} else {
 					viewPath = new SendError().sendError(request, "게시글 작성 실패"); // 게시글 작성 실패 시
 				}
@@ -396,7 +396,7 @@ public class RecipeController {
 		
 		// 변수세팅 + 값뽑기
 		int recipeNo = Integer.parseInt(request.getParameter("recipeNo"));
-		
+		System.out.println("인트인트" + recipeNo);
 		// Service요청
 		ArrayList<Reply> replyList = new RecipeServiceImpl().selectReplyListSingle(recipeNo);
 		

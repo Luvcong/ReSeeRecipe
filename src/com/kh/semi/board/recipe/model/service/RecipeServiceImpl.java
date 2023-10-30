@@ -96,7 +96,7 @@ public class RecipeServiceImpl implements RecipeService {
 		sqlSession.close();
 		return listCount;
 	}
-	.0
+	
 	
 	@Override
 	public ArrayList<Recipe> selectRecipeList(PageInfo pi) {

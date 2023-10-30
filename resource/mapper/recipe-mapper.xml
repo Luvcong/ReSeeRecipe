@@ -59,7 +59,7 @@
 		<result column="TAG_NAME" property="tagName" />
 		<result column="TAG_DATE" property="tagDate" />
 	</resultMap>
-	
+	<!-- 
 	<resultMap id="replyResultMap" type="reply">
 		<result column="REPLY_NO" property="replyNo" />
 		<result column="REPLY_CONTENT" property="replyContent" />
@@ -68,8 +68,9 @@
 		<result column="REPLY_WRITER_NO" property="replyWriterNo" />
 		<result column="RECIPE_NO" property="recipeNo" />
 		<result column="REPLY_STATUS" property="replyStatus" />
-		<result column="MEM_NICKNAME" property="memNickName" />
+		<result column="MEM_NICKNAME" property="memNickname" />
 	</resultMap>
+	 -->
 	
 	
 	<!-- SQL구문 id / parameterType(자바타입 or 경로나 alias) / resultType="자바" resultMap="resultMapId" -->
@@ -161,7 +162,7 @@
 		 WHERE
 			   TAG_RECIPE_NO = #{recipeNo}
 	</select>
-	
+	<!-- 
 	<select id="selectReplyListSingle" parameterType="_int" resultType="replyResultMap">
 		SELECT
 		   REPLY_NO,
@@ -180,6 +181,7 @@
 	   AND
 		   RECIPE_NO = #{recipeNo}
 	</select>
+	 -->
 
 	
 	<!-- 글과 작성자의 STATUS가 유효한 레시피글의 총 개수 조회 -->
@@ -196,7 +198,7 @@
 		   	   MEM_STATUS = 'Y'
 	</select>
 	
-	<select id="selectRecipeList">
+	<select id="selectRecipeList" resultMap="recipeResultMap">
 		SELECT
 		       RECIPE_NO,
 		       RECIPE_TITLE,
@@ -251,7 +253,7 @@
 	
 	
 	<!-- ******* 레시피 관련 INSERT구문 시작 ******* -->
-	<insert id="insertRecipe" parameterType="java.util.List">
+<!-- 	<insert id="insertRecipe" parameterType="java.util.List">
 		INSERT
 		  INTO
 		  	   TB_RECIPE
@@ -268,7 +270,7 @@
 			   #{recipeWriterNo},
 			   #{recipeCategoryNo}
 			   )
-	</insert>
+	</insert> -->
 	<!-- ㅠㅠㅠㅠㅠㅠ몰라 -->
 	
 	
@@ -372,9 +374,9 @@
 	</insert>
 	<!-- ******* 레시피 관련 INSERT구문 끝 ******* -->
 
-	<update id="ajaxModifyRecipeReply" parameterType="_int">
+<!-- 	<update id="ajaxModifyRecipeReply" parameterType="_int">
 		UPDATE
-	</update>
+	</update> -->
 
 
 
@@ -388,6 +390,7 @@
 	<!-- ***** 관리자 카테고리 ***** -->
 	
 	<!-- 카테고리 리스트 조회 SQL문 -->
+	<!-- 
 	<select id="selectRecipeCategoryList" resultMap="">
 		SELECT
 			   RECIPE_CATEGORY_NO,
@@ -395,6 +398,7 @@
 		  FROM
 		  	   TB_RECIPE_CATEGORY
 	</select>
+	 -->
 
 	
 	<!-- 레시피 카테고리 추가 SQL문 -->

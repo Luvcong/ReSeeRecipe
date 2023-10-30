@@ -1,12 +1,13 @@
+var recipeNo = $('#ajaxRecipeNo').val();
+var replyWriterNo = $('#ajaxReplyWriterNo').val();
+
+
 // jsp파일 로딩 시 카테고리 접힘상태로 로딩시켜주는 함수
 $(function(){
 	const categoryFoldingText = $('#category-toggle-msg > h3');
 	categoryFoldingText.text('카테고리 더보기');
 	$('#category-toggle-menu').css('display', 'none');
 });
-
-	
-	
 
 
 // 댓글 리스트 조회

@@ -199,5 +199,10 @@
 		   	<br><br><br><br><br>
     		</div>
 	</div>
+	
+	<input id="ajaxRecipeNo" type="hidden" value="${ requestScope.recipeDetailMap.recipe.recipeNo }">
+	<input id="ajaxReplyWriterNo" type="hidden" value="${ sessionScope.loginMember.memNo }">
+
+	<script src="resources/js/board/recipe/recipeDetailView.js"></script>
 </body>
 </html>
