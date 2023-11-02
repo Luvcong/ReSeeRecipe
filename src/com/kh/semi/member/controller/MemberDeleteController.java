@@ -36,7 +36,7 @@ public class MemberDeleteController extends HttpServlet {
 		int result = new MemberService().deleteMember(memberNo);
 		
 		// 로그인되어있는거 날려주기(앞단에서 해도되겠지만 여기서 간단쓰)
-		request.getSession().setAttribute("loginMember", null);
+		request.getSession().removeAttribute("loginMember");
 		// ajax처리
 		response.setContentType("text/html; charset=UTF-8");
 		
