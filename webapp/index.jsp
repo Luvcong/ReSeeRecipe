@@ -16,7 +16,7 @@
 	<!-- header부분 (상단 메인 메뉴바) -->
 	<jsp:include page="/WEB-INF/views/common/header.jsp" />
 
-	<c:if test="${ reqeustScope.alertMsg ne null }">
+	<c:if test="${ requestScope.alertMsg ne null }">
 		<script>
 			alert('${requestScope.alertMsg}');
 		</script>
