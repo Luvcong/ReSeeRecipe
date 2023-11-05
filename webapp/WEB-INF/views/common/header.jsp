@@ -27,14 +27,13 @@
 			<div id="header">
 				<div id="header_1">
 					<!-- 관리자 등급이면 관리자 페이지 버튼 활성화 - HL -->
-					<c:if
-						test="${ (sessionScope.loginMember ne null) and (sessionScope.loginMember.memGrade eq 4) }">
+					<c:if test="${ (sessionScope.loginMember ne null) and (sessionScope.loginMember.memGrade eq 4) }">
 						<a href="hllogin.ma" id="managerCheck"> 관리자 페이지 </a>
 					</c:if>
 				</div>
 				<div id="header_2">
-					<a href="${pageContext.request.contextPath}"> <img
-						src="resources/css/common/Re see recipe 로고.png" alt="Reseerecipe메인">
+					<a href="${pageContext.request.contextPath}"> 
+					<img src="resources/css/common/Re see recipe 로고.png" alt="Reseerecipe메인">
 					</a>
 				</div>
 				<div id="header_3">
@@ -46,7 +45,7 @@
 						</div>
 						<div id="header_3_1_2">
 							<c:choose>
-								<c:when test="${ sessionScope.loginMember eq null }">
+								<c:when test="${ sessionScope.loginMember empty }">
 									<a href="yrloginForm.me"> <i
 										class="fa-regular fa-user"></i><br> <img src="" alt="">로그인
 									</a>

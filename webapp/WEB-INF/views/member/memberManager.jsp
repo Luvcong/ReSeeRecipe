@@ -41,7 +41,7 @@
 </head>
 <body>
 
-	<%@ include file="../manager/navbar.jsp" %>
+	<jsp:include page="../manager/navbar.jsp" />
 	
 	<script src="resources/js/member/memberManager.js"></script>
 <div class="rs-content">
@@ -53,16 +53,7 @@
         <div class="header1">
             <div class="input-group mt-3 mb-3">
                 <div class="input-group-prepend">
-      <!--             <button type="button" class="btn btn-warning btn-outline-secondary dropdown-toggle" data-toggle="dropdown">
-                    조회
-                  </button> -->
-                  <!-- <div class="dropdown-menu">
-                    <a type="dropdown" class="dropdown-item" href="#">회원ID</a>
-                    <a type="dropdown" class="dropdown-item" href="#">닉네임</a>
-                    <a type="dropdown" class="dropdown-item" href="#">이름</a>
-                  </div> -->
                   <select id="HL_memSearch" name="ManagermemSearch" class="btn btn-warning" onchange="searchoption();">
-                  	<!--  <option selected>회원조회</option>-->
                   	<option value="MEM_ID" selected>회원ID</option> 
                   	<option value="MEM_NICKNAME">닉네임</option> 
                   	<option value="MEM_NAME">이름</option> 
